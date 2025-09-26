@@ -97,6 +97,15 @@
         }
       },
       tooltip: {
+        callbacks: {
+          title: function (context) {
+            const rawDate = context[0].label;
+            return moment(new Date(rawDate)).format('DD.MM.YYYY')
+          },
+          label: function (context) {
+            return context.parsed.y
+          }
+        },
         titleFont: {
           size: 18,
           weight: 'bold',
@@ -106,6 +115,16 @@
         },
       },
     },
+    scales: {
+      x: {
+        ticks: {
+          callback: function(value) {
+            const rawDate = this.getLabelForValue(value);
+            return moment(new Date(rawDate)).format('DD.MM.YYYY')
+          }
+        }
+      }
+    }
   }
 
 
