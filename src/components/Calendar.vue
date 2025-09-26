@@ -26,7 +26,7 @@
 <script setup>
 import AirDatepicker from 'air-datepicker';
 import 'air-datepicker/air-datepicker.css';
-import {computed, onMounted, toRefs, watch} from "vue";
+import {onMounted, toRefs} from "vue";
 import moment from "moment";
 import CloseIcon from "@/components/icons/CloseIcon.vue";
 
@@ -106,7 +106,7 @@ onMounted(() => {
 const clearDatepicker = () => {
   if (datepickerInstance) {
     if (refProps.initDate.value) {
-      datepickerInstance.selectDate(moment(refProps.initDate.value, 'YYYY-MM-DD').format('DD.MM.YYYY'))
+      datepickerInstance.selectDate(moment(refProps.initDate.value, 'YYYY-MM-DD').toDate())
     } else {
       datepickerInstance.clear()
     }
