@@ -50,7 +50,7 @@
   Tooltip,
   Legend
 } from 'chart.js'
-  import {computed, ref, toRefs, watch} from "vue";
+  import {computed, toRefs } from "vue";
   import {useTestStore} from "@/store.js";
   import Calendar from "@/components/Calendar.vue";
   import moment from "moment";
@@ -78,8 +78,8 @@
     responsive: true,
     elements: {
       point: {
-        radius: 6,
-        hoverRadius: 8,
+        radius: 8,
+        hoverRadius: 10,
       },
       line: {
         borderColor: '#006045',
@@ -98,11 +98,11 @@
       },
       tooltip: {
         titleFont: {
-          size: 22,
+          size: 18,
           weight: 'bold',
         },
         bodyFont: {
-          size: 18,
+          size: 22,
         },
       },
     },
@@ -157,7 +157,7 @@
           backgroundColor: '#006045',
           data: refProps.test.value.results || []
         }
-      ]
+      ],
     }
   })
 

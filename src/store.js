@@ -74,7 +74,6 @@ export const useTestStore = defineStore(
 
     const arrListData = computed(() => {
       return Object.entries(fullData.value).map(([key, value]) => {
-        // todo сортировать по order
         return {
               code: key,
               title: value.title,

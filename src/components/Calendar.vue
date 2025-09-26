@@ -112,20 +112,6 @@ const clearDatepicker = () => {
     }
   }
 };
-
-// const periodStart = computed(() => props.selectedDates)
-// watch(
-//     periodStart,
-//     (newValue) => {
-//       console.log(newValue)
-//       if (datepickerInstance) {
-//         datepickerInstance.selectDate(moment(newValue, 'YYYY-MM-DD').format('DD.MM.YYYY'))
-//       }
-//     },
-//     {
-//       immediate: true
-//     }
-// )
 </script>
 
 <style>
