@@ -1,27 +1,33 @@
 {
   "hb": {
     "title": "Гемоглобин, Hb",
-    "normalRange": "от 120 до 160",
+    "normalRange": {
+      "from": 121.30,
+      "to": 148.70
+    },
     "results": [
-      {"date": "2025-06-06", "value": 125, "isOk": true },
-      {"date": "2025-07-10", "value": 135, "isOk": true },
-      {"date": "2025-08-11", "value": 126, "isOk": true }
+      {"date": "2025-06-06", "value": 125},
+      {"date": "2025-07-10", "value": 135},
+      {"date": "2025-08-11", "value": 126},
+      {"date": "2025-09-11", "value": 119}
     ]
   },
   "d": {
     "title": "Витамин D, D",
-    "normalRange": "от 21 до 160",
     "results": [
-      {"date": "2025-06-06", "value": 20, "isOk": true },
-      {"date": "2025-07-10", "value": 25, "isOk": true }
+      {"date": "2025-06-06", "value": 20},
+      {"date": "2025-07-10", "value": 25}
     ]
   },
   "fe": {
     "title": "Железо, Fe",
-    "normalRange": "от 21 до 160",
+    "normalRange": {
+      "from": 10.0,
+      "to": 150.0
+    },
     "results": [
-      {"date": "2025-06-06", "value": 9, "isOk": true },
-      {"date": "2025-07-10", "value": 11, "isOk": true }
+      {"date": "2025-06-06", "value": 9},
+      {"date": "2025-07-10", "value": 11}
     ]
   }
 }

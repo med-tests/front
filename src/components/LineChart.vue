@@ -16,7 +16,24 @@
           :onBeforeSelect="onBeforeSelectStart"
           @input="changePeriod('start', $event)"
       />
-      <div class="text-lg text-gray-700 leading-none font-medium">{{ chartData.datasets[0].label }}</div>
+      <div class="text-lg text-gray-700 leading-none font-medium text-center">
+        {{ chartData.datasets[0].label }}
+        <div
+            class="text-center flex"
+            style="column-gap: 6px;"
+        >
+          <div
+              v-if="Object.hasOwn(test.normalRange, 'from')"
+              class="text-base font-normal mt-2"
+          >
+            от {{test.normalRange.from}}</div>
+          <div
+              v-if="Object.hasOwn(test.normalRange, 'to')"
+              class="text-base font-normal mt-2"
+          >
+            до {{test.normalRange.to}}</div>
+        </div>
+      </div>
       <Calendar
           class="inline-block"
           label="Конец периода"
@@ -80,6 +97,22 @@
       point: {
         radius: 8,
         hoverRadius: 10,
+        backgroundColor: (ctx) => {
+          const value = ctx.raw.y;
+          const range = refProps.test.value.normalRange
+
+          if (!range) {
+            return '#006045'
+          }
+
+          if (Object.hasOwn(range, 'to') && range.to < value) {
+            return '#ff0000'
+          }
+          if (Object.hasOwn(range, 'from') && range.from > value) {
+            return '#0033ff'
+          }
+          return '#006045'
+        },
       },
       line: {
         borderColor: '#006045',
