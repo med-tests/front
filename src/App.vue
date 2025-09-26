@@ -41,7 +41,7 @@ const computedIsNoChart = computed(() => {
       <a
           class="pr-1 cursor-pointer text-lg"
           :href="`#${test.code}`"
-          :class="[test.isHidden ? 'text-gray-400' : 'text-gray-700']"
+          :class="[test.isHidden ? 'text-gray-400' : 'text-gray-600 hover:text-gray-900']"
       >
         {{ test.title }}
       </a>
@@ -49,12 +49,14 @@ const computedIsNoChart = computed(() => {
       <EyeIcon
           v-if="test.isHidden"
           class="ml-auto cursor-pointer"
+          :class="[test.isHidden ? 'fill-gray-400' : 'fill-gray-600 hover:fill-gray-900']"
           title="Показать"
           @click="testStore.changeTest(test.code, 'isHidden', !test.isHidden)"
       />
       <EyeClosedIcon
           v-else
           class="ml-auto cursor-pointer"
+          :class="[test.isHidden ? 'fill-gray-400' : 'fill-gray-600 hover:fill-gray-900']"
           title="Скрыть"
           @click="testStore.changeTest(test.code, 'isHidden', !test.isHidden)"
       />
