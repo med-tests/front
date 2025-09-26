@@ -48,7 +48,8 @@
       />
     </div>
     <Line
-        id="my-chart-id"
+        :id="`chart-${test.code}`"
+        style="max-height: 500px;"
         :data="chartData"
         :options="options"
     />
@@ -72,20 +73,12 @@
   import Calendar from "@/components/Calendar.vue";
   import moment from "moment";
 
-  ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-  )
+  ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
 
   const props = defineProps({
     test: { type: Object, required: true },
     code: { type: String, required: true },
-})
+  })
 
   const refProps = toRefs(props)
 
@@ -160,7 +153,6 @@
     }
   }
 
-
   function onBeforeSelectStart (value) {
     if (value
         && refProps.test.value.shownPeriod.end
@@ -206,11 +198,9 @@
       datasets: [
         {
           label: refProps.test.value.title || 'No title',
-          backgroundColor: '#006045',
           data: refProps.test.value.results || []
         }
       ],
     }
   })
-
 </script>

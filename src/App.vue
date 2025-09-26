@@ -25,7 +25,7 @@ const computedIsNoChart = computed(() => {
 <template>
 <div
     class="mx-auto my-0 flex px-5 h-screen"
-    style="width: 1200px"
+    style="width: 1440px"
 >
   <div
       class="p-4 border-r-4 border-emerald-800"
@@ -84,7 +84,3 @@ const computedIsNoChart = computed(() => {
   </div>
 </div>
 </template>
-
-<style scoped>
-
-</style>
