@@ -74,6 +74,7 @@
   import {useTestStore} from "@/store.js";
   import Calendar from "@/components/Calendar.vue";
   import moment from "moment";
+  import {showToast} from "@/components/toaster/toast.js";
 
   ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
 
@@ -160,7 +161,7 @@
         && refProps.test.value.shownPeriod.end
         && moment(value).isAfter(refProps.test.value.shownPeriod.end)
     ) {
-      alert('start не может быть позже end')
+      showToast('Начало периода не может быть позже конца периода', {  type: 'error' })
       return false
     } else {
       return true
@@ -172,7 +173,7 @@
         && refProps.test.value.shownPeriod.start
         && moment(value).isBefore(refProps.test.value.shownPeriod.start)
     ) {
-      alert('end не может быть раньше start')
+      showToast('Конец периода не может быть раньше начала периода', {  type: 'error' })
       return false
     } else {
       return true

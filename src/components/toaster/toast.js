@@ -4,7 +4,7 @@ const toasts = ref([])
 
 let id = 0
 
-function showToast(message, { type = 'success', duration } = {}) {
+function showToast(message, { type = 'success', duration = 3000 } = {}) {
   ++id;
   const toast = { id, message, type, createdAt: Date.now() }
   toasts.value.push(toast)
