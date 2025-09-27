@@ -26,12 +26,14 @@
               v-if="Object.hasOwn(test.normalRange, 'from')"
               class="text-base font-normal mt-2"
           >
-            от {{test.normalRange.from}}</div>
+            от {{test.normalRange.from}}
+          </div>
           <div
               v-if="Object.hasOwn(test.normalRange, 'to')"
               class="text-base font-normal mt-2"
           >
-            до {{test.normalRange.to}}</div>
+            до {{test.normalRange.to}}
+          </div>
         </div>
       </div>
       <Calendar
@@ -197,7 +199,7 @@
     return  {
       datasets: [
         {
-          label: refProps.test.value.title || 'No title',
+          label: refProps.test.value.title,
           data: refProps.test.value.results || []
         }
       ],
