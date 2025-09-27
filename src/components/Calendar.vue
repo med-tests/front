@@ -9,7 +9,7 @@
 
     <div class="relative">
       <input
-          class="border border-color-gray-700 p-1 text-gray-700"
+          class="border border-color-gray-700 rounded-xs p-1 text-gray-700 text-lg"
           :id="`input-${uniqId}`"
           placeholder="Выберите дату"
           readonly

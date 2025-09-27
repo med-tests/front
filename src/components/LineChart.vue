@@ -19,20 +19,21 @@
       <div class="text-lg text-gray-700 leading-none font-medium text-center">
         {{ chartData.datasets[0].label }}
         <div
-            class="text-center flex"
+            v-if="Object.hasOwn(test.normalRange, 'from') || Object.hasOwn(test.normalRange, 'to')"
+            class="flex items-center mt-2"
             style="column-gap: 6px;"
-        >
+        >✅
           <div
               v-if="Object.hasOwn(test.normalRange, 'from')"
-              class="text-base font-normal mt-2"
+              class="text-base font-normal"
           >
-            от {{test.normalRange.from}}
+            от <span class="font-medium">{{test.normalRange.from}}</span>
           </div>
           <div
               v-if="Object.hasOwn(test.normalRange, 'to')"
-              class="text-base font-normal mt-2"
+              class="text-base font-normal"
           >
-            до {{test.normalRange.to}}
+            до <span class="font-medium">{{test.normalRange.to}}</span>
           </div>
         </div>
       </div>
