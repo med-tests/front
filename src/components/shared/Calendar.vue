@@ -122,4 +122,7 @@ const clearDatepicker = () => {
 .test-day {
   background-color: #ffb8ff;
 }
+.-selected-.test-day {
+  border: 2px solid #ffb8ff;
+}
 </style>

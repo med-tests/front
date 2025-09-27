@@ -73,9 +73,9 @@
 } from 'chart.js'
   import {computed, toRefs } from "vue";
   import {useTestStore} from "@/store.js";
-  import Calendar from "@/components/Calendar.vue";
+  import Calendar from "@/components/shared/Calendar.vue";
   import moment from "moment";
-  import {showToast} from "@/components/toaster/toast.js";
+  import {showToast} from "@/components/shared/toaster/toast.js";
 
   ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
 
@@ -151,6 +151,9 @@
           callback: function(value) {
             const rawDate = this.getLabelForValue(value);
             return moment(new Date(rawDate)).format('DD.MM.YYYY')
+          },
+          font: {
+            size: 16,
           }
         }
       }

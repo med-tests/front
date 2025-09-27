@@ -4,7 +4,7 @@ import {computed, onMounted} from "vue";
 import EyeIcon from "@/components/icons/EyeIcon.vue";
 import EyeClosedIcon from "@/components/icons/EyeClosedIcon.vue";
 import LineChart from "@/components/LineChart.vue";
-import Toast from "@/components/toaster/Toast.vue";
+import Toast from "@/components/shared/toaster/Toast.vue";
 
 const testStore = useTestStore()
 
