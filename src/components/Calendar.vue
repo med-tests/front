@@ -80,6 +80,10 @@ onMounted(() => {
       }
     },
     onSelect: ({formattedDate}) => {
+      if (!formattedDate) {
+        datepickerInstance.selectDate(moment(refProps.selectedDates.value, 'YYYY-MM-DD').toDate())
+        return
+      }
       emit('input', formattedDate || '')
     },
     onRenderCell({date, cellType}) {
