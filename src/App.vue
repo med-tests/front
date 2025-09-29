@@ -24,8 +24,8 @@ const computedIsNoChart = computed(() => {
 
 <template>
 <div
-    class="mx-auto my-0 flex px-5 h-screen"
-    style="width: 1440px"
+    class="mx-auto my-0 flex px-5 h-screen bg-white/95"
+    style="width: 1440px;"
 >
   <div
       class="p-4 border-r-4 border-emerald-800"
