@@ -31,7 +31,6 @@ export const useTestStore = defineStore(
           title: analis.title,
           normalRange: analis.normalRange || {},
           results,
-          order: index + 1,
           isHidden: false,
           shownPeriod: {
             start: visibilityData.shownPeriod?.start || results[0]?.x || analis.results[0].date || '',
@@ -53,7 +52,7 @@ export const useTestStore = defineStore(
     const changeTest = (code, param, value) => {
       const visibilityData = localStorage.getItem('testVisibilityData') ? JSON.parse(localStorage.getItem('testVisibilityData')) : {}
 
-      if (Object.hasOwn(visibilityData, code) && Object.hasOwn(visibilityData[code], param)) {
+      if (Object.hasOwn(visibilityData, code)) {
         visibilityData[code][param] = value
       } else {
         visibilityData[code] = {}
@@ -73,22 +72,49 @@ export const useTestStore = defineStore(
     }
 
     const arrListData = computed(() => {
-      return Object.entries(fullData.value).map(([key, value]) => {
-        return {
-              code: key,
-              title: value.title,
-              order: value.order,
-              isHidden: value.isHidden,
-            }
-      })
+      return Object.entries(fullData.value)
+        .map(([key, value]) => {
+          return {
+                code: key,
+                title: value.title,
+                order: value.order,
+                isHidden: value.isHidden,
+              }
+        })
+        .sort((a, b) => a.order - b.order)
     })
 
-    return {
-      fullData,
-      arrListData,
-      fetchData,
-      changeTest,
+    const sortedFullData = computed(() => {
+      return Object.entries(fullData.value)
+        .map(([key, value]) => {
+          return {
+            code: key,
+            ...value,
+          }
+        })
+        .sort((a, b) => a.order - b.order)
+    })
+
+    const updateOrder = (newList) => {
+      newList
+        .forEach(({ code }, index ) => {
+          changeTest(code, 'order', index)
+          fullData.value[code].order = index
+        })
     }
 
+    return {
+      // state
+      fullData,
+
+      // getters
+      arrListData,
+      sortedFullData,
+
+      // actions
+      fetchData,
+      changeTest,
+      updateOrder,
+    }
   }
 )

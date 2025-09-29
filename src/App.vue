@@ -1,10 +1,9 @@
 <script setup>
 import {useTestStore} from './store.js'
 import {computed, onMounted} from "vue";
-import EyeIcon from "@/components/icons/EyeIcon.vue";
-import EyeClosedIcon from "@/components/icons/EyeClosedIcon.vue";
 import LineChart from "@/components/LineChart.vue";
 import Toast from "@/components/shared/toaster/Toast.vue";
+import TestList from "@/components/TestList.vue";
 
 const testStore = useTestStore()
 
@@ -33,35 +32,7 @@ const computedIsNoChart = computed(() => {
       style="width: 225px"
   >
     <h3 class="mb-3 font-medium text-xl">Список анализов</h3>
-    <div
-        v-for="(test, index) of testStore.arrListData"
-        :key="test.code"
-        class="py-2 flex border-emerald-800"
-        :class="{'border-b-1': index !== testStore.arrListData.length - 1}"
-    >
-      <a
-          class="pr-1 cursor-pointer text-lg"
-          :href="`#${test.code}`"
-          :class="[test.isHidden ? 'text-gray-400' : 'text-gray-600 hover:text-gray-900']"
-      >
-        {{ test.title }}
-      </a>
-
-      <EyeIcon
-          v-if="test.isHidden"
-          class="ml-auto cursor-pointer"
-          :class="[test.isHidden ? 'fill-gray-400' : 'fill-gray-600 hover:fill-gray-900']"
-          title="Показать"
-          @click="testStore.changeTest(test.code, 'isHidden', !test.isHidden)"
-      />
-      <EyeClosedIcon
-          v-else
-          class="ml-auto cursor-pointer"
-          :class="[test.isHidden ? 'fill-gray-400' : 'fill-gray-600 hover:fill-gray-900']"
-          title="Скрыть"
-          @click="testStore.changeTest(test.code, 'isHidden', !test.isHidden)"
-      />
-    </div>
+    <TestList/>
   </div>
 
   <div class="grow-1 p-4">
@@ -79,6 +50,10 @@ const computedIsNoChart = computed(() => {
           :id="ind"
           class="py-5"
           :code="ind"
+          v-for="test in testStore.sortedFullData"
+          :key="test.code"
+          :id="test.code"
+          :code="test.code"
           :test="test"
       />
     </div>
