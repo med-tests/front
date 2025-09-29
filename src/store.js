@@ -14,7 +14,7 @@ export const useTestStore = defineStore(
         ? JSON.parse(localStorage.getItem('testVisibilityData'))
         : {}
 
-      Object.entries(usersData).forEach(([code, analis], index) => {
+      Object.entries(usersData).forEach(([code, analis]) => {
 
         let results = []
         if (Object.hasOwn(visibilityData, code) && Object.hasOwn(visibilityData[code], 'shownPeriod')) {

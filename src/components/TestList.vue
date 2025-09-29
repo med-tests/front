@@ -40,7 +40,7 @@ import draggable from 'vuedraggable'
 import EyeClosedIcon from "@/components/icons/EyeClosedIcon.vue"
 import EyeIcon from "@/components/icons/EyeIcon.vue"
 import {useTestStore} from "@/store.js";
-import {computed, ref, watch, watchEffect} from "vue";
+import {computed} from "vue";
 
 const testStore = useTestStore()
 

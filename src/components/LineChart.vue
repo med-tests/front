@@ -51,11 +51,25 @@
       />
     </div>
     <Line
+        v-if="test.results.length"
         :id="`chart-${test.code}`"
         style="max-height: 500px;"
         :data="chartData"
         :options="options"
     />
+    <div
+        v-else
+        class="pt-7 text-center text-xl"
+    >
+      <p class="mb-2 ">
+        Кажется,
+        с <span class="font-medium">{{ moment(test.shownPeriod.start).format('DD.MM.YYYY') }}</span>
+        по <span class="font-medium">{{ moment(test.shownPeriod.end).format('DD.MM.YYYY')}}</span>
+        не было анализов
+        <span class="font-medium">"{{ test.title }}"</span>.
+      </p>
+      <p>Попробуйте выбрать другой временной период.</p>
+    </div>
   </div>
 </template>
 

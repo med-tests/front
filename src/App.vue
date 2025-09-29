@@ -45,14 +45,10 @@ const computedIsNoChart = computed(() => {
         style="height: calc(100vh - 16px - 28px - 12px - 12px - 12px)"
     >
       <LineChart
-          v-for="(test, ind) in testStore.fullData"
-          :key="ind"
-          :id="ind"
-          class="py-5"
-          :code="ind"
           v-for="test in testStore.sortedFullData"
           :key="test.code"
           :id="test.code"
+          class="py-15 test-chart relative"
           :code="test.code"
           :test="test"
       />
@@ -61,3 +57,16 @@ const computedIsNoChart = computed(() => {
 </div>
 <Toast />
 </template>
+
+<style>
+.test-chart:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  width: 70%;
+  height: 1px;
+  background: #006045;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%);
+}
+</style>
