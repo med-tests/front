@@ -1,34 +1,20 @@
 <template>
-  <div>
-    <div
-        v-if="label"
-        class="mb-1 text-gray-700"
-    >
-      {{ label }}
-    </div>
-
-    <div class="relative">
-      <input
-          class="border border-color-gray-700 rounded-xs p-1 text-gray-700 text-lg"
-          :id="`input-${uniqId}`"
-          placeholder="Выберите дату"
-          readonly
-      />
-      <CloseIcon
-          class="absolute"
-          style="width: 24px; height: 24px; top: 50%; transform: translate(0, -50%); right: 5px;}"
-          @click="clearDatepicker"
-      />
-    </div>
-  </div>
+  <Input
+      :id="`input-${uniqId}`"
+      :label="label"
+      placeholder="Выберите дату"
+      readonly
+      showCloseIcon
+      @onClickCloseIcon="clearDatepicker"
+  />
 </template>
 
 <script setup>
 import AirDatepicker from 'air-datepicker';
+import Input from '@/components/shared/Input.vue';
 import 'air-datepicker/air-datepicker.css';
 import {onMounted, toRefs} from "vue";
 import moment from "moment";
-import CloseIcon from "@/components/icons/CloseIcon.vue";
 
 const props = defineProps({
   uniqId: {
