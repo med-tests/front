@@ -25,7 +25,7 @@ const computedIsNoChart = computed(() => {
 <template>
 <div
     class="mx-auto my-0 flex px-5 h-screen bg-white/95"
-    style="width: 1440px;"
+    style="max-width: 1440px;"
 >
   <div
       class="p-4 border-r-4 border-emerald-800"
@@ -35,8 +35,8 @@ const computedIsNoChart = computed(() => {
     <TestList/>
   </div>
 
-  <div class="grow-1 p-4">
-    <h3 class="mb-3 font-medium text-xl">Графики</h3>
+  <div class="grow-1 p-4 pr-0">
+    <h3 class="font-medium text-xl">Графики</h3>
     <div v-if="computedIsNoChart">
       нет данных или все графики скрыты
     </div>

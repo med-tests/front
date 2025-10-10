@@ -53,7 +53,7 @@
     <Line
         v-if="test.results.length"
         :id="`chart-${test.code}`"
-        style="max-height: 500px;"
+        style="max-height: 400px;"
         :data="chartData"
         :options="options"
     />
