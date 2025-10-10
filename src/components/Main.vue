@@ -35,7 +35,7 @@ const computedIsNoChart = computed(() => {
     </div>
 
     <div class="grow-1 p-4 pr-0">
-      <h3 class="font-medium text-xl">Графики</h3>
+      <h3 class="font-medium text-xl mb-3">Графики</h3>
       <div v-if="computedIsNoChart">
         нет данных или все графики скрыты
       </div>
@@ -47,7 +47,7 @@ const computedIsNoChart = computed(() => {
             v-for="test in testStore.sortedFullData"
             :key="test.code"
             :id="test.code"
-            class="py-15 test-chart relative"
+            class="py-15 first:pt-5 test-chart relative"
             :code="test.code"
             :test="test"
         />
