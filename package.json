@@ -9,7 +9,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "npx eslint src/",
+    "lint:fix": "npx eslint src/ --fix"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.13",
@@ -26,6 +28,9 @@
     "@tailwindcss/postcss": "^4.1.13",
     "@vitejs/plugin-vue": "^6.0.1",
     "autoprefixer": "^10.4.21",
+    "eslint": "^9.37.0",
+    "eslint-plugin-vue": "^10.5.0",
+    "globals": "^16.4.0",
     "tailwindcss": "^4.1.13",
     "vite": "^7.0.6"
   }
