@@ -1,8 +1,8 @@
-import {defineStore} from "pinia";
-import {computed, ref} from "vue"
+import {defineStore} from 'pinia'
+import {computed, ref} from 'vue'
 
 import usersData from '@/data/users.json'
-import moment from "moment";
+import moment from 'moment'
 
 export const useTestStore = defineStore(
   'testStore',
@@ -20,7 +20,7 @@ export const useTestStore = defineStore(
         if (Object.hasOwn(visibilityData, code) && Object.hasOwn(visibilityData[code], 'shownPeriod')) {
           results = analis.results
             .filter(res => {
-              return moment(res.date, 'YYYY-MM-DD').isBetween(visibilityData[code].shownPeriod.start, visibilityData[code].shownPeriod.end, 'day', '[]');
+              return moment(res.date, 'YYYY-MM-DD').isBetween(visibilityData[code].shownPeriod.start, visibilityData[code].shownPeriod.end, 'day', '[]')
             })
             .map((res) => ({x: res.date, y: res.value }))
         } else {
@@ -34,7 +34,7 @@ export const useTestStore = defineStore(
           isHidden: false,
           shownPeriod: {
             start: visibilityData.shownPeriod?.start || results[0]?.x || analis.results[0].date || '',
-            end: visibilityData.shownPeriod?.end || results[results.length - 1]?.x || analis.results[analis.results.length - 1].date || ''
+            end: visibilityData.shownPeriod?.end || results[results.length - 1]?.x || analis.results[analis.results.length - 1].date || '',
           },
           testDates: analis.results.map(({ date }) => date),
           firstTestDate: analis.results[0].date,
@@ -65,7 +65,7 @@ export const useTestStore = defineStore(
       if (param === 'shownPeriod') {
         fullData.value[code].results = usersData[code].results
           .filter(res => {
-            return moment(res.date).isBetween(value.start, value.end, 'day', '[]');
+            return moment(res.date).isBetween(value.start, value.end, 'day', '[]')
           })
           .map((res) => ({x: res.date, y: res.value }))
       }
@@ -116,5 +116,5 @@ export const useTestStore = defineStore(
       changeTest,
       updateOrder,
     }
-  }
+  },
 )

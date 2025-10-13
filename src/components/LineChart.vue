@@ -1,70 +1,71 @@
 <template>
   <div v-if="!test.isHidden">
     <div
-        class="flex mb-3 items-end justify-between mx-auto"
-        style="width: calc(100% - 64px)"
+      class="flex mb-3 items-end justify-between mx-auto"
+      style="width: calc(100% - 64px)"
     >
-      <Calendar
-          class="mr-5 inline-block"
-          label="Начало периода"
-          :uniq-id="`${code}-start`"
-          :selected-dates="test.shownPeriod.start"
-          :min-date="test.firstTestDate"
-          :max-date="test.lastTestDate"
-          :colored-dates="test.testDates"
-          :initDate="test.firstTestDate"
-          :onBeforeSelect="onBeforeSelectStart"
-          @input="changePeriod('start', $event)"
+      <V-Calendar
+        class="mr-5 inline-block"
+        label="Начало периода"
+        :uniq-id="`${code}-start`"
+        :selected-dates="test.shownPeriod.start"
+        :min-date="test.firstTestDate"
+        :max-date="test.lastTestDate"
+        :colored-dates="test.testDates"
+        :init-date="test.firstTestDate"
+        :on-before-select="onBeforeSelectStart"
+        @input="changePeriod('start', $event)"
       />
       <div class="text-lg text-gray-700 leading-none font-medium text-center">
         {{ chartData.datasets[0].label }}
         <div
-            v-if="Object.hasOwn(test.normalRange, 'from') || Object.hasOwn(test.normalRange, 'to')"
-            class="flex items-center mt-2"
-            style="column-gap: 6px;"
-        >✅
+          v-if="Object.hasOwn(test.normalRange, 'from') || Object.hasOwn(test.normalRange, 'to')"
+          class="flex items-center mt-2"
+          style="column-gap: 6px;"
+        >
+          ✅
           <div
-              v-if="Object.hasOwn(test.normalRange, 'from')"
-              class="text-base font-normal"
+            v-if="Object.hasOwn(test.normalRange, 'from')"
+            class="text-base font-normal"
           >
-            от <span class="font-medium">{{test.normalRange.from}}</span>
+            от <span class="font-medium">{{ test.normalRange.from }}</span>
           </div>
           <div
-              v-if="Object.hasOwn(test.normalRange, 'to')"
-              class="text-base font-normal"
+            v-if="Object.hasOwn(test.normalRange, 'to')"
+            class="text-base font-normal"
           >
-            до <span class="font-medium">{{test.normalRange.to}}</span>
+            до <span class="font-medium">{{ test.normalRange.to }}</span>
           </div>
         </div>
       </div>
-      <Calendar
-          class="inline-block"
-          label="Конец периода"
-          :uniq-id="`${code}-end`"
-          :selected-dates="test.shownPeriod.end"
-          :min-date="test.firstTestDate"
-          :max-date="test.lastTestDate"
-          :colored-dates="test.testDates"
-          :initDate="test.lastTestDate"
-          :onBeforeSelect="onBeforeSelectEnd"
-          @input="changePeriod('end', $event)"
+      <V-Calendar
+        class="inline-block"
+        label="Конец периода"
+        :uniq-id="`${code}-end`"
+        :selected-dates="test.shownPeriod.end"
+        :min-date="test.firstTestDate"
+        :max-date="test.lastTestDate"
+        :colored-dates="test.testDates"
+        :init-date="test.lastTestDate"
+        :on-before-select="onBeforeSelectEnd"
+        @input="changePeriod('end', $event)"
       />
     </div>
     <Line
-        v-if="test.results.length"
-        :id="`chart-${test.code}`"
-        style="max-height: 400px;"
-        :data="chartData"
-        :options="options"
+      v-if="test.results.length"
+      :id="`chart-${test.code}`"
+      style="max-height: 400px;"
+      :data="chartData"
+      :options="options"
     />
     <div
-        v-else
-        class="pt-7 text-center text-xl"
+      v-else
+      class="pt-7 text-center text-xl"
     >
       <p class="mb-2 ">
         Кажется,
         с <span class="font-medium">{{ moment(test.shownPeriod.start).format('DD.MM.YYYY') }}</span>
-        по <span class="font-medium">{{ moment(test.shownPeriod.end).format('DD.MM.YYYY')}}</span>
+        по <span class="font-medium">{{ moment(test.shownPeriod.end).format('DD.MM.YYYY') }}</span>
         не было анализов
         <span class="font-medium">"{{ test.title }}"</span>.
       </p>
@@ -83,13 +84,13 @@
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
 } from 'chart.js'
-  import {computed, toRefs } from "vue";
-  import {useTestStore} from "@/store.js";
-  import Calendar from "@/components/shared/Calendar.vue";
-  import moment from "moment";
-  import {showToast} from "@/components/shared/toaster/toast.js";
+  import {computed, toRefs } from 'vue'
+  import {useTestStore} from '@/store.js'
+  import VCalendar from '@/components/shared/VCalendar.vue'
+  import moment from 'moment'
+  import {showToast} from '@/components/shared/toaster/toast.js'
 
   ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
 
@@ -109,7 +110,7 @@
         radius: 8,
         hoverRadius: 10,
         backgroundColor: (ctx) => {
-          const value = ctx.raw.y;
+          const value = ctx.raw.y
           const range = refProps.test.value.normalRange
 
           if (!range) {
@@ -127,7 +128,7 @@
       },
       line: {
         borderColor: '#006045',
-        borderWidth: 4
+        borderWidth: 4,
       },
     },
     plugins: {
@@ -138,17 +139,17 @@
             size: 18,
           },
           color: '#000000',
-        }
+        },
       },
       tooltip: {
         callbacks: {
           title: function (context) {
-            const rawDate = context[0].label;
+            const rawDate = context[0].label
             return moment(new Date(rawDate)).format('DD.MM.YYYY')
           },
           label: function (context) {
             return context.parsed.y
-          }
+          },
         },
         titleFont: {
           size: 18,
@@ -163,15 +164,15 @@
       x: {
         ticks: {
           callback: function(value) {
-            const rawDate = this.getLabelForValue(value);
+            const rawDate = this.getLabelForValue(value)
             return moment(new Date(rawDate)).format('DD.MM.YYYY')
           },
           font: {
             size: 16,
-          }
-        }
-      }
-    }
+          },
+        },
+      },
+    },
   }
 
   function onBeforeSelectStart (value) {
@@ -219,8 +220,8 @@
       datasets: [
         {
           label: refProps.test.value.title,
-          data: refProps.test.value.results || []
-        }
+          data: refProps.test.value.results || [],
+        },
       ],
     }
   })

@@ -1,20 +1,20 @@
 <template>
-  <Input
-      :id="`input-${uniqId}`"
-      :label="label"
-      placeholder="Выберите дату"
-      readonly
-      showCloseIcon
-      @onClickCloseIcon="clearDatepicker"
+  <V-Input
+    :id="`input-${uniqId}`"
+    :label="label"
+    placeholder="Выберите дату"
+    readonly
+    show-close-icon
+    @on-click-close-icon="clearDatepicker"
   />
 </template>
 
 <script setup>
-import AirDatepicker from 'air-datepicker';
-import Input from '@/components/shared/Input.vue';
-import 'air-datepicker/air-datepicker.css';
-import {onMounted, toRefs} from "vue";
-import moment from "moment";
+import AirDatepicker from 'air-datepicker'
+import VInput from '@/components/shared/VInput.vue'
+import 'air-datepicker/air-datepicker.css'
+import {onMounted, toRefs} from 'vue'
+import moment from 'moment'
 
 const props = defineProps({
   uniqId: {
@@ -23,15 +23,15 @@ const props = defineProps({
   },
   label: {
     type: String,
-    default: ''
+    default: '',
   },
   initDate: {
     type: String,
-    default: ''
+    default: '',
   },
   selectedDates: {
     type: [String, Date, Array, null],
-    default: null
+    default: null,
   },
   minDate: {
     type: [String, Date, null],
@@ -43,11 +43,11 @@ const props = defineProps({
   },
   coloredDates: {
     type: Array,
-    default: () => ([])
+    default: () => ([]),
   },
   onBeforeSelect: {
     type: [Function, null],
-    default: null
+    default: null,
   },
 })
 const refProps = toRefs(props)
@@ -57,7 +57,7 @@ const emit = defineEmits(['input'])
 let datepickerInstance = null
 onMounted(() => {
   const options = {
-    dateFormat: "dd.MM.yyyy",
+    dateFormat: 'dd.MM.yyyy',
     onBeforeSelect: ({ date }) => {
       if (refProps.onBeforeSelect.value) {
         return refProps.onBeforeSelect.value(date)
@@ -79,7 +79,7 @@ onMounted(() => {
           shouldChangeContent = isDay && dates.includes(_date)
 
       return {
-        classes: shouldChangeContent ? 'test-day' : undefined
+        classes: shouldChangeContent ? 'test-day' : undefined,
       }
     },
   }
@@ -101,7 +101,7 @@ const clearDatepicker = () => {
       datepickerInstance.clear()
     }
   }
-};
+}
 </script>
 
 <style>

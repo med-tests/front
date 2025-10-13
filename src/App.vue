@@ -1,7 +1,7 @@
 <template>
   <RouterView />
-  <Toast />
+  <V-Toast />
 </template>
 <script setup>
-import Toast from "@/components/shared/toaster/Toast.vue";
+import VToast from '@/components/shared/toaster/VToast.vue'
 </script>
