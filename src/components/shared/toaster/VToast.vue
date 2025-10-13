@@ -1,8 +1,8 @@
 <template>
   <transition-group
+    class="fixed z-10 top-[16px] right-[16px] pointer-events-none max-w-[320px]"
     name="toast"
     tag="div"
-    class="fixed z-10 top-[16px] right-[16px] pointer-events-none max-w-[320px]"
   >
     <div
       v-for="toast in toasts"
@@ -21,9 +21,9 @@
         @click="removeToast(toast.id)"
       >
         <CloseIcon
-          width="20px"
-          height="20px"
           class="fill-red-900"
+          height="20px"
+          width="20px"
         />
       </button>
     </div>

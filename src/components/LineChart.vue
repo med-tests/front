@@ -7,13 +7,13 @@
       <V-Calendar
         class="mr-5 inline-block"
         label="Начало периода"
-        :uniq-id="`${code}-start`"
-        :selected-dates="test.shownPeriod.start"
-        :min-date="test.firstTestDate"
-        :max-date="test.lastTestDate"
         :colored-dates="test.testDates"
         :init-date="test.firstTestDate"
+        :max-date="test.lastTestDate"
+        :min-date="test.firstTestDate"
         :on-before-select="onBeforeSelectStart"
+        :selected-dates="test.shownPeriod.start"
+        :uniq-id="`${code}-start`"
         @input="changePeriod('start', $event)"
       />
       <div class="text-lg text-gray-700 leading-none font-medium text-center">
@@ -41,13 +41,13 @@
       <V-Calendar
         class="inline-block"
         label="Конец периода"
-        :uniq-id="`${code}-end`"
-        :selected-dates="test.shownPeriod.end"
-        :min-date="test.firstTestDate"
-        :max-date="test.lastTestDate"
         :colored-dates="test.testDates"
         :init-date="test.lastTestDate"
+        :max-date="test.lastTestDate"
+        :min-date="test.firstTestDate"
         :on-before-select="onBeforeSelectEnd"
+        :selected-dates="test.shownPeriod.end"
+        :uniq-id="`${code}-end`"
         @input="changePeriod('end', $event)"
       />
     </div>

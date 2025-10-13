@@ -11,23 +11,23 @@
       >
         <a
           class="pr-1 cursor-pointer text-lg"
-          :href="`#${element.code}`"
           :class="[element.isHidden ? 'text-gray-400' : 'text-gray-600 hover:text-gray-900']"
+          :href="`#${element.code}`"
         >
           {{ element.title }}
         </a>
         <EyeIcon
           v-if="element.isHidden"
           class="ml-auto cursor-pointer"
-          :class="[element.isHidden ? 'fill-gray-400' : 'fill-gray-600 hover:fill-gray-900']"
           title="Показать"
+          :class="[element.isHidden ? 'fill-gray-400' : 'fill-gray-600 hover:fill-gray-900']"
           @click="testStore.changeTest(element.code, 'isHidden', !element.isHidden)"
         />
         <EyeClosedIcon
           v-else
           class="ml-auto cursor-pointer"
-          :class="[element.isHidden ? 'fill-gray-400' : 'fill-gray-600 hover:fill-gray-900']"
           title="Скрыть"
+          :class="[element.isHidden ? 'fill-gray-400' : 'fill-gray-600 hover:fill-gray-900']"
           @click="testStore.changeTest(element.code, 'isHidden', !element.isHidden)"
         />
       </div>

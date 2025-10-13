@@ -8,7 +8,25 @@ export default [
     rules: {
       quotes: ["error", "single"],
       semi: ["error", "never"],
-      "comma-dangle": ["error", "always-multiline"]
+      "comma-dangle": ["error", "always-multiline"],
+      "vue/attributes-order": ["error", {
+        "order": [
+          "DEFINITION",
+          "LIST_RENDERING",
+          "CONDITIONALS",
+          "RENDER_MODIFIERS",
+          "GLOBAL",
+          ["UNIQUE", "SLOT"],
+          "TWO_WAY_BINDING",
+          "OTHER_DIRECTIVES",
+          "ATTR_SHORTHAND_BOOL",
+          "ATTR_STATIC",
+          "ATTR_DYNAMIC",
+          "EVENTS",
+          "CONTENT"
+        ],
+        "alphabetical": true,
+      }]
     },
     languageOptions: {
       globals: {

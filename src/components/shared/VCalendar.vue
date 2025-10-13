@@ -1,10 +1,10 @@
 <template>
   <V-Input
     :id="`input-${uniqId}`"
-    :label="label"
-    placeholder="Выберите дату"
     readonly
     show-close-icon
+    placeholder="Выберите дату"
+    :label="label"
     @on-click-close-icon="clearDatepicker"
   />
 </template>

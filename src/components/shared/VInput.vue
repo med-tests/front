@@ -11,11 +11,11 @@
       <input
         :id="id"
         class="border border-color-gray-700 rounded-xs p-2 text-gray-700 text-lg"
-        :value="modelValue"
-        :type="computedType"
         :name="id"
         :placeholder="placeholder"
         :readonly="readonly"
+        :type="computedType"
+        :value="modelValue"
         @input="$emit('update:modelValue', $event.target.value)"
       >
       <div
