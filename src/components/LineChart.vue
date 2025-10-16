@@ -7,10 +7,10 @@
       <V-Calendar
         class="mr-5 inline-block"
         label="Начало периода"
-        :colored-dates="test.testDates"
-        :init-date="test.firstTestDate"
-        :max-date="test.lastTestDate"
-        :min-date="test.firstTestDate"
+        :colored-dates="computedTestDates"
+        :init-date="computedFirstDate"
+        :max-date="computedLastDate"
+        :min-date="computedFirstDate"
         :on-before-select="onBeforeSelectStart"
         :selected-dates="test.shownPeriod.start"
         :uniq-id="`${code}-start`"
@@ -41,10 +41,10 @@
       <V-Calendar
         class="inline-block"
         label="Конец периода"
-        :colored-dates="test.testDates"
-        :init-date="test.lastTestDate"
-        :max-date="test.lastTestDate"
-        :min-date="test.firstTestDate"
+        :colored-dates="computedTestDates"
+        :init-date="computedLastDate"
+        :max-date="computedLastDate"
+        :min-date="computedFirstDate"
         :on-before-select="onBeforeSelectEnd"
         :selected-dates="test.shownPeriod.end"
         :uniq-id="`${code}-end`"
@@ -52,7 +52,7 @@
       />
     </div>
     <Line
-      v-if="test.results.length"
+      v-if="chartData.datasets[0].data.length"
       :id="`chart-${test.code}`"
       style="max-height: 400px;"
       :data="chartData"
@@ -216,13 +216,32 @@
   }
 
   const chartData = computed(() => {
+    const data = refProps.test.value.results
+        .filter(res => {
+          return moment(res.date, 'YYYY-MM-DD')
+            .isBetween(refProps.test.value.shownPeriod.start, refProps.test.value.shownPeriod.end, 'day', '[]')
+        })
+        .map((res) => ({x: res.date, y: res.value })) || [];
+
     return  {
       datasets: [
         {
           label: refProps.test.value.title,
-          data: refProps.test.value.results || [],
+          data,
         },
       ],
     }
+  })
+
+  const computedTestDates = computed(() => {
+    return refProps.test.value.results.map(({ date }) => date) || []
+  })
+
+  const computedFirstDate = computed(() => {
+    return refProps.test.value.results[0].date || ''
+  })
+
+  const computedLastDate = computed(() => {
+    return refProps.test.value.results[refProps.test.value.results.length - 1].date || ''
   })
 </script>
