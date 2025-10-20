@@ -1,17 +1,14 @@
-import { ref } from 'vue'
+import { ref } from "vue";
 
 const toasts = ref([])
 
-let id = 0
-
 function showToast(message, { type = 'success', duration = 3000 } = {}) {
-  ++id
-  const toast = { id, message, type, createdAt: Date.now() }
+  const id = toasts.value.length + 1
+  const toast = { id, message, type }
   toasts.value.push(toast)
   if (duration > 0) {
     setTimeout(() => removeToast(id), duration)
   }
-  return id
 }
 
 function removeToast(id) {
