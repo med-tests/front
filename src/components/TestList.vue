@@ -19,8 +19,8 @@
 
         <v-btn
           not-bordered
+          not-filling
           class="ml-auto"
-          :filling="false"
           :title="element.isHidden ? 'Показать' : 'Скрыть'"
           @click="testStore.changeTest(element.code, 'isHidden', !element.isHidden)"
         >

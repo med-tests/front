@@ -38,7 +38,6 @@
 <script setup>
 import VInput from '@/components/shared/VInput.vue'
 import {ref} from 'vue'
-import { removeToast } from '@/components/shared/toaster/toast.js'
 
 const username = ref('')
 const password = ref('')

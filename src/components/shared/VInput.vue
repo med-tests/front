@@ -22,9 +22,9 @@
       <v-btn
         v-if="type === 'password'"
         not-bordered
+        not-filling
         class="absolute"
         style="width: 24px; height: 24px; top: 50%; transform: translate(0, -50%); right: 5px;}"
-        :filling="false"
         :title="passwordHidden ? 'Показать' : 'Скрыть'"
         @click="passwordHidden = !passwordHidden"
       >
@@ -35,10 +35,10 @@
       <v-btn
         v-if="type !== 'password' && showCloseIcon"
         not-bordered
+        not-filling
         class="absolute"
         style="width: 24px; height: 24px; top: 50%; transform: translate(0, -50%); right: 5px;}"
         title="Очистить"
-        :filling="false"
         @click="$emit('onClickCloseIcon')"
       >
         <CloseIcon />
