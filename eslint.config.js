@@ -26,6 +26,9 @@ export default [
           "CONTENT"
         ],
         "alphabetical": true,
+      }],
+      'vue/multi-word-component-names': ['error', {
+        'ignores': ['index']
       }]
     },
     languageOptions: {
