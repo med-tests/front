@@ -221,7 +221,7 @@
           return moment(res.date, 'YYYY-MM-DD')
             .isBetween(refProps.test.value.shownPeriod.start, refProps.test.value.shownPeriod.end, 'day', '[]')
         })
-        .map((res) => ({x: res.date, y: res.value })) || [];
+        .map((res) => ({x: res.date, y: res.value })) || []
 
     return  {
       datasets: [
