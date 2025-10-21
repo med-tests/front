@@ -1,5 +1,6 @@
 <template>
   <svg
+    fill="inherit"
     height="24px"
     viewBox="0 0 24 24"
     width="24px"

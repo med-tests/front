@@ -1,6 +1,7 @@
 <template>
   <svg
     clip-rule="evenodd"
+    fill="inherit"
     fill-rule="evenodd"
     height="24"
     width="24"

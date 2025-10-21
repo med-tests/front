@@ -1,7 +1,7 @@
 <template>
   <svg
     id="Flat"
-    fill="#000000"
+    fill="inherit"
     height="24"
     viewBox="0 0 256 256"
     width="24"
