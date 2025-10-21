@@ -16,20 +16,17 @@
         >
           {{ element.title }}
         </a>
-        <EyeIcon
-          v-if="element.isHidden"
-          class="ml-auto cursor-pointer"
-          title="Показать"
-          :class="[element.isHidden ? 'fill-gray-400' : 'fill-gray-600 hover:fill-gray-900']"
+
+        <v-btn
+          not-bordered
+          class="ml-auto"
+          :filling="false"
+          :title="element.isHidden ? 'Показать' : 'Скрыть'"
           @click="testStore.changeTest(element.code, 'isHidden', !element.isHidden)"
-        />
-        <EyeClosedIcon
-          v-else
-          class="ml-auto cursor-pointer"
-          title="Скрыть"
-          :class="[element.isHidden ? 'fill-gray-400' : 'fill-gray-600 hover:fill-gray-900']"
-          @click="testStore.changeTest(element.code, 'isHidden', !element.isHidden)"
-        />
+        >
+          <EyeIcon v-if="element.isHidden" />
+          <EyeClosedIcon v-else />
+        </v-btn>
       </div>
     </template>
   </draggable>

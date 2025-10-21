@@ -9,6 +9,7 @@
           id="login"
           v-model="username"
           label="Логин"
+          @on-click-close-icon="username = ''"
         />
       </div>
 
@@ -22,11 +23,13 @@
       </div>
 
       <div class="flex justify-center">
-        <button
-          class="border py-2 px-4 bg-emerald-700 text-white uppercase cursor-pointer"
+        <v-btn
+          type="success"
         >
-          Войти
-        </button>
+          <div class="uppercase px-3 py-1">
+            Войти
+          </div>
+        </v-btn>
       </div>
     </form>
   </div>
@@ -35,6 +38,7 @@
 <script setup>
 import VInput from '@/components/shared/VInput.vue'
 import {ref} from 'vue'
+import { removeToast } from '@/components/shared/toaster/toast.js'
 
 const username = ref('')
 const password = ref('')

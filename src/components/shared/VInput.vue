@@ -18,30 +18,31 @@
         :value="modelValue"
         @input="$emit('update:modelValue', $event.target.value)"
       >
-      <div
+
+      <v-btn
         v-if="type === 'password'"
-        class="absolute "
+        not-bordered
+        class="absolute"
         style="width: 24px; height: 24px; top: 50%; transform: translate(0, -50%); right: 5px;}"
+        :filling="false"
+        :title="passwordHidden ? 'Показать' : 'Скрыть'"
+        @click="passwordHidden = !passwordHidden"
       >
-        <EyeIcon
-          v-if="passwordHidden"
-          class="ml-auto cursor-pointer fill-gray-600 hover:fill-gray-900"
-          title="Показать"
-          @click="passwordHidden = !passwordHidden"
-        />
-        <EyeClosedIcon
-          v-else
-          class="ml-auto cursor-pointer fill-gray-600 hover:fill-gray-900"
-          title="Скрыть"
-          @click="passwordHidden = !passwordHidden"
-        />
-      </div>
-      <CloseIcon
+        <EyeIcon v-if="passwordHidden" />
+        <EyeClosedIcon v-else />
+      </v-btn>
+
+      <v-btn
         v-if="type !== 'password' && showCloseIcon"
-        class="absolute cursor-pointer"
+        not-bordered
+        class="absolute"
         style="width: 24px; height: 24px; top: 50%; transform: translate(0, -50%); right: 5px;}"
+        title="Очистить"
+        :filling="false"
         @click="$emit('onClickCloseIcon')"
-      />
+      >
+        <CloseIcon />
+      </v-btn>
     </div>
   </div>
 </template>

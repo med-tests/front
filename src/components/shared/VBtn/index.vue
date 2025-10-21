@@ -22,7 +22,7 @@ import { computed } from 'vue'
 const props = defineProps({
   notBordered: { type: Boolean, default: false },
   disabled: { type: Boolean, default: false },
-  filling: { type: Boolean, default: true }, // заливка фона кнопки
+  notFilling: { type: Boolean, default: false }, // заливка фона кнопки
   title: { type: String, default: '' },
   type: {type: String, default: 'default'}, // success, error, default
 })
@@ -32,8 +32,9 @@ defineEmits(['click'])
 const randomUid = getRandomUid()
 
 const computedStyles = computed(() => {
-  const { type, filling, disabled } = props
+  const { type, disabled } = props
   const bordered = !props.notBordered
+  const filling = !props.notFilling
 
   const obj = {
     // font-color
