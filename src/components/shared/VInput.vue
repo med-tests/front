@@ -10,7 +10,7 @@
     <div class="relative">
       <input
         :id="id"
-        class="border border-color-gray-700 rounded-xs p-2 text-gray-700 text-lg"
+        class="border border-gray-700 rounded-xs p-2 text-gray-700 text-lg"
         :name="id"
         :placeholder="placeholder"
         :readonly="readonly"

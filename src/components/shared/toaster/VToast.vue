@@ -17,7 +17,7 @@
         {{ toast.message }}
       </div>
       <button
-        class="ml-2 cursor-pointer rounded-xs p-1 hover:bg-gray-900/20"
+        class="ml-2 cursor-pointer rounded-xs p-1 hover:bg-black/5"
         @click="removeToast(toast.id)"
       >
         <CloseIcon
