@@ -62,14 +62,18 @@
       v-else
       class="pt-7 text-center text-xl"
     >
-      <p class="mb-2 ">
-        Кажется,
-        с <span class="font-medium">{{ moment(test.shownPeriod.start).format('DD.MM.YYYY') }}</span>
-        по <span class="font-medium">{{ moment(test.shownPeriod.end).format('DD.MM.YYYY') }}</span>
-        не было анализов
-        <span class="font-medium">"{{ test.title }}"</span>.
-      </p>
-      <p>Попробуйте выбрать другой временной период.</p>
+      <div v-if="!test.results.length">
+        Не было сдано ни одного анализа
+      </div>
+      <div v-else>
+        <p class="mb-2">
+          Кажется,
+          с <span class="font-medium">{{ moment(test.shownPeriod.start).format('DD.MM.YYYY') }}</span>
+          по <span class="font-medium">{{ moment(test.shownPeriod.end).format('DD.MM.YYYY') }}</span>
+          не было анализов <span class="font-medium">"{{ test.title }}"</span>.
+        </p>
+        <p>Попробуйте выбрать другой временной период.</p>
+      </div>
     </div>
   </div>
 </template>
@@ -238,10 +242,10 @@
   })
 
   const computedFirstDate = computed(() => {
-    return refProps.test.value.results[0].date || ''
+    return refProps.test.value.results[0]?.date || ''
   })
 
   const computedLastDate = computed(() => {
-    return refProps.test.value.results[refProps.test.value.results.length - 1].date || ''
+    return refProps.test.value.results[refProps.test.value.results.length - 1]?.date || ''
   })
 </script>
