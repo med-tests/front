@@ -1,7 +1,7 @@
 import {defineStore} from 'pinia'
 import {computed, ref} from 'vue'
-
-import usersData from '@/data/users.json'
+import api from "@/api";
+import { showToast } from "@/components/shared/toaster/toast.js";
 
 export const useTestStore = defineStore(
   'testStore',
@@ -13,24 +13,30 @@ export const useTestStore = defineStore(
         ? JSON.parse(localStorage.getItem('testVisibilityData'))
         : {}
 
-      Object.entries(usersData).forEach(([code, analis]) => {
-        let res = {
-          title: analis.title,
-          normalRange: analis.normalRange || {},
-          results: analis.results,
-          isHidden: false,
-          shownPeriod: {
-            start: visibilityData.shownPeriod?.start || analis.results[0]?.date || '',
-            end: visibilityData.shownPeriod?.end || analis.results[analis.results.length - 1]?.date || '',
-          },
-        }
+      api.getAllTests()
+        .then(data => {
+          Object.entries(data).forEach(([code, analis]) => {
+            let res = {
+              title: analis.title,
+              normalRange: {
+                from: analis.normalFrom || '',
+                to: analis.normalTo || '',
+              },
+              results: analis.results,
+              isHidden: false,
+              shownPeriod: {
+                start: visibilityData.shownPeriod?.start || analis.results[0]?.date || '',
+                end: visibilityData.shownPeriod?.end || analis.results[analis.results.length - 1]?.date || '',
+              },
+            }
 
-        if (Object.hasOwn(visibilityData, code)) {
-          res = {...res, ...visibilityData[code]}
-        }
+            if (Object.hasOwn(visibilityData, code)) {
+              res = {...res, ...visibilityData[code]}
+            }
 
-        fullData.value[code] = res
-      })
+            fullData.value[code] = res
+          })
+        })
     }
 
     const changeTest = (code, param, value) => {
