@@ -3,6 +3,7 @@
     <label
       v-if="label"
       class="block mb-1 text-gray-700"
+      :class="{'required': required }"
       :for="id"
     >
       {{ label }}
@@ -10,7 +11,7 @@
     <div class="relative">
       <input
         :id="id"
-        class="border border-gray-700 rounded-xs p-2 text-gray-700 text-lg"
+        class="border border-color-gray-700 rounded-xs p-2 text-gray-700 text-base w-full"
         :name="id"
         :placeholder="placeholder"
         :readonly="readonly"
@@ -33,7 +34,7 @@
       </v-btn>
 
       <v-btn
-        v-if="type !== 'password' && showCloseIcon"
+        v-if="type !== 'password' && !hideCloseIcon"
         not-bordered
         not-filling
         class="absolute"
@@ -57,10 +58,11 @@ const props = defineProps({
   modelValue: { type: [String, Number], default: ''},
   label: { type: String, default: '' },
   id: { type: String, required: true },
-  placeholder: { type: String, default: '' },
+  placeholder: { type: String, default: 'Введите значение' },
   readonly: { type: Boolean, default: false },
   type: { type: String, default: 'text' },
-  showCloseIcon: { type: Boolean, default: true },
+  hideCloseIcon: { type: Boolean, default: false },
+  required: { type: Boolean, default: false },
 })
 
 defineEmits(['update:modelValue', 'onClickCloseIcon'])
@@ -74,3 +76,22 @@ const computedType = computed(() => {
   return props.type
 })
 </script>
+
+<style scoped>
+/* Скрытие стрелок для всех браузеров */
+input[type=number] {
+  -moz-appearance: textfield;
+  appearance: none;
+}
+
+/* Скрытие стрелок для Webkit-браузеров */
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  display: none;
+}
+.required::after {
+  content: '*';
+  color: red;
+}
+</style>
