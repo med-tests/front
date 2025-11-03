@@ -17,7 +17,7 @@
         :readonly="readonly"
         :type="computedType"
         :value="modelValue"
-        @input="$emit('update:modelValue', $event.target.value)"
+        @input="$emit('update:modelValue', type === 'number' ? Number($event.target.value) : $event.target.value)"
       >
 
       <v-btn
