@@ -1,7 +1,7 @@
 <template>
   <div v-if="!test.isHidden">
     <div
-      class="flex mb-3 items-end justify-between mx-auto"
+      class="flex mb-3 items-center justify-between mx-auto"
       style="width: calc(100% - 64px)"
     >
       <V-Calendar
@@ -19,19 +19,19 @@
       <div class="text-lg text-gray-700 leading-none font-medium text-center">
         {{ chartData.datasets[0].label }}
         <div
-          v-if="Object.hasOwn(test.normalRange, 'from') || Object.hasOwn(test.normalRange, 'to')"
+          v-if="test.normalRange.from || test.normalRange.to"
           class="flex items-center mt-2"
           style="column-gap: 6px;"
         >
           ✅
           <div
-            v-if="Object.hasOwn(test.normalRange, 'from')"
+            v-if="test.normalRange.from"
             class="text-base font-normal"
           >
             от <span class="font-medium">{{ test.normalRange.from }}</span>
           </div>
           <div
-            v-if="Object.hasOwn(test.normalRange, 'to')"
+            v-if="test.normalRange.to"
             class="text-base font-normal"
           >
             до <span class="font-medium">{{ test.normalRange.to }}</span>

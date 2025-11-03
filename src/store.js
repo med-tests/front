@@ -1,40 +1,24 @@
 import {defineStore} from 'pinia'
-import {computed, ref} from 'vue'
-import api from "@/api";
-import { showToast } from "@/components/shared/toaster/toast.js";
+import { computed, reactive } from 'vue'
+import api from '@/api'
+import { showToast } from '@/components/shared/toaster/toast.js'
+import { prepareTest } from '@/helpers'
 
 export const useTestStore = defineStore(
   'testStore',
   () => {
-    const fullData = ref({})
+    const fullData = reactive({})
 
     const fetchData = () => {
       const visibilityData = localStorage.getItem('testVisibilityData')
         ? JSON.parse(localStorage.getItem('testVisibilityData'))
         : {}
 
+      // todo установка order
       api.getAllTests()
         .then(data => {
-          Object.entries(data).forEach(([code, analis]) => {
-            let res = {
-              title: analis.title,
-              normalRange: {
-                from: analis.normalFrom || '',
-                to: analis.normalTo || '',
-              },
-              results: analis.results,
-              isHidden: false,
-              shownPeriod: {
-                start: visibilityData.shownPeriod?.start || analis.results[0]?.date || '',
-                end: visibilityData.shownPeriod?.end || analis.results[analis.results.length - 1]?.date || '',
-              },
-            }
-
-            if (Object.hasOwn(visibilityData, code)) {
-              res = {...res, ...visibilityData[code]}
-            }
-
-            fullData.value[code] = res
+          data.forEach(test => {
+            fullData[test.code] = prepareTest(test, visibilityData[test.code])
           })
         })
     }
@@ -54,20 +38,21 @@ export const useTestStore = defineStore(
     }
 
     const arrListData = computed(() => {
-      return Object.entries(fullData.value)
+      return Object.entries(fullData)
         .map(([key, value]) => {
+          const { title, order, isHidden } = value
           return {
                 code: key,
-                title: value.title,
-                order: value.order,
-                isHidden: value.isHidden,
+                title: title,
+                order: order,
+                isHidden: isHidden,
               }
         })
         .sort((a, b) => a.order - b.order)
     })
 
     const sortedFullData = computed(() => {
-      return Object.entries(fullData.value)
+      return Object.entries(fullData)
         .map(([key, value]) => {
           return {
             code: key,
@@ -81,7 +66,16 @@ export const useTestStore = defineStore(
       newList
         .forEach(({ code }, index ) => {
           changeTest(code, 'order', index)
-          fullData.value[code].order = index
+          fullData[code].order = index
+        })
+    }
+
+    const addNewTest = (test) => {
+      api.addTest(test)
+        .then((res) => {
+          showToast('Новый тест добавлен')
+          // todo разобраться с order
+          fullData[res.code] = prepareTest(res, { isHidden: false, order: Object.keys(fullData).length })
         })
     }
 
@@ -97,6 +91,7 @@ export const useTestStore = defineStore(
       fetchData,
       changeTest,
       updateOrder,
+      addNewTest,
     }
   },
 )

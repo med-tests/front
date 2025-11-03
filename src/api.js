@@ -1,20 +1,20 @@
-import axios from 'axios';
-import { showToast } from "@/components/shared/toaster/toast.js";
+import axios from 'axios'
+import { showToast } from '@/components/shared/toaster/toast.js'
 
 const apiInstance = axios.create({
   baseURL: 'http://localhost:5000',
-});
+})
 
 apiInstance.interceptors.response.use(function (response) {
   // если код состояния в диапазоне 2xx
-  return response;
+  return response
 },
   function (error) {
   // если код состояния вне диапазона 2xx
   showToast('Ошибка', { type: 'error' })
-  console.log(error);
-  return Promise.reject(error);
-});
+  console.log(error)
+  return Promise.reject(error)
+})
 
 export default {
   getAllTests: function () {
@@ -22,5 +22,11 @@ export default {
       .then(response => {
         return response.data
     })
+  },
+  addTest: function addTest (data) {
+    return apiInstance.post('/add-test', data)
+      .then(response => {
+        return response.data
+      })
   },
 }
