@@ -4,16 +4,16 @@
     to="body"
   >
     <div class="absolute flex items-center justify-center top-0 bottom-0 left-0 right-0 bg-black/70 p-10">
-      <div class="p-4 bg-white/95">
+      <div class="p-5 bg-white/95 rounded-sm">
         <CloseIcon
           v-if="!hideClose"
-          class="mb-3 ml-auto cursor-pointer"
+          class="ml-auto cursor-pointer"
           style="width: 24px; height: 24px;}"
           @click="close"
         />
         <h5
           v-if="title"
-          class="mb-4 text-center text-xl font-medium"
+          class="mb-3 text-center text-xl font-medium"
         >
           {{ title }}
         </h5>
@@ -40,7 +40,7 @@ defineProps({
 
 const emit = defineEmits(['onClose'])
 
-defineExpose({ show })
+defineExpose({ show, close })
 
 const isOpened = ref(false)
 
