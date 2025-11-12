@@ -4,7 +4,9 @@
     readonly
     show-close-icon
     placeholder="Выберите дату"
+    :hide-close-icon="hideCloseIcon"
     :label="label"
+    @invalid="emit('invalid')"
     @on-click-close-icon="clearDatepicker"
   />
 </template>
@@ -13,7 +15,7 @@
 import AirDatepicker from 'air-datepicker'
 import VInput from '@/components/shared/VInput.vue'
 import 'air-datepicker/air-datepicker.css'
-import {onMounted, toRefs} from 'vue'
+import { onMounted, toRefs, watch } from 'vue'
 import moment from 'moment'
 
 const props = defineProps({
@@ -49,10 +51,14 @@ const props = defineProps({
     type: [Function, null],
     default: null,
   },
+  hideCloseIcon: {
+    type: Boolean,
+    default: false,
+  },
 })
 const refProps = toRefs(props)
 
-const emit = defineEmits(['input'])
+const emit = defineEmits(['input', 'invalid'])
 
 let datepickerInstance = null
 onMounted(() => {
@@ -102,6 +108,17 @@ const clearDatepicker = () => {
     }
   }
 }
+
+watch(
+  () => props.selectedDates,
+  () => {
+    if (!props.selectedDates) {
+      datepickerInstance.clear()
+      return
+    }
+    datepickerInstance.selectDate(moment(props.selectedDates, 'DD.MM.YYYY').toDate())
+  },
+)
 </script>
 
 <style>
