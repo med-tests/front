@@ -11,13 +11,14 @@
     <div class="relative">
       <input
         :id="id"
-        class="border border-color-gray-700 rounded-xs p-2 text-gray-700 text-base w-full"
+        class="border rounded-xs p-2 text-gray-700 text-base w-full"
+        :class="[isInvalid ? 'border-red-700' : 'border-gray-700']"
         :name="id"
         :placeholder="placeholder"
         :readonly="readonly"
         :type="computedType"
         :value="modelValue"
-        @input="$emit('update:modelValue', type === 'number' ? Number($event.target.value) : $event.target.value)"
+        @input="setValue($event.target.value)"
       >
 
       <v-btn
@@ -49,10 +50,11 @@
 </template>
 
 <script setup>
-import {computed, ref} from 'vue'
+import { computed, ref, watch } from 'vue'
 import EyeIcon from '@/components/icons/EyeIcon.vue'
 import EyeClosedIcon from '@/components/icons/EyeClosedIcon.vue'
 import CloseIcon from '@/components/icons/CloseIcon.vue'
+import { showToast } from '@/components/shared/toaster/toast.js'
 
 const props = defineProps({
   modelValue: { type: [String, Number], default: ''},
@@ -60,12 +62,16 @@ const props = defineProps({
   id: { type: String, required: true },
   placeholder: { type: String, default: 'Введите значение' },
   readonly: { type: Boolean, default: false },
-  type: { type: String, default: 'text' },
+  type: { type: String, default: 'text' }, // text, password, number
   hideCloseIcon: { type: Boolean, default: false },
   required: { type: Boolean, default: false },
+  touchId: { type: String, default: '' },
+  // должна возвращать true, если ввод валиден и false - если нет
+  // может иметь сайд-эффекты типа вызовы тостера с текстом ошибки
+  callbackValidator: { type: Function, default: () => true },
 })
 
-defineEmits(['update:modelValue', 'onClickCloseIcon'])
+const emit = defineEmits(['update:modelValue', 'onClickCloseIcon', 'invalid'])
 
 const passwordHidden = ref(true)
 
@@ -75,6 +81,41 @@ const computedType = computed(() => {
   }
   return props.type
 })
+
+const value = ref('')
+const setValue = (newValue) => {
+  value.value = newValue
+  emit('update:modelValue', props.type === 'number' ? Number(newValue) : newValue)
+}
+
+const isInvalid = ref(false)
+
+watch(
+  () => props.touchId,
+  () => {
+    if (props.required && (!value.value && value.value !== 0)) {
+      isInvalid.value = true
+      showToast('Заполните обязательные поля', {type: 'error'})
+      emit('invalid')
+      return
+    }
+
+    const isCustomValid = props.callbackValidator(value.value)
+    if (!isCustomValid) {
+      isInvalid.value = true
+      emit('invalid')
+    }
+  },
+)
+
+watch(
+  value,
+  () => {
+    if (isInvalid.value) {
+      isInvalid.value = false
+    }
+  },
+)
 </script>
 
 <style scoped>

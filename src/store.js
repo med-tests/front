@@ -34,7 +34,7 @@ export const useTestStore = defineStore(
       }
 
       localStorage.setItem('testVisibilityData', JSON.stringify(visibilityData))
-      fullData.value[code][param] = value
+      fullData[code][param] = value
     }
 
     const arrListData = computed(() => {
