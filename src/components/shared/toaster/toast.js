@@ -2,7 +2,7 @@ import { ref } from 'vue'
 
 const toasts = ref([])
 
-function showToast(message, { type = 'success', duration = 3000 } = {}) {
+function showToast(message, { type = 'success', duration = 4000 } = {}) {
   const id = toasts.value.length + 1
   const toast = { id, message, type }
   toasts.value.push(toast)

@@ -7,16 +7,12 @@
     <div
       v-for="toast in toasts"
       :key="toast.id"
-      class="flex items-center justify-between pointer-events-auto mb-4 pl-5 pr-4 py-3 border shadow-sm rounded-xs relative"
+      class="flex items-center justify-between pointer-events-auto mb-4 pl-4 pr-6 py-7 border shadow-sm rounded-xs relative"
       :class="{
         'bg-emerald-100 border-emerald-700': toast.type === 'success',
         'bg-red-100 border-red-700': toast.type === 'error',
       }"
     >
-      <div class="text-lg text-gray-800">
-        {{ toast.message }}
-      </div>
-
       <v-btn
         not-bordered
         not-filling
@@ -31,6 +27,10 @@
           width="20px"
         />
       </v-btn>
+
+      <div class="text-lg text-gray-800">
+        {{ toast.message }}
+      </div>
     </div>
   </transition-group>
 </template>
