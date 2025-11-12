@@ -1,12 +1,15 @@
 <template>
   <V-Input
     :id="`input-${uniqId}`"
+    :model-value="dateValue"
     readonly
-    show-close-icon
     placeholder="Выберите дату"
+    :callbackValidator="callbackValidator"
     :hide-close-icon="hideCloseIcon"
     :label="label"
-    @invalid="emit('invalid')"
+    :touch-id="touchId"
+    :required="required"
+    @on-validate="emit('onValidate', $event)"
     @on-click-close-icon="clearDatepicker"
   />
 </template>
@@ -15,7 +18,7 @@
 import AirDatepicker from 'air-datepicker'
 import VInput from '@/components/shared/VInput.vue'
 import 'air-datepicker/air-datepicker.css'
-import { onMounted, toRefs, watch } from 'vue'
+import { onMounted, ref, toRefs, watch } from "vue";
 import moment from 'moment'
 
 const props = defineProps({
@@ -23,6 +26,7 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  required: { type: Boolean, default: false },
   label: {
     type: String,
     default: '',
@@ -31,6 +35,7 @@ const props = defineProps({
     type: String,
     default: '',
   },
+  touchId: { type: String, default: '' },
   selectedDates: {
     type: [String, Date, Array, null],
     default: null,
@@ -55,10 +60,13 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  callbackValidator: { type: Function, default: () => true },
 })
 const refProps = toRefs(props)
 
-const emit = defineEmits(['input', 'invalid'])
+const emit = defineEmits(['input', 'onValidate'])
+
+const dateValue = ref('')
 
 let datepickerInstance = null
 onMounted(() => {
@@ -73,9 +81,11 @@ onMounted(() => {
     },
     onSelect: ({formattedDate}) => {
       if (!formattedDate) {
+        dateValue.value = moment(refProps.selectedDates.value, 'YYYY-MM-DD').format('DD.MM.YYYY')
         datepickerInstance.selectDate(moment(refProps.selectedDates.value, 'YYYY-MM-DD').toDate())
         return
       }
+      dateValue.value = formattedDate
       emit('input', formattedDate || '')
     },
     onRenderCell({date, cellType}) {
@@ -112,7 +122,7 @@ const clearDatepicker = () => {
 watch(
   () => props.selectedDates,
   () => {
-    if (!props.selectedDates) {
+    if (props.selectedDates === '') {
       datepickerInstance.clear()
       return
     }

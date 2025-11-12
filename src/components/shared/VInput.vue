@@ -17,7 +17,7 @@
         :placeholder="placeholder"
         :readonly="readonly"
         :type="computedType"
-        :value="modelValue"
+        :value="value"
         @input="setValue($event.target.value)"
       >
 
@@ -71,7 +71,7 @@ const props = defineProps({
   callbackValidator: { type: Function, default: () => true },
 })
 
-const emit = defineEmits(['update:modelValue', 'onClickCloseIcon', 'invalid'])
+const emit = defineEmits(['update:modelValue', 'onClickCloseIcon', 'onValidate'])
 
 const passwordHidden = ref(true)
 
@@ -96,15 +96,17 @@ watch(
     if (props.required && (!value.value && value.value !== 0)) {
       isInvalid.value = true
       showToast('Заполните обязательные поля', {type: 'error'})
-      emit('invalid')
+      emit('onValidate', false)
       return
     }
 
     const isCustomValid = props.callbackValidator(value.value)
     if (!isCustomValid) {
       isInvalid.value = true
-      emit('invalid')
+      emit('onValidate', false)
     }
+
+    emit('onValidate', true)
   },
 )
 
@@ -115,6 +117,16 @@ watch(
       isInvalid.value = false
     }
   },
+)
+
+watch(
+  () => props.modelValue,
+  (newVal) => {
+    value.value = newVal
+  },
+  {
+    immediate: true,
+  }
 )
 </script>
 
