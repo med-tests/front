@@ -56,19 +56,19 @@
             :required="field.required"
             :touch-id="touchId"
             :type="field.type || 'text'"
-            @onValidate="data[rowIndex][fieldKey].error = $event"
+            @on-validate="data[rowIndex][fieldKey].error = $event"
           />
           <v-calendar
             v-if="field.type === 'calendar'"
             class="grow"
             :callback-validator="field.validator"
             :hide-close-icon="field.hideInputCloseIcon"
-            :selected-dates="data[rowIndex][fieldKey].value"
-            :uniq-id="`${rowIndex}-${fieldKey}-calendar`"
-            :touch-id="touchId"
             :required="field.required"
+            :selected-dates="data[rowIndex][fieldKey].value"
+            :touch-id="touchId"
+            :uniq-id="`${rowIndex}-${fieldKey}-calendar`"
             @input="data[rowIndex][fieldKey].value = $event"
-            @onValidate="data[rowIndex][fieldKey].error = !$event"
+            @on-validate="data[rowIndex][fieldKey].error = !$event"
           />
         </div>
         <v-btn

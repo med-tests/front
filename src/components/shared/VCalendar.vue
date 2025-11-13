@@ -1,16 +1,16 @@
 <template>
   <V-Input
     :id="`input-${uniqId}`"
-    :model-value="dateValue"
     readonly
     placeholder="Выберите дату"
-    :callbackValidator="callbackValidator"
+    :callback-validator="callbackValidator"
     :hide-close-icon="hideCloseIcon"
     :label="label"
-    :touch-id="touchId"
+    :model-value="dateValue"
     :required="required"
-    @on-validate="emit('onValidate', $event)"
+    :touch-id="touchId"
     @on-click-close-icon="clearDatepicker"
+    @on-validate="emit('onValidate', $event)"
   />
 </template>
 
@@ -18,7 +18,7 @@
 import AirDatepicker from 'air-datepicker'
 import VInput from '@/components/shared/VInput.vue'
 import 'air-datepicker/air-datepicker.css'
-import { onMounted, ref, toRefs, watch } from "vue";
+import { onMounted, ref, toRefs, watch } from 'vue'
 import moment from 'moment'
 
 const props = defineProps({

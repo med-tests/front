@@ -126,7 +126,7 @@ watch(
   },
   {
     immediate: true,
-  }
+  },
 )
 </script>
 
