@@ -79,6 +79,25 @@ export const useTestStore = defineStore(
         })
     }
 
+    const deleteTest = (code) => {
+      api.editTest(code, { status: 0 })
+        .then(() => {
+          delete fullData[code]
+          const visibilityData = localStorage.getItem('testVisibilityData')
+            ? JSON.parse(localStorage.getItem('testVisibilityData'))
+            : {}
+
+          if(!Object.keys(visibilityData).length) {
+            return
+          }
+
+          if (Object.hasOwn(visibilityData, code)) {
+            delete visibilityData[code]
+            localStorage.setItem('testVisibilityData', JSON.stringify(visibilityData))
+          }
+        })
+    }
+
     return {
       // state
       fullData,
@@ -92,6 +111,7 @@ export const useTestStore = defineStore(
       changeTest,
       updateOrder,
       addNewTest,
+      deleteTest,
     }
   },
 )

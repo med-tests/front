@@ -11,7 +11,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "npx eslint src/",
-    "lint:fix": "npx eslint src/ --fix"
+    "lint:fix": "npx eslint src/ --fix",
+    "back": "cd ../med-tests-back && npm start"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.13",

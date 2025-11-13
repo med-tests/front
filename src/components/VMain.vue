@@ -33,7 +33,7 @@ const upsertTestModalRef = useTemplateRef('upsert-test-modal')
   >
     <div
       class="p-4 pl-0 border-r-4 border-emerald-800"
-      style="width: 235px"
+      style="width: 250px"
     >
       <div class="mb-3 flex items-center justify-between">
         <h3 class="font-medium text-xl text-gray-700">

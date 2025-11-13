@@ -7,7 +7,7 @@ const apiInstance = axios.create({
 
 apiInstance.interceptors.response.use(function (response) {
   // если код состояния в диапазоне 2xx
-  return response
+  return response.data
 },
   function (error) {
   // если код состояния вне диапазона 2xx
@@ -19,14 +19,12 @@ apiInstance.interceptors.response.use(function (response) {
 export default {
   getAllTests: function () {
     return apiInstance.get('/')
-      .then(response => {
-        return response.data
-    })
   },
-  addTest: function addTest (data) {
+  addTest: function (data) {
     return apiInstance.post('/add-test', data)
-      .then(response => {
-        return response.data
-      })
+  },
+  editTest: function (code, data) {
+    // code должен быть обязательно
+    return apiInstance.patch('/edit', { code, ...data })
   },
 }
