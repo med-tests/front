@@ -7,6 +7,10 @@ const apiInstance = axios.create({
 
 apiInstance.interceptors.response.use(function (response) {
   // если код состояния в диапазоне 2xx
+  if (response.data.error) {
+    showToast(response.data.message, { type: 'error' })
+    return Promise.reject(response.data)
+  }
   return response.data
 },
   function (error) {
