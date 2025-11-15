@@ -56,7 +56,7 @@
             :required="field.required"
             :touch-id="touchId"
             :type="field.type || 'text'"
-            @on-validate="data[rowIndex][fieldKey].error = $event"
+            @on-validate="data[rowIndex][fieldKey].error = !$event"
           />
           <v-calendar
             v-if="field.type === 'calendar'"
@@ -67,8 +67,8 @@
             :selected-dates="data[rowIndex][fieldKey].value"
             :touch-id="touchId"
             :uniq-id="`${rowIndex}-${fieldKey}-calendar`"
-            @input="data[rowIndex][fieldKey].value = $event"
             @clear="data[rowIndex][fieldKey].value = ''"
+            @input="data[rowIndex][fieldKey].value = $event"
             @on-validate="data[rowIndex][fieldKey].error = !$event"
           />
         </div>
@@ -130,6 +130,7 @@ function addFieldForNewResult () {
   Object.entries(props.fieldsSettings)
     .forEach(([fieldKey, fieldValue]) => {
       const item = { error: false, value: '' }
+
       if (Object.hasOwn(fieldValue, 'defaultValue')) {
         item.value = fieldValue.defaultValue
       }

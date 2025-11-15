@@ -12,7 +12,7 @@
       <input
         :id="id"
         class="border rounded-xs p-2 text-gray-700 text-base w-full"
-        :class="[isInvalid ? 'border-red-700' : 'border-gray-700']"
+        :class="[isInvalid || isInvalidCalendar ? 'border-red-700' : 'border-gray-700']"
         :name="id"
         :placeholder="placeholder"
         :readonly="readonly"
@@ -69,6 +69,8 @@ const props = defineProps({
   // должна возвращать true, если ввод валиден и false - если нет
   // может иметь сайд-эффекты типа вызовы тостера с текстом ошибки
   callbackValidator: { type: Function, default: () => true },
+  // только для календаря. Инпут используется только на вывод. Ввод контролирует библиотека
+  isInvalidCalendar: { type: Boolean, default: false},
 })
 
 const emit = defineEmits(['update:modelValue', 'onClickCloseIcon', 'onValidate'])

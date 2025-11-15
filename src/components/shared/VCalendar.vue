@@ -3,14 +3,10 @@
     :id="`input-${uniqId}`"
     readonly
     placeholder="Выберите дату"
-    :callback-validator="callbackValidator"
     :hide-close-icon="hideCloseIcon"
+    :is-invalid-calendar="isInvalid"
     :label="label"
-    :model-value="dateValue"
-    :required="required"
-    :touch-id="touchId"
     @on-click-close-icon="emit('clear')"
-    @on-validate="emit('onValidate', $event)"
   />
 </template>
 
@@ -20,6 +16,7 @@ import VInput from '@/components/shared/VInput.vue'
 import 'air-datepicker/air-datepicker.css'
 import { onMounted, ref, toRefs, watch } from 'vue'
 import moment from 'moment'
+import { showToast } from '@/components/shared/toaster/toast.js'
 
 const props = defineProps({
   uniqId: {
@@ -72,6 +69,7 @@ let datepickerInstance = null
 onMounted(() => {
   const options = {
     dateFormat: 'dd.MM.yyyy',
+    autoClose: true,
     onBeforeSelect: ({ date }) => {
       // если не проходит проверку, выбранная дата не установится
       if (refProps.onBeforeSelect.value) {
@@ -80,12 +78,13 @@ onMounted(() => {
         return true
       }
     },
-    onSelect: ({ date, formattedDate }) => {
+    onSelect: ({ date }) => {
+      isInvalid.value = false
       const initFormat = date
        ? moment(date).format('YYYY-MM-DD')
        : ''
 
-      dateValue.value = formattedDate ? formattedDate : ''
+      dateValue.value = initFormat
       emit('input', initFormat)
     },
     onRenderCell({date, cellType}) {
@@ -108,16 +107,46 @@ onMounted(() => {
   })
 
   datepickerInstance = new AirDatepicker(`#input-${refProps.uniqId.value}`, options)
+
+  if (props.selectedDates) {
+    datepickerInstance.selectDate(moment(props.selectedDates, 'YYYY-MM-DD').toDate())
+  }
 })
 
 watch(
   () => props.selectedDates,
   (newVal) => {
-    if (newVal === '') {
-      datepickerInstance.clear()
+    if (datepickerInstance) {
+      if (props.selectedDates === dateValue.value) {
+        return
+      }
+
+      newVal === ''
+       ? datepickerInstance.clear()
+       : datepickerInstance.selectDate(moment(newVal, 'YYYY-MM-DD').toDate())
+    }
+  },
+)
+
+const isInvalid = ref(false)
+
+watch(
+  () => props.touchId,
+  () => {
+    if (props.required && !dateValue.value) {
+      isInvalid.value = true
+      showToast('Заполните обязательные поля', {type: 'error'})
+      emit('onValidate', false)
       return
     }
-    datepickerInstance.selectDate(moment(newVal, 'YYYY-MM-DD').toDate())
+
+    const isCustomValid = props.callbackValidator(dateValue.value)
+    if (!isCustomValid) {
+      isInvalid.value = true
+      emit('onValidate', false)
+    }
+
+    emit('onValidate', true)
   },
 )
 </script>
