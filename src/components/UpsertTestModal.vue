@@ -1,7 +1,7 @@
 <template>
   <v-modal
     ref="test-modal"
-    :title="editingTestCode ? `Редактировать '${testName}'` : 'Добавить анализ'"
+    :title="isCreating ? 'Добавить анализ' : `Редактировать '${testName}'`"
     @on-close="onClose"
   >
     <div>
@@ -148,7 +148,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['close', 'save'])
+const emit = defineEmits(['close'])
 
 const testModal = useTemplateRef('test-modal')
 
@@ -159,6 +159,10 @@ const highEdge = ref(0)
 const results = ref([])
 
 defineExpose({ open })
+
+const isCreating = computed(() => {
+  return props.editingTestCode === ''
+})
 
 function open () {
   if (props.editingTestCode) {
@@ -246,23 +250,25 @@ const saveTest = () => {
   }
 
   // создание анализа - сохраняем все поля
-  if (!props.editingTestCode) {
-    emit('save', {
+  if (isCreating.value) {
+    const sendData = {
       code: testCode.value,
       title: testName.value,
       normalFrom: lowEdge.value,
       normalTo: highEdge.value,
-      results: existedResults.map(res => ({
-        date: moment(res.date, 'DD.MM.YYYY').format('YYYY-MM-DD'),
-        value: res.value,
-      })),
-    })
+      results: formResults.value
+        .filter(({ date, resValue }) => date.value && (resValue.value || resValue.value === 0))
+        .map(({ date, resValue }) => ({
+          date: date.value,
+          value: resValue.value,
+        })),
+    }
+
+    testStore.addNewTest(sendData)
+      .then(() => {
+        testModal.value.close()
+      })
   }
-
-
-  nextTick(() => {
-    testModal.value.close()
-  })
 }
 </script>
 

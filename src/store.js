@@ -71,7 +71,7 @@ export const useTestStore = defineStore(
     }
 
     const addNewTest = (test) => {
-      api.addTest(test)
+      return api.addTest(test)
         .then((res) => {
           showToast('Новый тест добавлен')
           // todo разобраться с order

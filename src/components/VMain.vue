@@ -57,7 +57,6 @@ const upsertTestModalRef = useTemplateRef('upsert-test-modal')
 
       <UpsertTestModal
         ref="upsert-test-modal"
-        @save="testStore.addNewTest($event)"
       />
     </div>
 
