@@ -8,12 +8,12 @@
         class="mr-5 inline-block"
         label="Начало периода"
         :colored-dates="computedTestDates"
-        :init-date="computedFirstDate"
         :max-date="computedLastDate"
         :min-date="computedFirstDate"
         :on-before-select="onBeforeSelectStart"
         :selected-dates="test.shownPeriod.start"
         :uniq-id="`${code}-start`"
+        @clear="changePeriod('start', computedFirstDate)"
         @input="changePeriod('start', $event)"
       />
       <div class="text-lg text-gray-700 leading-none font-medium text-center">
@@ -42,12 +42,12 @@
         class="inline-block"
         label="Конец периода"
         :colored-dates="computedTestDates"
-        :init-date="computedLastDate"
         :max-date="computedLastDate"
         :min-date="computedFirstDate"
         :on-before-select="onBeforeSelectEnd"
         :selected-dates="test.shownPeriod.end"
         :uniq-id="`${code}-end`"
+        @clear="changePeriod('end', computedLastDate)"
         @input="changePeriod('end', $event)"
       />
     </div>
@@ -209,8 +209,6 @@
       end: refProps.test.value.shownPeriod.end,
     }
     newPeriod[period] = value
-        ? moment(value, 'DD.MM.YYYY').format('YYYY-MM-DD')
-        : ''
 
     testStore.changeTest(
         refProps.code.value,

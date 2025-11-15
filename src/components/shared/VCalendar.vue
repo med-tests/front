@@ -9,7 +9,7 @@
     :model-value="dateValue"
     :required="required"
     :touch-id="touchId"
-    @on-click-close-icon="clearDatepicker"
+    @on-click-close-icon="emit('clear')"
     @on-validate="emit('onValidate', $event)"
   />
 </template>
@@ -31,23 +31,23 @@ const props = defineProps({
     type: String,
     default: '',
   },
-  initDate: {
-    type: String,
-    default: '',
-  },
   touchId: { type: String, default: '' },
+  // Ожидает формат YYYY-MM-DD или пустую строку
   selectedDates: {
-    type: [String, Date, Array, null],
-    default: null,
+    type: String,
+    required: true,
   },
+  // Ожидает формат YYYY-MM-DD
   minDate: {
     type: [String, Date, null],
     default: null,
   },
+  // Ожидает формат YYYY-MM-DD
   maxDate: {
     type: [String, Date, null],
     default: null,
   },
+  // Ожидает формат YYYY-MM-DD
   coloredDates: {
     type: Array,
     default: () => ([]),
@@ -64,7 +64,7 @@ const props = defineProps({
 })
 const refProps = toRefs(props)
 
-const emit = defineEmits(['input', 'onValidate'])
+const emit = defineEmits(['input', 'onValidate', 'clear'])
 
 const dateValue = ref('')
 
@@ -73,20 +73,20 @@ onMounted(() => {
   const options = {
     dateFormat: 'dd.MM.yyyy',
     onBeforeSelect: ({ date }) => {
+      // если не проходит проверку, выбранная дата не установится
       if (refProps.onBeforeSelect.value) {
         return refProps.onBeforeSelect.value(date)
       } else {
         return true
       }
     },
-    onSelect: ({formattedDate}) => {
-      if (!formattedDate) {
-        dateValue.value = moment(refProps.selectedDates.value, 'YYYY-MM-DD').format('DD.MM.YYYY')
-        datepickerInstance.selectDate(moment(refProps.selectedDates.value, 'YYYY-MM-DD').toDate())
-        return
-      }
-      dateValue.value = formattedDate
-      emit('input', formattedDate || '')
+    onSelect: ({ date, formattedDate }) => {
+      const initFormat = date
+       ? moment(date).format('YYYY-MM-DD')
+       : ''
+
+      dateValue.value = formattedDate ? formattedDate : ''
+      emit('input', initFormat)
     },
     onRenderCell({date, cellType}) {
       let dates = refProps.coloredDates.value,
@@ -109,24 +109,15 @@ onMounted(() => {
 
   datepickerInstance = new AirDatepicker(`#input-${refProps.uniqId.value}`, options)
 })
-const clearDatepicker = () => {
-  if (datepickerInstance) {
-    if (refProps.initDate.value) {
-      datepickerInstance.selectDate(moment(refProps.initDate.value, 'YYYY-MM-DD').toDate())
-    } else {
-      datepickerInstance.clear()
-    }
-  }
-}
 
 watch(
   () => props.selectedDates,
-  () => {
-    if (props.selectedDates === '') {
+  (newVal) => {
+    if (newVal === '') {
       datepickerInstance.clear()
       return
     }
-    datepickerInstance.selectDate(moment(props.selectedDates, 'DD.MM.YYYY').toDate())
+    datepickerInstance.selectDate(moment(newVal, 'YYYY-MM-DD').toDate())
   },
 )
 </script>

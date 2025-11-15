@@ -68,6 +68,7 @@
             :touch-id="touchId"
             :uniq-id="`${rowIndex}-${fieldKey}-calendar`"
             @input="data[rowIndex][fieldKey].value = $event"
+            @clear="data[rowIndex][fieldKey].value = ''"
             @on-validate="data[rowIndex][fieldKey].error = !$event"
           />
         </div>

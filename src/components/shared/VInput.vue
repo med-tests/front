@@ -87,9 +87,17 @@ const setValue = (newValue) => {
   value.value = newValue
   emit('update:modelValue', props.type === 'number' ? Number(newValue) : newValue)
 }
+watch(
+  () => props.modelValue,
+  (newVal) => {
+    setValue(newVal)
+  },
+  {
+    immediate: true,
+  },
+)
 
 const isInvalid = ref(false)
-
 watch(
   () => props.touchId,
   () => {
@@ -116,16 +124,6 @@ watch(
     if (isInvalid.value) {
       isInvalid.value = false
     }
-  },
-)
-
-watch(
-  () => props.modelValue,
-  (newVal) => {
-    value.value = newVal
-  },
-  {
-    immediate: true,
   },
 )
 </script>
