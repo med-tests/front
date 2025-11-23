@@ -2,7 +2,7 @@
   <draggable
     v-model="computedArrListData"
     group="test"
-    item-key="code"
+    item-key="id"
   >
     <template #item="{element, index}">
       <div
@@ -12,7 +12,7 @@
         <a
           class="pr-1 cursor-pointer text-lg"
           :class="[element.isHidden ? 'text-gray-400' : 'text-gray-600 hover:text-gray-900']"
-          :href="`#${element.code}`"
+          :href="`#test-${element.id}`"
         >
           {{ element.title }}
         </a>
@@ -22,7 +22,7 @@
             not-bordered
             not-filling
             :title="element.isHidden ? 'Показать' : 'Скрыть'"
-            @click="testStore.changeTest(element.code, 'isHidden', !element.isHidden)"
+            @click="testStore.changeTest(element.id, { isHidden: element.isHidden ? 0 : 1 })"
           >
             <EyeClosedIcon v-if="element.isHidden" />
             <EyeIcon v-else />
@@ -91,7 +91,7 @@ async function showDeleteModal (test) {
   deleteTestModal.value.show()
 }
 function deleteTest () {
-  testStore.deleteTest(deletingTest.value.code)
+  testStore.deleteTest(deletingTest.value.id)
   deleteTestModal.value.close()
 }
 </script>

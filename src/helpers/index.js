@@ -1,7 +1,7 @@
 import getRandomUid from './getRandomUid.js'
-import prepareTest from '@/helpers/prepareTest.js'
+import formatTest from '@/helpers/formatTest.js'
 
 export {
   getRandomUid,
-  prepareTest,
+  formatTest,
 }

@@ -2,64 +2,58 @@ import {defineStore} from 'pinia'
 import { computed, reactive } from 'vue'
 import api from '@/api'
 import { showToast } from '@/components/shared/toaster/toast.js'
-import { prepareTest } from '@/helpers'
+import { formatTest } from '@/helpers'
 
 export const useTestStore = defineStore(
   'testStore',
   () => {
-    const fullData = reactive({})
+    const fullData = reactive([])
 
     const fetchData = () => {
-      const visibilityData = localStorage.getItem('testVisibilityData')
-        ? JSON.parse(localStorage.getItem('testVisibilityData'))
-        : {}
-
       // todo установка order
       api.getAllTests()
         .then(data => {
           data.forEach(test => {
-            fullData[test.code] = prepareTest(test, visibilityData[test.code])
+            const formattedTest = formatTest(test)
+            fullData.push(formattedTest)
           })
         })
     }
 
-    const changeTest = (code, param, value) => {
-      const visibilityData = localStorage.getItem('testVisibilityData') ? JSON.parse(localStorage.getItem('testVisibilityData')) : {}
+    const changeTest = (id, data) => {
+      // todo оrder
+      const allowedFields = ['title', 'normalRangeFrom', 'normalRangeTo', 'isHidden', 'showFrom', 'showTo']
+      const sendData = {}
+      allowedFields.forEach(field => {
+        if (Object.hasOwn(data, field)) {
+          sendData[field] = data[field]
+        }
+      })
 
-      if (Object.hasOwn(visibilityData, code)) {
-        visibilityData[code][param] = value
-      } else {
-        visibilityData[code] = {}
-        visibilityData[code][param] = value
-      }
-
-      localStorage.setItem('testVisibilityData', JSON.stringify(visibilityData))
-      fullData[code][param] = value
+      api.editTest(id, sendData)
+        .then((res) => {
+          const index = getIndexByTestId(id)
+          fullData[index] = formatTest(res)
+        })
     }
 
     const arrListData = computed(() => {
-      return Object.entries(fullData)
-        .map(([key, value]) => {
-          const { title, order, isHidden } = value
+      // todo index -> order
+      return fullData
+        .map((test, index) => {
+          const { title, id, isHidden } = test
           return {
-                code: key,
-                title: title,
-                order: order,
-                isHidden: isHidden,
-              }
+            id,
+            title,
+            order: index,
+            isHidden,
+          }
         })
         .sort((a, b) => a.order - b.order)
     })
 
     const sortedFullData = computed(() => {
-      return Object.entries(fullData)
-        .map(([key, value]) => {
-          return {
-            code: key,
-            ...value,
-          }
-        })
-        .sort((a, b) => a.order - b.order)
+      return fullData.map(test => test).sort((a, b) => a.order - b.order)
     })
 
     const updateOrder = (newList) => {
@@ -72,30 +66,28 @@ export const useTestStore = defineStore(
 
     const addNewTest = (test) => {
       return api.addTest(test)
-        .then((res) => {
+        .then((test) => {
           showToast('Новый тест добавлен')
           // todo разобраться с order
-          fullData[res.code] = prepareTest(res, { isHidden: false, order: Object.keys(fullData).length })
+          const formattedTest = formatTest(test)
+          fullData.push(formattedTest)
         })
     }
 
-    const deleteTest = (code) => {
-      api.editTest(code, { status: 0 })
+    const deleteTest = (id) => {
+      api.editTest(id, { status: 0 })
         .then(() => {
-          delete fullData[code]
-          const visibilityData = localStorage.getItem('testVisibilityData')
-            ? JSON.parse(localStorage.getItem('testVisibilityData'))
-            : {}
+          const index = fullData.findIndex(test => test.id === id)
+          fullData.splice(index, 1)
+        })
+    }
 
           if(!Object.keys(visibilityData).length) {
             return
           }
 
-          if (Object.hasOwn(visibilityData, code)) {
-            delete visibilityData[code]
-            localStorage.setItem('testVisibilityData', JSON.stringify(visibilityData))
-          }
-        })
+    function getIndexByTestId (id) {
+      return fullData.findIndex(test => test.id === id)
     }
 
     return {

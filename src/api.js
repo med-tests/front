@@ -27,8 +27,7 @@ export default {
   addTest: function (data) {
     return apiInstance.post('/add-test', data)
   },
-  editTest: function (code, data) {
-    // code должен быть обязательно
-    return apiInstance.patch('/edit', { code, ...data })
+  editTest: function (id, data) {
+    return apiInstance.patch(`/edit/${id}`, data)
   },
 }

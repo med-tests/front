@@ -5,28 +5,13 @@
     @on-close="onClose"
   >
     <div>
-      <div class="flex">
-        <!--  code  -->
-        <VInput
-          id="testCode"
-          v-model="testCode"
-          hide-close-icon
-          required
-          class="mr-4 w-[100px]"
-          label="Код анализа"
-          placeholder=""
-          :callback-validator="validation.code.validator"
-          :touch-id="touchId"
-          @on-validate="validation.code.error = !$event"
-        />
-
+      <div>
         <!--  Название  -->
         <VInput
           id="testName"
           v-model="testName"
           hide-close-icon
           required
-          class="grow-1"
           label="Название анализа"
           placeholder="Введите название анализа"
           :touch-id="touchId"
@@ -73,7 +58,7 @@
           :data="results"
           :fields-settings="resultFieldSettings"
           :touch-id="touchId"
-          @on-change="formResults.value = $event"
+          @on-change="formResults = $event"
         />
       </div>
 
@@ -114,9 +99,9 @@ import VAddInputs from '@/components/shared/VAddInputs.vue'
 const testStore = useTestStore()
 
 const props = defineProps({
-  editingTestCode: {
-    type: String,
-    default: '',
+  editingTestId: {
+    type: Number,
+    default: 0,
   },
 })
 
@@ -124,7 +109,6 @@ const emit = defineEmits(['close'])
 
 const testModal = useTemplateRef('test-modal')
 
-const testCode = ref('')
 const testName = ref('')
 const lowEdge = ref(0)
 const highEdge = ref(0)
@@ -134,7 +118,7 @@ const formResults = ref([])
 defineExpose({ open })
 
 const isCreating = computed(() => {
-  return props.editingTestCode === ''
+  return props.editingTestId === 0
 })
 
 function open () {
@@ -144,7 +128,6 @@ function open () {
 }
 
 const onClose = () => {
-  testCode.value = ''
   testName.value = ''
   lowEdge.value = ''
   highEdge.value = ''
@@ -155,16 +138,6 @@ const onClose = () => {
 const touchId = ref('')
 
 const validation = ref({
-  code: {
-    error: false,
-    validator: (value) => {
-      if (testStore.arrListData.some(({ code }) => code === value)) {
-        showToast('Код анализа должен быть уникален', {type: 'error'})
-        return false
-      }
-      return true
-    },
-  },
   title: {
     error: false,
   },
@@ -236,7 +209,6 @@ const saveTest = async () => {
   // создание анализа - сохраняем все поля
   if (isCreating.value) {
     const sendData = {
-      code: testCode.value,
       title: testName.value,
       normalFrom: lowEdge.value,
       normalTo: highEdge.value,

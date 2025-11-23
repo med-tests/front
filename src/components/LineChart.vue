@@ -2,6 +2,7 @@
   <div v-if="!test.isHidden">
     <div
       class="flex mb-3 items-center justify-between mx-auto"
+      :id="`test-${id}`"
       style="width: calc(100% - 64px)"
     >
       <V-Calendar
@@ -12,7 +13,7 @@
         :min-date="computedFirstDate"
         :on-before-select="onBeforeSelectStart"
         :selected-dates="test.shownPeriod.start"
-        :uniq-id="`${code}-start`"
+        :uniq-id="`${id}-start`"
         @clear="changePeriod('start', computedFirstDate)"
         @input="changePeriod('start', $event)"
       />
@@ -46,14 +47,14 @@
         :min-date="computedFirstDate"
         :on-before-select="onBeforeSelectEnd"
         :selected-dates="test.shownPeriod.end"
-        :uniq-id="`${code}-end`"
+        :uniq-id="`${id}-end`"
         @clear="changePeriod('end', computedLastDate)"
         @input="changePeriod('end', $event)"
       />
     </div>
     <Line
       v-if="chartData.datasets[0].data.length"
-      :id="`chart-${test.code}`"
+      :id="`chart-${test.id}`"
       style="max-height: 400px;"
       :data="chartData"
       :options="options"
@@ -100,7 +101,7 @@
 
   const props = defineProps({
     test: { type: Object, required: true },
-    code: { type: String, required: true },
+    id: { type: Number, required: true },
   })
 
   const refProps = toRefs(props)
@@ -204,17 +205,14 @@
   }
 
   const changePeriod = (period, value) => {
-    const newPeriod = {
-      start: refProps.test.value.shownPeriod.start,
-      end: refProps.test.value.shownPeriod.end,
+    // todo ошибка, когда два раза нажали на одну и ту же дату
+    const sameStart = period === 'start' && refProps.test.value.shownPeriod.start === value
+    const sameEnd = period === 'end' && refProps.test.value.shownPeriod.end === value
+    if (sameStart || sameEnd) {
+      return
     }
-    newPeriod[period] = value
 
-    testStore.changeTest(
-        refProps.code.value,
-        'shownPeriod',
-        newPeriod,
-    )
+    testStore.changeTest(refProps.id.value, { [period === 'start' ? 'showFrom' : 'showTo']: value })
   }
 
   const chartData = computed(() => {

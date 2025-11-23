@@ -76,10 +76,9 @@ const upsertTestModalRef = useTemplateRef('upsert-test-modal')
       >
         <LineChart
           v-for="test in testStore.sortedFullData"
-          :id="test.code"
-          :key="test.code"
+          :id="test.id"
+          :key="test.id"
           class="py-15 first:pt-5 test-chart relative"
-          :code="test.code"
           :test="test"
         />
       </div>
