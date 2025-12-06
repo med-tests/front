@@ -213,7 +213,6 @@
   }
 
   const changePeriod = (period, value) => {
-    // todo ошибка, когда два раза нажали на одну и ту же дату
     const sameStart = period === 'start' && refProps.test.value.shownPeriod.start === value
     const sameEnd = period === 'end' && refProps.test.value.shownPeriod.end === value
     if (sameStart || sameEnd) {

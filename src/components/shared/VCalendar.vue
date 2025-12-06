@@ -67,7 +67,7 @@ const refProps = toRefs(props)
 
 const emit = defineEmits(['input', 'onValidate', 'clear'])
 
-const dateValue = ref('')
+const dateValue = ref('') // '' или 'YYYY-MM-DD'
 
 let datepickerInstance = null
 onMounted(() => {
@@ -148,10 +148,15 @@ watch(
 
 watch(
   () => props.coloredDates,
-  (newVal) => {
+  (newVal, oldVal) => {
     if (!datepickerInstance) {
       return
     }
+
+    if (newVal && oldVal && (JSON.stringify(oldVal) === JSON.stringify(newVal))) {
+      return
+    }
+
     datepickerInstance.update({
       onRenderCell: ({date, cellType}) => {
         return setClassForColoredCells(newVal, cellType, date)
