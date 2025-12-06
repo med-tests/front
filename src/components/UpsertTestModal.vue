@@ -53,6 +53,9 @@
         class="overflow-y-auto p-1"
         style="max-height: 350px; min-width: 450px;"
       >
+        <div>
+          Чтобы добавить результаты анализа, нажмите на плюс
+        </div>
         <v-add-inputs
           title="Результаты"
           :data="results"
@@ -142,15 +145,15 @@ function initEditing () {
   editingTest.results
     .reverse()
     .forEach(({ date, value, id }) => {
-    results.value.push({
-      id,
-      date: {
-        value: date,
-      },
-      resValue: {
-        value: value,
-      },
-    })
+      results.value.push({
+        id,
+        date: {
+          value: date,
+        },
+        resValue: {
+          value: value,
+        },
+      })
   })
 }
 

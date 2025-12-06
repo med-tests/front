@@ -107,11 +107,12 @@ const props = defineProps({
   fieldsSettings: { type: Object, required: true },
   hideDelete: { type: Boolean, default: false },
   data: { type: Array, default: () => ([]) },
+  addNewRowIfEmpty: { type: Boolean, default: false },
 })
 
 const data = ref(props.data.map(item => ({ ...item, isHidden: false })))
 
-if (!data.value.length) {
+if (props.addNewRowIfEmpty.value && !data.value.length) {
   addFieldForNewResult()
 }
 
