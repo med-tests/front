@@ -92,22 +92,15 @@ onMounted(() => {
       dateValue.value = initFormat
       emit('input', initFormat)
     },
-    onRenderCell({date, cellType}) {
-      let dates = refProps.coloredDates.value,
-          isDay = cellType === 'day',
-          _date = moment(date).format('YYYY-MM-DD'),
-          shouldChangeContent = isDay && dates.includes(_date)
-
-      return {
-        classes: shouldChangeContent ? 'test-day' : undefined,
-      }
+    onRenderCell: ({date, cellType}) => {
+      return setClassForColoredCells(refProps.coloredDates.value, cellType, date)
     },
   }
 
   const arr = ['selectedDates', 'minDate', 'maxDate']
   arr.forEach(field => {
     if (refProps[field]?.value) {
-      options[field] = [refProps[field].value]
+      options[field] = refProps[field].value
     }
   })
 
@@ -133,6 +126,40 @@ watch(
   },
 )
 
+watch(
+  () => props.minDate,
+  (newVal) => {
+    if (!datepickerInstance) {
+      return
+    }
+    datepickerInstance.update({ minDate: moment(newVal, 'YYYY-MM-DD').toDate() })
+  }
+)
+
+watch(
+  () => props.maxDate,
+  (newVal) => {
+    if (!datepickerInstance) {
+      return
+    }
+    datepickerInstance.update({ maxDate: moment(newVal, 'YYYY-MM-DD').toDate() })
+  }
+)
+
+watch(
+  () => props.coloredDates,
+  (newVal) => {
+    if (!datepickerInstance) {
+      return
+    }
+    datepickerInstance.update({
+      onRenderCell: ({date, cellType}) => {
+        return setClassForColoredCells(newVal, cellType, date)
+      },
+    })
+  }
+)
+
 const isInvalid = ref(false)
 
 watch(
@@ -154,6 +181,17 @@ watch(
     emit('onValidate', true)
   },
 )
+
+function setClassForColoredCells (coloredDates, cellType, date) {
+  let dates = coloredDates,
+    isDay = cellType === 'day',
+    _date = moment(date).format('YYYY-MM-DD'),
+    shouldChangeContent = isDay && dates.includes(_date)
+
+  return {
+    classes: shouldChangeContent ? 'test-day' : undefined,
+  }
+}
 </script>
 
 <style>

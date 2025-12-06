@@ -301,8 +301,6 @@ const saveTest = async () => {
       }
     })
 
-    console.log('changedResults', changedResults)
-
     if (changedResults.length) {
       sendData.results = changedResults
     }
