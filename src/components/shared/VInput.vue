@@ -114,6 +114,7 @@ watch(
     if (!isCustomValid) {
       isInvalid.value = true
       emit('onValidate', false)
+      return
     }
 
     emit('onValidate', true)

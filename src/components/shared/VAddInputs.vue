@@ -35,12 +35,14 @@
     </div>
 
     <!--  Поля ввода  -->
-    <div
+    <template
       v-for="(row, rowIndex) in data"
       :key="`row-${rowIndex}`"
-      class="flex justify-between items-center gap-x-4 mb-2"
     >
-      <template v-if="!row.isHidden">
+      <div
+        v-if="!row.isHidden"
+        class="flex justify-between items-center gap-x-4 mb-2"
+      >
         <div
           v-for="(field, fieldKey) in fieldsSettings"
           :key="`row-${rowIndex}-${fieldKey}`"
@@ -85,8 +87,8 @@
             width="20px"
           />
         </v-btn>
-      </template>
-    </div>
+      </div>
+    </template>
   </div>
 </template>
 

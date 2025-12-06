@@ -1,7 +1,7 @@
 <template>
   <v-modal
     ref="test-modal"
-    :title="isCreating ? 'Добавить анализ' : `Редактировать '${testName}'`"
+    :title="isCreating ? 'Добавить анализ' : `Редактировать '${initTestName}'`"
     @on-close="onClose"
   >
     <div>
@@ -58,6 +58,7 @@
           :data="results"
           :fields-settings="resultFieldSettings"
           :touch-id="touchId"
+          @delete-row="onDeleteResult"
           @on-change="formResults = $event"
         />
       </div>
@@ -73,12 +74,11 @@
         </v-btn>
 
         <v-btn
-          v-if="isCreating"
           type="success"
           @click="saveTest"
         >
           <div class="px-2">
-            Добавить анализ
+            {{ isCreating ? 'Добавить анализ' : 'Сохранить' }}
           </div>
         </v-btn>
       </div>
@@ -88,13 +88,14 @@
 
 <script setup>
 import VModal from '@/components/shared/VModal.vue'
-import { computed, nextTick, ref, useTemplateRef } from 'vue'
+import { computed, nextTick, reactive, ref, useTemplateRef } from 'vue'
 import { useTestStore } from '@/store.js'
 import VInput from '@/components/shared/VInput.vue'
 import { showToast } from '@/components/shared/toaster/toast.js'
 import VBtn from '@/components/shared/VBtn/index.vue'
 import { getRandomUid } from '@/helpers/index.js'
 import VAddInputs from '@/components/shared/VAddInputs.vue'
+import { log10 } from 'chart.js/helpers'
 
 const testStore = useTestStore()
 
@@ -110,6 +111,7 @@ const emit = defineEmits(['close'])
 const testModal = useTemplateRef('test-modal')
 
 const testName = ref('')
+const initTestName = ref('')
 const lowEdge = ref(0)
 const highEdge = ref(0)
 const results = ref([])
@@ -122,16 +124,43 @@ const isCreating = computed(() => {
 })
 
 function open () {
+  if (!isCreating.value) {
+    initEditing()
+  }
   nextTick(() => {
     testModal.value.show()
   })
 }
 
+function initEditing () {
+  const editingTest = JSON.parse(JSON.stringify(testStore.getFullTestById(props.editingTestId)))
+
+  initTestName.value = editingTest.title
+  testName.value = editingTest.title
+  lowEdge.value = editingTest.normalRange.from
+  highEdge.value = editingTest.normalRange.to
+  editingTest.results
+    .reverse()
+    .forEach(({ date, value, id }) => {
+    results.value.push({
+      id,
+      date: {
+        value: date,
+      },
+      resValue: {
+        value: value,
+      },
+    })
+  })
+}
+
+const deletedResultIds = ref([])
 const onClose = () => {
   testName.value = ''
   lowEdge.value = ''
   highEdge.value = ''
   results.value = []
+  deletedResultIds.value = []
   emit('close')
 }
 
@@ -192,6 +221,12 @@ const resultFieldSettings = {
   },
 }
 
+function onDeleteResult (result) {
+  if (Object.hasOwn(result, 'id')) {
+    deletedResultIds.value.push(result.id)
+  }
+}
+
 const saveTest = async () => {
   touchId.value = getRandomUid(7)
   await nextTick()
@@ -221,6 +256,63 @@ const saveTest = async () => {
     }
 
     testStore.addNewTest(sendData)
+      .then(() => {
+        testModal.value.close()
+      })
+  }
+  // редактирование анализа - отправляем только изменившиеся поля
+  else {
+    const initTest = testStore.getFullTestById(props.editingTestId)
+    const sendData = {}
+    if (testName.value !== initTest.title) {
+      sendData.title = testName.value
+    }
+    if (lowEdge.value !== initTest.normalRange.from) {
+      sendData.normalFrom = lowEdge.value
+    }
+    if (highEdge.value !== initTest.normalRange.to) {
+      sendData.normalTo = highEdge.value
+    }
+
+    const changedResults = []
+    formResults.value
+      .filter(({ date, resValue }) => date.value && (resValue.value || resValue.value === 0))
+      .forEach(({ date, resValue, id }) => {
+      if (id) {
+        const initResult = initTest.results.find(initRes => initRes.id === id)
+        const changedResult = {}
+        if (initResult.date !== date.value) {
+          changedResult.date =  date.value
+        }
+        if (initResult.value !== resValue.value) {
+          changedResult.value =  resValue.value
+        }
+        if (deletedResultIds.value.includes(id)) {
+          changedResult.status = 0
+        }
+
+        if (Object.keys(changedResult).length) {
+          changedResult.id = id
+          changedResults.push(changedResult)
+        }
+      }
+      else {
+        changedResults.push({ date: date.value, value: resValue.value })
+      }
+    })
+
+    console.log('changedResults', changedResults)
+
+    if (changedResults.length) {
+      sendData.results = changedResults
+    }
+
+    if (!Object.keys(sendData).length) {
+      testModal.value.close()
+      return
+    }
+
+    testStore.changeTest(props.editingTestId, sendData)
       .then(() => {
         testModal.value.close()
       })

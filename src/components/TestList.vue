@@ -31,6 +31,18 @@
           <v-btn
             not-bordered
             not-filling
+            title="Редактировать анализ"
+            @click="showUpsertTestModal(element.id)"
+          >
+            <PencilIcon
+              height="17"
+              width="17"
+            />
+          </v-btn>
+
+          <v-btn
+            not-bordered
+            not-filling
             title="Удалить анализ"
             type="error"
             @click="showDeleteModal(element)"
@@ -65,6 +77,10 @@
       </v-btn>
     </div>
   </v-modal>
+  <upsert-test-modal
+    ref="upsert-test-modal"
+    :editing-test-id="editingTestId"
+  />
 </template>
 
 <script setup>
@@ -75,8 +91,19 @@ import {useTestStore} from '@/store.js'
 import { computed, nextTick, ref, useTemplateRef } from 'vue'
 import CloseIcon from '@/components/icons/CloseIcon.vue'
 import VModal from '@/components/shared/VModal.vue'
+import PencilIcon from '@/components/icons/PencilIcon.vue'
+import UpsertTestModal from '@/components/UpsertTestModal.vue'
 
 const testStore = useTestStore()
+
+const editingTestId = ref(0)
+const upsertTestModalRef = useTemplateRef('upsert-test-modal')
+
+async function showUpsertTestModal (id) {
+  editingTestId.value = id
+  await nextTick()
+  upsertTestModalRef.value.open()
+}
 
 const computedArrListData = computed({
   get: () => testStore.arrListData,

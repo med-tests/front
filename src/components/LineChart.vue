@@ -1,8 +1,8 @@
 <template>
   <div v-if="!test.isHidden">
     <div
-      class="flex mb-3 items-center justify-between mx-auto"
       :id="`test-${id}`"
+      class="flex mb-3 items-center justify-between mx-auto"
       style="width: calc(100% - 64px)"
     >
       <V-Calendar
@@ -21,6 +21,7 @@
         {{ chartData.datasets[0].label }}
         <div
           v-if="test.normalRange.from || test.normalRange.to"
+          :id="`normal-${id}`"
           class="flex items-center mt-2"
           style="column-gap: 6px;"
         >
@@ -37,6 +38,10 @@
           >
             до <span class="font-medium">{{ test.normalRange.to }}</span>
           </div>
+          <ToolTip
+            text="Норма"
+            :append-element-id="`normal-${id}`"
+          />
         </div>
       </div>
       <V-Calendar
@@ -96,6 +101,7 @@
   import VCalendar from '@/components/shared/VCalendar.vue'
   import moment from 'moment'
   import {showToast} from '@/components/shared/toaster/toast.js'
+  import ToolTip from '@/plugins/ToolTipPlugin/ToolTip.vue'
 
   ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
 

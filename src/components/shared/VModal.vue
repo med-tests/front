@@ -7,13 +7,13 @@
       <div class="p-5 bg-white/95 rounded-sm">
         <CloseIcon
           v-if="!hideClose"
-          class="ml-auto cursor-pointer"
+          class="ml-auto cursor-pointer fill-gray-600 hover:fill-gray-900"
           style="width: 24px; height: 24px;}"
           @click="close"
         />
         <h5
           v-if="title"
-          class="mb-3 text-center text-xl font-medium"
+          class="mb-3 text-center text-xl font-medium text-gray-700"
         >
           {{ title }}
         </h5>

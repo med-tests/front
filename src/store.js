@@ -22,7 +22,7 @@ export const useTestStore = defineStore(
 
     const changeTest = (id, data) => {
       // todo оrder
-      const allowedFields = ['title', 'normalRangeFrom', 'normalRangeTo', 'isHidden', 'showFrom', 'showTo']
+      const allowedFields = ['title', 'normalFrom', 'normalTo', 'isHidden', 'showFrom', 'showTo', 'results']
       const sendData = {}
       allowedFields.forEach(field => {
         if (Object.hasOwn(data, field)) {
@@ -30,8 +30,9 @@ export const useTestStore = defineStore(
         }
       })
 
-      api.editTest(id, sendData)
+      return api.editTest(id, sendData)
         .then((res) => {
+          showToast('Изменения сохранены')
           const index = getIndexByTestId(id)
           fullData[index] = formatTest(res)
         })
@@ -82,9 +83,9 @@ export const useTestStore = defineStore(
         })
     }
 
-          if(!Object.keys(visibilityData).length) {
-            return
-          }
+    function getFullTestById (id) {
+      return fullData.find(test => Number(test.id) === Number(id))
+    }
 
     function getIndexByTestId (id) {
       return fullData.findIndex(test => test.id === id)
@@ -104,6 +105,7 @@ export const useTestStore = defineStore(
       updateOrder,
       addNewTest,
       deleteTest,
+      getFullTestById,
     }
   },
 )
