@@ -88,14 +88,13 @@
 
 <script setup>
 import VModal from '@/components/shared/VModal.vue'
-import { computed, nextTick, reactive, ref, useTemplateRef } from 'vue'
+import { computed, nextTick, ref, useTemplateRef } from 'vue'
 import { useTestStore } from '@/store.js'
 import VInput from '@/components/shared/VInput.vue'
 import { showToast } from '@/components/shared/toaster/toast.js'
 import VBtn from '@/components/shared/VBtn/index.vue'
 import { getRandomUid } from '@/helpers/index.js'
 import VAddInputs from '@/components/shared/VAddInputs.vue'
-import { log10 } from 'chart.js/helpers'
 
 const testStore = useTestStore()
 
@@ -317,10 +316,3 @@ const saveTest = async () => {
   }
 }
 </script>
-
-<style>
-.required::after {
-  content: '*';
-  color: red;
-}
-</style>

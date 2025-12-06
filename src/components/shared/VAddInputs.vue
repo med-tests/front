@@ -147,3 +147,10 @@ function deleteRow (index) {
 }
 
 </script>
+
+<style>
+.required::after {
+  content: '*';
+  color: red;
+}
+</style>
