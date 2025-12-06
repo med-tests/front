@@ -95,6 +95,7 @@ import { showToast } from '@/components/shared/toaster/toast.js'
 import VBtn from '@/components/shared/VBtn/index.vue'
 import { getRandomUid } from '@/helpers/index.js'
 import VAddInputs from '@/components/shared/VAddInputs.vue'
+import moment from "moment";
 
 const testStore = useTestStore()
 
@@ -204,6 +205,9 @@ const resultFieldSettings = {
     hideCloseIcon: true,
     hideInputCloseIcon: false,
     placeholder: 'ДД.MM.ГГГГ',
+    maxDate: () => {
+      return moment().format('YYYY-MM-DD')
+    }
   },
   resValue: {
     label: 'Результат',

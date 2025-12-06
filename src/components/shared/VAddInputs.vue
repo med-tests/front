@@ -67,6 +67,7 @@
             :hide-close-icon="field.hideInputCloseIcon"
             :required="field.required"
             :selected-dates="data[rowIndex][fieldKey].value"
+            :max-date="field.maxDate ? field.maxDate() : ''"
             :touch-id="touchId"
             :uniq-id="`${rowIndex}-${fieldKey}-calendar`"
             @clear="data[rowIndex][fieldKey].value = ''"
