@@ -57,6 +57,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  forbidToggleSelected: {
+    type: Boolean,
+    default: false,
+  },
   callbackValidator: { type: Function, default: () => true },
 })
 const refProps = toRefs(props)
@@ -70,6 +74,7 @@ onMounted(() => {
   const options = {
     dateFormat: 'dd.MM.yyyy',
     autoClose: true,
+    toggleSelected: !refProps.forbidToggleSelected.value,
     onBeforeSelect: ({ date }) => {
       // если не проходит проверку, выбранная дата не установится
       if (refProps.onBeforeSelect.value) {

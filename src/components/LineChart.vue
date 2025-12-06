@@ -8,6 +8,7 @@
       <V-Calendar
         class="mr-5 inline-block"
         label="Начало периода"
+        forbid-toggle-selected
         :colored-dates="computedTestDates"
         :max-date="computedLastDate"
         :min-date="computedFirstDate"
@@ -47,6 +48,7 @@
       <V-Calendar
         class="inline-block"
         label="Конец периода"
+        forbid-toggle-selected
         :colored-dates="computedTestDates"
         :max-date="computedLastDate"
         :min-date="computedFirstDate"
