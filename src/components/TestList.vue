@@ -1,58 +1,64 @@
 <template>
-  <draggable
-    v-model="computedArrListData"
-    group="test"
-    item-key="id"
+  <div
+    class="overflow-x-auto"
+    style="max-height: calc(100% - 40px);"
   >
-    <template #item="{element, index}">
-      <div
-        class="py-2 flex border-emerald-800"
-        :class="{'border-b-1': index !== computedArrListData.length - 1}"
-      >
-        <a
-          class="pr-1 cursor-pointer text-lg"
-          :class="[element.isHidden ? 'text-gray-400' : 'text-gray-600 hover:text-gray-900']"
-          :href="`#test-${element.id}`"
+    <draggable
+      v-model="computedArrListData"
+      class="pr-3"
+      group="test"
+      item-key="id"
+    >
+      <template #item="{element, index}">
+        <div
+          class="py-2 flex border-emerald-800"
+          :class="{'border-b-1': index !== computedArrListData.length - 1}"
         >
-          {{ element.title }}
-        </a>
-
-        <div class="ml-auto pl-3 flex gap-x-2">
-          <v-btn
-            not-bordered
-            not-filling
-            :title="element.isHidden ? 'Показать' : 'Скрыть'"
-            @click="testStore.changeTest(element.id, { isHidden: element.isHidden ? 0 : 1 })"
+          <a
+            class="pr-1 cursor-pointer text-lg"
+            :class="[element.isHidden ? 'text-gray-400' : 'text-gray-600 hover:text-gray-900']"
+            :href="`#test-${element.id}`"
           >
-            <EyeClosedIcon v-if="element.isHidden" />
-            <EyeIcon v-else />
-          </v-btn>
+            {{ element.title }}
+          </a>
 
-          <v-btn
-            not-bordered
-            not-filling
-            title="Редактировать анализ"
-            @click="showUpsertTestModal(element.id)"
-          >
-            <PencilIcon
-              height="17"
-              width="17"
-            />
-          </v-btn>
+          <div class="ml-auto pl-3 flex gap-x-2">
+            <v-btn
+              not-bordered
+              not-filling
+              :title="element.isHidden ? 'Показать' : 'Скрыть'"
+              @click="testStore.changeTest(element.id, { isHidden: element.isHidden ? 0 : 1 })"
+            >
+              <EyeClosedIcon v-if="element.isHidden" />
+              <EyeIcon v-else />
+            </v-btn>
 
-          <v-btn
-            not-bordered
-            not-filling
-            title="Удалить анализ"
-            type="error"
-            @click="showDeleteModal(element)"
-          >
-            <CloseIcon />
-          </v-btn>
+            <v-btn
+              not-bordered
+              not-filling
+              title="Редактировать анализ"
+              @click="showUpsertTestModal(element.id)"
+            >
+              <PencilIcon
+                height="17"
+                width="17"
+              />
+            </v-btn>
+
+            <v-btn
+              not-bordered
+              not-filling
+              title="Удалить анализ"
+              type="error"
+              @click="showDeleteModal(element)"
+            >
+              <CloseIcon />
+            </v-btn>
+          </div>
         </div>
-      </div>
-    </template>
-  </draggable>
+      </template>
+    </draggable>
+  </div>
 
   <v-modal
     ref="delete-test-modal"
