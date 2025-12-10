@@ -16,6 +16,7 @@
         :name="id"
         :placeholder="placeholder"
         :readonly="readonly"
+        :style="[type === 'password' || !hideCloseIcon ? 'padding-right: 30px;' : '']"
         :type="computedType"
         :value="value"
         @input="setValue($event.target.value)"
@@ -126,6 +127,7 @@ watch(
   () => {
     if (isInvalid.value) {
       isInvalid.value = false
+      emit('onValidate', true)
     }
   },
 )

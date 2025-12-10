@@ -99,7 +99,7 @@
   Legend,
 } from 'chart.js'
   import {computed, toRefs } from 'vue'
-  import {useTestStore} from '@/store.js'
+  import {useTestStore} from '@/stores/testStore.js'
   import VCalendar from '@/components/shared/VCalendar.vue'
   import moment from 'moment'
   import {showToast} from '@/components/shared/toaster/toast.js'

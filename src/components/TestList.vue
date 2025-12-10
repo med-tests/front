@@ -93,7 +93,7 @@
 import draggable from 'vuedraggable'
 import EyeClosedIcon from '@/components/icons/EyeClosedIcon.vue'
 import EyeIcon from '@/components/icons/EyeIcon.vue'
-import {useTestStore} from '@/store.js'
+import {useTestStore} from '@/stores/testStore.js'
 import { computed, nextTick, ref, useTemplateRef } from 'vue'
 import CloseIcon from '@/components/icons/CloseIcon.vue'
 import VModal from '@/components/shared/VModal.vue'

@@ -1,13 +1,15 @@
 <script setup>
 import { computed, onMounted, useTemplateRef } from 'vue'
-import {useTestStore} from '@/store.js'
+import {useTestStore} from '@/stores/testStore.js'
 import LineChart from '@/components/LineChart.vue'
 import TestList from '@/components/TestList.vue'
 import UpsertTestModal from '@/components/UpsertTestModal.vue'
 import VBtn from '@/components/shared/VBtn/index.vue'
 import PlusIcon from '@/components/icons/PlusIcon.vue'
+import { useUserStore } from '@/stores/userStore.js'
 
 const testStore = useTestStore()
+const userStore = useUserStore()
 
 onMounted(() => {
   testStore.fetchData()
@@ -61,9 +63,18 @@ const upsertTestModalRef = useTemplateRef('upsert-test-modal')
     </div>
 
     <div class="grow-1 p-4 pr-0">
-      <h3 class="font-medium text-xl mb-3 text-gray-700">
-        Графики
-      </h3>
+      <div class="flex justify-between">
+        <h3 class="font-medium text-xl mb-3 text-gray-700">
+          Графики
+        </h3>
+        <v-btn
+          type="error"
+          @click="userStore.logout()"
+        >
+          ВЫЙТИ
+        </v-btn>
+      </div>
+
       <div
         v-if="computedIsNoChart"
         class="text-gray-700"

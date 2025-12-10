@@ -1,48 +1,172 @@
 <template>
   <div class="flex justify-center items-center h-screen w-screen">
     <form
-      class="border p-5 bg-white/95"
-      @submit.prevent="login"
+      class="border p-5 bg-white/95 flex flex-col items-center"
+      style="min-width: 300px;"
+      @submit.prevent
     >
+      <div class="text-xl uppercase mb-3">
+        {{ isLoginPage ? 'Вход' : 'Регистрация' }}
+      </div>
+
       <div class="w-full mb-3">
         <V-Input
           id="login"
-          v-model="username"
+          v-model="username.value"
+          required
           label="Логин"
-          @on-click-close-icon="username = ''"
+          :callback-validator="validateUsername"
+          :touch-id="touchId"
+          @on-click-close-icon="username.value = ''"
+          @on-validate="username.error = !$event"
         />
       </div>
 
-      <div class="w-full mb-4">
+      <div class="w-full mb-3">
         <V-Input
           id="password"
-          v-model="password"
+          v-model="password.value"
+          required
           label="Пароль"
           type="password"
+          :callback-validator="validatePassword"
+          :touch-id="touchId"
+          @on-validate="password.error = !$event"
         />
       </div>
 
-      <div class="flex justify-center">
-        <v-btn
-          type="success"
-        >
-          <div class="uppercase px-3 py-1">
-            Войти
-          </div>
-        </v-btn>
-      </div>
+      <v-btn
+        not-bordered
+        not-filling
+        class="mb-3"
+        type="success"
+        @click="toggleLoginRegister"
+      >
+        <div class="text-sm text-gray-600 hover:text-emerald-700">
+          {{ isLoginPage ? 'Регистрация' : 'Вход' }}
+        </div>
+      </v-btn>
+
+      <v-btn
+        type="success"
+        @click="isLoginPage ? login() : register()"
+      >
+        <div class="uppercase px-3 py-1">
+          {{ isLoginPage ? 'Войти' : 'Зарегистрироваться' }}
+        </div>
+      </v-btn>
     </form>
   </div>
 </template>
 
 <script setup>
 import VInput from '@/components/shared/VInput.vue'
-import {ref} from 'vue'
+import { nextTick, reactive, ref } from 'vue'
+import { useUserStore } from '@/stores/userStore.js'
+import { useRouter } from 'vue-router'
+import { showToast } from '@/components/shared/toaster/toast.js'
+import { getRandomUid } from '@/helpers/index.js'
 
-const username = ref('')
-const password = ref('')
+const userStore = useUserStore()
+const router = useRouter()
 
-const login = () => {
-  console.log(username.value, password.value)
+const username = reactive({
+  value: '',
+  error: false,
+})
+function validateUsername (value) {
+  if (isLoginPage.value) {
+    return true
+  }
+
+  // Валидация при регистрации
+  if (value.length < 2) {
+    showToast('Слишком короткй логин', {type: 'error'})
+    return false
+  }
+  if (value.length > 16) {
+    showToast('Не больше 16 символов в логине', {type: 'error'})
+    return false
+  }
+
+  return true
+}
+
+const password =  reactive({
+  value: '',
+  error: false,
+})
+function validatePassword (value) {
+  if (isLoginPage.value) {
+    return true
+  }
+
+  // Валидация при регистрации
+  if (value.length < 8) {
+    showToast('Не менее 8 символов в пароле.', {type: 'error'})
+    return false
+  }
+  if (!/(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]/g.test(value)) {
+    // (?=.*[0-9]) - строка содержит хотя бы одно число
+    // (?=.*[!@#$%^&*]) - строка содержит хотя бы один спецсимвол
+    // (?=.*[a-z]) - строка содержит хотя бы одну латинскую букву в нижнем регистре
+    // (?=.*[A-Z]) - строка содержит хотя бы одну латинскую букву в верхнем регистре
+    showToast('Пароль должен содержать заглавные и строчные латинские буквы, цифры и символы', {type: 'error'})
+    return false
+  }
+
+  return true
+}
+
+const touchId = ref('')
+async function checkValidate () {
+  touchId.value = getRandomUid(7)
+  await nextTick()
+  if (username.error || password.error) {
+    return false
+  }
+  return true
+}
+
+const login = async () => {
+  if (!await checkValidate()) {
+    return
+  }
+
+  userStore.login({
+    login: username.value,
+    password: password.value,
+  })
+    .then(() => {
+      router.push({ name: 'main' })
+    })
+    .catch(err => {
+      if (!err.error) {
+        console.log(err)
+      }
+    })
+}
+
+const register = async () => {
+  if (!await checkValidate()) {
+    return
+  }
+
+  userStore.register({
+    login: username.value,
+    password: password.value,
+  })
+    .catch(err => {
+      if (!err.error) {
+        console.log(err)
+      }
+    })
+}
+
+const isLoginPage = ref(true)
+function toggleLoginRegister () {
+  username.value = ''
+  password.value = ''
+  isLoginPage.value = !isLoginPage.value
 }
 </script>

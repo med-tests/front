@@ -92,13 +92,13 @@
 <script setup>
 import VModal from '@/components/shared/VModal.vue'
 import { computed, nextTick, ref, useTemplateRef } from 'vue'
-import { useTestStore } from '@/store.js'
+import { useTestStore } from '@/stores/testStore.js'
 import VInput from '@/components/shared/VInput.vue'
 import { showToast } from '@/components/shared/toaster/toast.js'
 import VBtn from '@/components/shared/VBtn/index.vue'
 import { getRandomUid } from '@/helpers/index.js'
 import VAddInputs from '@/components/shared/VAddInputs.vue'
-import moment from "moment";
+import moment from 'moment'
 
 const testStore = useTestStore()
 
@@ -210,7 +210,7 @@ const resultFieldSettings = {
     placeholder: 'ДД.MM.ГГГГ',
     maxDate: () => {
       return moment().format('YYYY-MM-DD')
-    }
+    },
   },
   resValue: {
     label: 'Результат',

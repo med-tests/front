@@ -133,7 +133,7 @@ watch(
       return
     }
     datepickerInstance.update({ minDate: moment(newVal, 'YYYY-MM-DD').toDate() })
-  }
+  },
 )
 
 watch(
@@ -143,7 +143,7 @@ watch(
       return
     }
     datepickerInstance.update({ maxDate: moment(newVal, 'YYYY-MM-DD').toDate() })
-  }
+  },
 )
 
 watch(
@@ -162,7 +162,7 @@ watch(
         return setClassForColoredCells(newVal, cellType, date)
       },
     })
-  }
+  },
 )
 
 const isInvalid = ref(false)

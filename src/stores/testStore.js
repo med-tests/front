@@ -1,8 +1,8 @@
-import {defineStore} from 'pinia'
+import { defineStore } from 'pinia'
 import { computed, reactive } from 'vue'
-import api from '@/api'
-import { showToast } from '@/components/shared/toaster/toast.js'
+import api from '@/api.js'
 import { formatTest } from '@/helpers'
+import { showToast } from '@/components/shared/toaster/toast.js'
 
 export const useTestStore = defineStore(
   'testStore',
@@ -10,14 +10,14 @@ export const useTestStore = defineStore(
     const fullData = reactive([])
 
     const fetchData = () => {
-      // todo установка order
-      api.getAllTests()
+      return api.getAllTests()
         .then(data => {
           data.forEach(test => {
             const formattedTest = formatTest(test)
             fullData.push(formattedTest)
           })
         })
+        .catch((err) => {})
     }
 
     const changeTest = (id, data) => {
@@ -36,6 +36,7 @@ export const useTestStore = defineStore(
           const index = getIndexByTestId(id)
           fullData[index] = formatTest(res)
         })
+        .catch((err) => {})
     }
 
     const arrListData = computed(() => {
@@ -73,14 +74,20 @@ export const useTestStore = defineStore(
           const formattedTest = formatTest(test)
           fullData.push(formattedTest)
         })
+        .catch((err) => {})
     }
 
     const deleteTest = (id) => {
-      api.editTest(id, { status: 0 })
+      api.editTest(id,{ status: 0 })
         .then(() => {
           const index = fullData.findIndex(test => test.id === id)
           fullData.splice(index, 1)
         })
+        .catch((err) => {})
+    }
+
+    const clearTests = () => {
+      fullData.splice(0, fullData.length)
     }
 
     function getFullTestById (id) {
@@ -106,6 +113,7 @@ export const useTestStore = defineStore(
       addNewTest,
       deleteTest,
       getFullTestById,
+      clearTests,
     }
   },
 )

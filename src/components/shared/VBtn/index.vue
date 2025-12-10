@@ -1,7 +1,7 @@
 <template>
   <div
     :id="randomUid"
-    class="inline-block rounded-xs select-none text-lg"
+    class="inline-block rounded-xs select-none text-lg btn"
     :class="computedStyles"
     @click.stop.capture="!disabled && $emit('click')"
   >
