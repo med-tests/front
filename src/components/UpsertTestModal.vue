@@ -253,6 +253,7 @@ const saveTest = async () => {
       title: testName.value,
       normalFrom: lowEdge.value,
       normalTo: highEdge.value,
+      position: testStore.fullData.length + 1,
       results: formResults.value
         .filter(({ date, resValue }) => date.value && (resValue.value || resValue.value === 0))
         .map(({ date, resValue }) => ({

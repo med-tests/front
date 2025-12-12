@@ -6,9 +6,9 @@
       style="width: calc(100% - 64px)"
     >
       <V-Calendar
+        forbid-toggle-selected
         class="mr-5 inline-block"
         label="Начало периода"
-        forbid-toggle-selected
         :colored-dates="computedTestDates"
         :max-date="computedLastDate"
         :min-date="computedFirstDate"
@@ -46,9 +46,9 @@
         </div>
       </div>
       <V-Calendar
+        forbid-toggle-selected
         class="inline-block"
         label="Конец периода"
-        forbid-toggle-selected
         :colored-dates="computedTestDates"
         :max-date="computedLastDate"
         :min-date="computedFirstDate"

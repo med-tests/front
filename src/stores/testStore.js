@@ -10,6 +10,8 @@ export const useTestStore = defineStore(
     const fullData = reactive([])
 
     const fetchData = () => {
+      fullData.splice(0, fullData.length)
+
       return api.getAllTests()
         .then(data => {
           data.forEach(test => {
@@ -21,7 +23,6 @@ export const useTestStore = defineStore(
     }
 
     const changeTest = (id, data) => {
-      // todo оrder
       const allowedFields = ['title', 'normalFrom', 'normalTo', 'isHidden', 'showFrom', 'showTo', 'results']
       const sendData = {}
       allowedFields.forEach(field => {
@@ -40,37 +41,69 @@ export const useTestStore = defineStore(
     }
 
     const arrListData = computed(() => {
-      // todo index -> order
       return fullData
-        .map((test, index) => {
-          const { title, id, isHidden } = test
+        .map(test => {
+          const { title, id, isHidden, position } = test
           return {
             id,
             title,
-            order: index,
+            position,
             isHidden,
           }
         })
-        .sort((a, b) => a.order - b.order)
+        .sort((a, b) => b.position - a.position)
     })
 
     const sortedFullData = computed(() => {
-      return fullData.map(test => test).sort((a, b) => a.order - b.order)
+      return fullData
+        .map(test => test)
+        .sort((a, b) => b.position - a.position)
     })
 
-    const updateOrder = (newList) => {
-      newList
-        .forEach(({ code }, index ) => {
-          changeTest(code, 'order', index)
-          fullData[code].order = index
+    const updateOrder = ({ id, newPosition, oldPosition }) => {
+      const reversedNewPosition = fullData.length - newPosition
+      const reversedOldPosition = fullData.length - oldPosition
+
+
+      return api.editTest(id, { position: {
+          newPosition: reversedNewPosition,
+          oldPosition: reversedOldPosition,
+        },
+      })
+        .then(() => {
+          showToast('Изменения сохранены')
+          const isGoUp = reversedNewPosition > reversedOldPosition
+          if (isGoUp) {
+            fullData.forEach(test => {
+              if (test.position > reversedOldPosition
+                && test.position <= reversedNewPosition
+                && test.id !== id) {
+                test.position = test.position - 1
+              }
+              if (test.id === id) {
+                test.position = reversedNewPosition
+              }
+            })
+          } else {
+            fullData.forEach(test => {
+              if (test.position >= reversedNewPosition
+                && test.position < reversedOldPosition
+                && test.id !== id) {
+                test.position = test.position + 1
+              }
+              if (test.id === id) {
+                test.position = reversedNewPosition
+              }
+            })
+          }
         })
+        .catch(err => {})
     }
 
     const addNewTest = (test) => {
       return api.addTest(test)
         .then((test) => {
           showToast('Новый тест добавлен')
-          // todo разобраться с order
           const formattedTest = formatTest(test)
           fullData.push(formattedTest)
         })

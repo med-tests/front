@@ -1,7 +1,7 @@
 <template>
   <div class="flex justify-center items-center h-screen w-screen">
     <form
-      class="border p-5 bg-white/95 flex flex-col items-center"
+      class="border border-emerald-800 p-5 bg-white/95 flex flex-col items-center"
       style="min-width: 300px;"
       @submit.prevent
     >

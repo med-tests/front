@@ -4,15 +4,16 @@
     style="max-height: calc(100% - 40px);"
   >
     <draggable
-      v-model="computedArrListData"
       class="pr-3"
       group="test"
       item-key="id"
+      :list="testStore.arrListData"
+      @change="change"
     >
       <template #item="{element, index}">
         <div
           class="py-2 flex border-emerald-800"
-          :class="{'border-b-1': index !== computedArrListData.length - 1}"
+          :class="{'border-b-1': index !== testStore.arrListData.length - 1}"
         >
           <a
             class="pr-1 cursor-pointer text-lg"
@@ -94,7 +95,7 @@ import draggable from 'vuedraggable'
 import EyeClosedIcon from '@/components/icons/EyeClosedIcon.vue'
 import EyeIcon from '@/components/icons/EyeIcon.vue'
 import {useTestStore} from '@/stores/testStore.js'
-import { computed, nextTick, ref, useTemplateRef } from 'vue'
+import { nextTick, ref, useTemplateRef } from 'vue'
 import CloseIcon from '@/components/icons/CloseIcon.vue'
 import VModal from '@/components/shared/VModal.vue'
 import PencilIcon from '@/components/icons/PencilIcon.vue'
@@ -111,10 +112,13 @@ async function showUpsertTestModal (id) {
   upsertTestModalRef.value.open()
 }
 
-const computedArrListData = computed({
-  get: () => testStore.arrListData,
-  set: (newList) => testStore.updateOrder(newList),
-})
+function change ({ moved }) {
+  testStore.updateOrder({
+    id: moved.element.id,
+    newPosition: moved.newIndex,
+    oldPosition: moved.oldIndex,
+  })
+}
 
 const deletingTest = ref(null)
 const deleteTestModal = useTemplateRef('delete-test-modal')

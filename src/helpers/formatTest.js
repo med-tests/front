@@ -11,6 +11,7 @@ export default function (test) {
       start: test.showFrom || '',
       end: test.showTo || '',
     },
+    position: test.position,
     order: 0,
     results: test.results,
   }
