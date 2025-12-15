@@ -2,8 +2,10 @@ import axios from 'axios'
 import { showToast } from '@/components/shared/toaster/toast.js'
 import { useUserStore } from '@/stores/userStore.js'
 
+const apiUrl = import.meta.env.VITE_API_URL
+
 const apiInstance = axios.create({
-  baseURL: 'http://med-tests.fvds.ru/api',
+  baseURL: `${apiUrl}/api`,
 })
 
 apiInstance.interceptors.request.use((config) => {

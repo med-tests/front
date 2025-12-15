@@ -33,6 +33,13 @@
           :touch-id="touchId"
           @on-validate="password.error = !$event"
         />
+        <div v-if="!isLoginPage">
+          <div class="text-sm">- Не менее 8 символов</div>
+          <div class="text-sm">- Xотя бы одно число</div>
+          <div class="text-sm">- Xотя бы один спецсимвол</div>
+          <div class="text-sm">- Xотя бы одна латинская буква в нижнем регистре</div>
+          <div class="text-sm">- Xотя бы одна латинская буква в верхнем регистре</div>
+        </div>
       </div>
 
       <v-btn
@@ -43,7 +50,7 @@
         @click="toggleLoginRegister"
       >
         <div class="text-sm text-gray-600 hover:text-emerald-700">
-          {{ isLoginPage ? 'Регистрация' : 'Вход' }}
+          {{ isLoginPage ? 'У меня нет аккаунта' : 'У меня есть аккаунт' }}
         </div>
       </v-btn>
 
@@ -84,8 +91,8 @@ function validateUsername (value) {
     showToast('Слишком короткй логин', {type: 'error'})
     return false
   }
-  if (value.length > 16) {
-    showToast('Не больше 16 символов в логине', {type: 'error'})
+  if (value.length > 32) {
+    showToast('Не больше 32 символов в логине', {type: 'error'})
     return false
   }
 
