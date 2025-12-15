@@ -3,7 +3,7 @@ import { showToast } from '@/components/shared/toaster/toast.js'
 import { useUserStore } from '@/stores/userStore.js'
 
 const apiInstance = axios.create({
-  baseURL: 'http://80.74.28.97/api',
+  baseURL: 'http://med-tests.fvds.ru/api',
 })
 
 apiInstance.interceptors.request.use((config) => {
