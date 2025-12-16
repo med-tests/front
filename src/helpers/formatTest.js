@@ -8,8 +8,8 @@ export default function (test) {
     },
     isHidden: test.isHidden,
     shownPeriod: {
-      start: test.showFrom || '',
-      end: test.showTo || '',
+      start: test.showFrom,
+      end: test.showTo,
     },
     position: test.position,
     order: 0,

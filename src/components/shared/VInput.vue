@@ -12,8 +12,13 @@
       <input
         :id="id"
         class="border rounded-xs p-2 text-gray-700 text-base w-full"
-        :class="[isInvalid || isInvalidCalendar ? 'border-red-700' : 'border-gray-700']"
+        :class="{
+          'border-gray-400': disabled && !(isInvalid || isInvalidCalendar),
+          'border-red-700': (isInvalid || isInvalidCalendar) && !disabled,
+          'border-gray-600': !isInvalid && !isInvalidCalendar && !disabled,
+        }"
         :name="id"
+        :disabled="disabled"
         :placeholder="placeholder"
         :readonly="readonly"
         :style="[type === 'password' || !hideCloseIcon ? 'padding-right: 30px;' : '']"
@@ -41,7 +46,8 @@
         not-filling
         class="absolute"
         style="width: 24px; height: 24px; top: 50%; transform: translate(0, -50%); right: 5px;}"
-        title="Очистить"
+        :disabled="disabled"
+        :title="disabled ? '' : 'Очистить'"
         @click="$emit('onClickCloseIcon')"
       >
         <CloseIcon />
@@ -72,6 +78,7 @@ const props = defineProps({
   callbackValidator: { type: Function, default: () => true },
   // только для календаря. Инпут используется только на вывод. Ввод контролирует библиотека
   isInvalidCalendar: { type: Boolean, default: false},
+  disabled: { type: Boolean, default: false },
 })
 
 const emit = defineEmits(['update:modelValue', 'onClickCloseIcon', 'onValidate'])
@@ -87,6 +94,9 @@ const computedType = computed(() => {
 
 const value = ref('')
 const setValue = (newValue) => {
+  if (props.disabled) {
+    return
+  }
   value.value = newValue
   emit('update:modelValue', props.type === 'number' && newValue ? Number(newValue) : newValue)
 }

@@ -4,7 +4,7 @@
     :title="isCreating ? 'Добавить анализ' : `Редактировать '${initTestName}'`"
     @on-close="onClose"
   >
-    <div>
+    <div style="min-width: 480px;">
       <div>
         <!--  Название  -->
         <VInput

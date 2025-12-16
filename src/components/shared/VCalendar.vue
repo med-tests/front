@@ -3,6 +3,7 @@
     :id="`input-${uniqId}`"
     readonly
     placeholder="Выберите дату"
+    :disabled="disabled"
     :hide-close-icon="hideCloseIcon"
     :is-invalid-calendar="isInvalid"
     :label="label"
@@ -62,6 +63,10 @@ const props = defineProps({
     default: false,
   },
   callbackValidator: { type: Function, default: () => true },
+  disabled: {
+    type: Boolean,
+    default: false,
+  }
 })
 const refProps = toRefs(props)
 
@@ -132,7 +137,7 @@ watch(
     if (!datepickerInstance) {
       return
     }
-    datepickerInstance.update({ minDate: moment(newVal, 'YYYY-MM-DD').toDate() })
+    datepickerInstance.update({ minDate: newVal ? moment(newVal, 'YYYY-MM-DD').toDate() : '' })
   },
 )
 
@@ -142,7 +147,7 @@ watch(
     if (!datepickerInstance) {
       return
     }
-    datepickerInstance.update({ maxDate: moment(newVal, 'YYYY-MM-DD').toDate() })
+    datepickerInstance.update({ maxDate: newVal ? moment(newVal, 'YYYY-MM-DD').toDate() : '' })
   },
 )
 
