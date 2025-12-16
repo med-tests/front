@@ -14,9 +14,9 @@
         <div
           class="py-2 flex border-emerald-800"
           :class="{
-          'border-b-1': index !== testStore.arrListData.length - 1,
-          'opacity-60': element.isHidden
-        }"
+            'border-b-1': index !== testStore.arrListData.length - 1,
+            'opacity-60': element.isHidden
+          }"
         >
           <a
             class="pr-1 cursor-pointer text-lg text-gray-600 hover:text-gray-900"

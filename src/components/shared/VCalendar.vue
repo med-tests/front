@@ -66,7 +66,7 @@ const props = defineProps({
   disabled: {
     type: Boolean,
     default: false,
-  }
+  },
 })
 const refProps = toRefs(props)
 

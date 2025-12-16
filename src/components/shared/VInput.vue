@@ -17,8 +17,8 @@
           'border-red-700': (isInvalid || isInvalidCalendar) && !disabled,
           'border-gray-600': !isInvalid && !isInvalidCalendar && !disabled,
         }"
-        :name="id"
         :disabled="disabled"
+        :name="id"
         :placeholder="placeholder"
         :readonly="readonly"
         :style="[type === 'password' || !hideCloseIcon ? 'padding-right: 30px;' : '']"
