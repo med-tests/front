@@ -13,11 +13,13 @@
       <template #item="{element, index}">
         <div
           class="py-2 flex border-emerald-800"
-          :class="{'border-b-1': index !== testStore.arrListData.length - 1}"
+          :class="{
+          'border-b-1': index !== testStore.arrListData.length - 1,
+          'opacity-60': element.isHidden
+        }"
         >
           <a
-            class="pr-1 cursor-pointer text-lg"
-            :class="[element.isHidden ? 'text-gray-400' : 'text-gray-600 hover:text-gray-900']"
+            class="pr-1 cursor-pointer text-lg text-gray-600 hover:text-gray-900"
             :href="`#test-${element.id}`"
           >
             {{ element.title }}

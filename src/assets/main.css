@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@source inline("border-gray-700 border-red-700");
+@source inline("border-gray-700 border-red-700 opacity-60");
 
 *,
 *::before,
