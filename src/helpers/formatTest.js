@@ -3,8 +3,8 @@ export default function (test) {
     id: test.id,
     title: test.title,
     normalRange: {
-      from: test.normalFrom || '',
-      to: test.normalTo || '',
+      from: test.normalFrom,
+      to: test.normalTo,
     },
     isHidden: test.isHidden,
     shownPeriod: {

@@ -21,20 +21,20 @@
       <div class="text-lg text-gray-700 leading-none font-medium text-center">
         {{ chartData.datasets[0].label }}
         <div
-          v-if="test.normalRange.from || test.normalRange.to"
+          v-if="computedIsNormalFromExist || computedIsNormalToExist"
           :id="`normal-${id}`"
           class="flex items-center mt-2"
           style="column-gap: 6px;"
         >
           ✅
           <div
-            v-if="test.normalRange.from"
+            v-if="computedIsNormalFromExist"
             class="text-base font-normal"
           >
             от <span class="font-medium">{{ test.normalRange.from }}</span>
           </div>
           <div
-            v-if="test.normalRange.to"
+            v-if="computedIsNormalToExist"
             class="text-base font-normal"
           >
             до <span class="font-medium">{{ test.normalRange.to }}</span>
@@ -130,10 +130,10 @@
             return '#006045'
           }
 
-          if (Object.hasOwn(range, 'to') && range.to < value) {
+          if (Object.hasOwn(range, 'to') && range.to && range.to < value) {
             return '#ff0000'
           }
-          if (Object.hasOwn(range, 'from') && range.from > value) {
+          if (Object.hasOwn(range, 'from') && range.from && range.from > value) {
             return '#0033ff'
           }
           return '#006045'
@@ -250,5 +250,13 @@
 
   const computedLastDate = computed(() => {
     return refProps.test.value.results[refProps.test.value.results.length - 1]?.date || ''
+  })
+
+  const computedIsNormalFromExist = computed(() => {
+    return refProps.test.value.normalRange.from || refProps.test.value.normalRange.from === 0
+  })
+
+  const computedIsNormalToExist = computed(() => {
+    return refProps.test.value.normalRange.to || refProps.test.value.normalRange.to === 0
   })
 </script>

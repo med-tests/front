@@ -115,8 +115,8 @@ const testModal = useTemplateRef('test-modal')
 
 const testName = ref('')
 const initTestName = ref('')
-const lowEdge = ref(0)
-const highEdge = ref(0)
+const lowEdge = ref('')
+const highEdge = ref('')
 const results = ref([])
 const formResults = ref([])
 
@@ -186,7 +186,7 @@ const validation = ref({
   highEdge: {
     error: false,
     validator: (value) => {
-      if (highEdge.value < lowEdge.value && (highEdge.value && lowEdge.value)) {
+      if (highEdge.value < lowEdge.value && ((highEdge.value || highEdge.value === 0) && (lowEdge.value || lowEdge.value === 0))) {
         showToast('Максимальное значение не может быть меньше минимального', {type: 'error'})
         return false
       }

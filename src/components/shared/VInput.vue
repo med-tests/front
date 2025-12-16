@@ -88,7 +88,7 @@ const computedType = computed(() => {
 const value = ref('')
 const setValue = (newValue) => {
   value.value = newValue
-  emit('update:modelValue', props.type === 'number' ? Number(newValue) : newValue)
+  emit('update:modelValue', props.type === 'number' && newValue ? Number(newValue) : newValue)
 }
 watch(
   () => props.modelValue,
