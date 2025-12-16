@@ -215,6 +215,9 @@
   }
 
   const changePeriod = (period, value) => {
+    if (!refProps.test.value.results.length) {
+      return
+    }
     const sameStart = period === 'start' && refProps.test.value.shownPeriod.start === value
     const sameEnd = period === 'end' && refProps.test.value.shownPeriod.end === value
     if (sameStart || sameEnd) {

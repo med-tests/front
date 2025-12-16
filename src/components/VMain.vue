@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, useTemplateRef } from 'vue'
+import {computed, onMounted, ref, useTemplateRef} from 'vue'
 import {useTestStore} from '@/stores/testStore.js'
 import LineChart from '@/components/LineChart.vue'
 import TestList from '@/components/TestList.vue'
@@ -10,9 +10,14 @@ import { useUserStore } from '@/stores/userStore.js'
 
 const testStore = useTestStore()
 const userStore = useUserStore()
+const isLoading = ref(false)
 
 onMounted(() => {
+  isLoading.value = true
   testStore.fetchData()
+      .finally(() => {
+        isLoading.value = false
+      })
 })
 
 const computedIsNoChart = computed(() => {
@@ -31,11 +36,11 @@ const upsertTestModalRef = useTemplateRef('upsert-test-modal')
 <template>
   <div
     class="mx-auto my-0 flex px-5 h-screen bg-white/95"
-    style="max-width: 1440px;"
+    style="max-width: 1600px;"
   >
     <div
       class="p-4 pl-0 border-r-4 border-emerald-800"
-      style="width: 250px"
+      style="width: 350px"
     >
       <div class="mb-3 flex items-center justify-between">
         <h3 class="font-medium text-xl text-gray-700">
@@ -47,6 +52,7 @@ const upsertTestModalRef = useTemplateRef('upsert-test-modal')
           class="ml-auto"
           title="Добавить анализ"
           type="success"
+          :disabled="isLoading"
           @click="upsertTestModalRef.open()"
         >
           <PlusIcon
@@ -55,7 +61,11 @@ const upsertTestModalRef = useTemplateRef('upsert-test-modal')
           />
         </v-btn>
       </div>
-      <TestList />
+
+      <div v-if="isLoading">
+        Загрузка...
+      </div>
+      <TestList v-else />
 
       <UpsertTestModal
         ref="upsert-test-modal"
@@ -75,13 +85,17 @@ const upsertTestModalRef = useTemplateRef('upsert-test-modal')
         </v-btn>
       </div>
 
+      <div v-if="isLoading">
+        Загрузка...
+      </div>
       <div
-        v-if="computedIsNoChart"
+        v-if="!isLoading && computedIsNoChart"
         class="text-gray-700"
       >
         нет данных или все графики скрыты
       </div>
       <div
+        v-if="!isLoading && !computedIsNoChart"
         class="overflow-y-auto overflow-x-hidden"
         style="height: calc(100vh - 16px - 28px - 12px - 12px - 12px)"
       >
