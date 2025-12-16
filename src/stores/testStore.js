@@ -65,12 +65,10 @@ export const useTestStore = defineStore(
       const reversedOldPosition = fullData.length - oldPosition
 
 
-      return api.editTest(id, { position: {
-          newPosition: reversedNewPosition,
-          oldPosition: reversedOldPosition,
-        },
-      })
-        .then(() => {
+      return api.changeTestPosition(id, {
+        newPosition: reversedNewPosition,
+        oldPosition: reversedOldPosition,
+      }).then(() => {
           showToast('Изменения сохранены')
           const isGoUp = reversedNewPosition > reversedOldPosition
           if (isGoUp) {
@@ -111,7 +109,7 @@ export const useTestStore = defineStore(
     }
 
     const deleteTest = (id) => {
-      api.editTest(id,{ status: 0 })
+      api.deleteTest(id)
         .then(() => {
           const index = fullData.findIndex(test => test.id === id)
           fullData.splice(index, 1)

@@ -54,4 +54,10 @@ export default {
   editTest: function (id, data) {
     return apiInstance.patch(`/edit-test/${id}`, data)
   },
+  deleteTest: function (id) {
+    return apiInstance.delete(`/delete-test/${id}`)
+  },
+  changeTestPosition: function (id, data) {
+    return apiInstance.patch(`/position/${id}`, data)
+  },
 }
