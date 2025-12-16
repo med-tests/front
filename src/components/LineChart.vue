@@ -105,7 +105,6 @@
   import VCalendar from '@/components/shared/VCalendar.vue'
   import moment from 'moment'
   import {showToast} from '@/components/shared/toaster/toast.js'
-  import ToolTip from '@/plugins/ToolTipPlugin/ToolTip.vue'
 
   ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
 

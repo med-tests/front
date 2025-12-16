@@ -15,7 +15,6 @@
 </template>
 
 <script setup>
-import ToolTip from '@/plugins/ToolTipPlugin/ToolTip.vue'
 import { getRandomUid } from '@/helpers/index.js'
 import { computed } from 'vue'
 
