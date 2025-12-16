@@ -8,12 +8,11 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build --emptyOutDir --outDir /var/www/med-tests",
     "preview": "vite preview",
     "lint": "npx eslint src/",
     "lint:fix": "npx eslint src/ --fix",
-    "back": "cd ../med-tests-back && npm start",
-    "deploy": "vite build && mv ./dist /var/www/med-tests/dist"
+    "back": "cd ../med-tests-back && npm start"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.13",
