@@ -20,11 +20,13 @@ onMounted(() => {
       })
 })
 
-const computedIsNoChart = computed(() => {
-  if (testStore.fullData) {
-    const noData = !Object.keys(testStore.fullData).length
-    const allHidden =  Object.values(testStore.fullData).every(({isHidden}) => isHidden)
-    return noData || allHidden
+const computedIsNoTests = computed(() => {
+  return !testStore.fullData.length
+})
+
+const computedAllTestsHidden = computed(() => {
+  if (testStore.fullData.length) {
+    return Object.values(testStore.fullData).every(({isHidden}) => isHidden)
   } else {
     return false
   }
@@ -38,6 +40,7 @@ const upsertTestModalRef = useTemplateRef('upsert-test-modal')
     class="mx-auto my-0 flex px-5 h-screen bg-white/95"
     style="max-width: 1600px;"
   >
+    <!--  Список анализов  -->
     <div
       class="p-4 pl-0 border-r-4 border-emerald-800"
       style="width: 350px"
@@ -66,12 +69,9 @@ const upsertTestModalRef = useTemplateRef('upsert-test-modal')
         Загрузка...
       </div>
       <TestList v-else />
-
-      <UpsertTestModal
-        ref="upsert-test-modal"
-      />
     </div>
 
+    <!--  Графики  -->
     <div class="grow-1 p-4 pr-0">
       <div class="flex justify-between">
         <h3 class="font-medium text-xl mb-3 text-gray-700">
@@ -88,14 +88,36 @@ const upsertTestModalRef = useTemplateRef('upsert-test-modal')
       <div v-if="isLoading">
         Загрузка...
       </div>
+
       <div
-        v-if="!isLoading && computedIsNoChart"
-        class="text-gray-700"
+          v-if="!isLoading && (computedAllTestsHidden || computedIsNoTests)"
+          class="text-red-800 text-xl p-6 font-semibold"
       >
-        нет данных или все графики скрыты
+        <template v-if="computedAllTestsHidden">
+          Все графики скрыты.
+          <div>Чтобы изменить видимость графика, нажиме на иконку глаза напротив соответствующего анализа в списке.</div>
+        </template>
+
+        <template v-else-if="computedIsNoTests">
+          Анализы еще не добавлены.
+          <div>Чтобы добавить анализ, нажмите на плюс возле списка анализов или
+            <v-btn
+                not-bordered
+                not-filling
+                title="Добавить анализ"
+                type="success"
+                @click="upsertTestModalRef.open()"
+            >
+              <div class="text-xl">
+                сюда
+              </div>
+            </v-btn>.
+          </div>
+        </template>
       </div>
+
       <div
-        v-if="!isLoading && !computedIsNoChart"
+        v-if="!isLoading && !computedIsNoTests && !computedAllTestsHidden"
         class="overflow-y-auto overflow-x-hidden"
         style="height: calc(100vh - 16px - 28px - 12px - 12px - 12px)"
       >
@@ -108,6 +130,11 @@ const upsertTestModalRef = useTemplateRef('upsert-test-modal')
         />
       </div>
     </div>
+
+    <!--  Модалка добавления анализа  -->
+    <UpsertTestModal
+        ref="upsert-test-modal"
+    />
   </div>
 </template>
 

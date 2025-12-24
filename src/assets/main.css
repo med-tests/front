@@ -7,12 +7,7 @@
   box-sizing: border-box;
 }
 
-*:not(.btn, .btn *),
-*::before,
-*::after {
-  color: var(--color-gray-700);
-}
-
 html {
   scroll-behavior: smooth;
+  color: var(--color-gray-700);
 }

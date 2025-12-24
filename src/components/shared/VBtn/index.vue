@@ -1,7 +1,7 @@
 <template>
   <div
     :id="randomUid"
-    class="inline-block rounded-xs select-none text-lg btn"
+    class="inline-block rounded-xs select-none text-lg"
     :class="computedStyles"
     @click.stop.capture="!disabled && $emit('click')"
   >
@@ -37,8 +37,9 @@ const computedStyles = computed(() => {
 
   const obj = {
     // font-color
-    'text-gray-700': !disabled && (type === 'default' || (['success', 'error'].includes(type) && !filling)),
+    'text-gray-700': !disabled && (type === 'default' || (['error'].includes(type) && !filling)),
     'text-white': !disabled && ['success', 'error'].includes(type) && filling,
+    'text-emerald-700 hover:text-emerald-800': !disabled && type === 'success' && !filling,
     'text-gray-500': disabled,
     'text-gray-200': disabled && ['success', 'error'].includes(type) && filling,
 
