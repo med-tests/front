@@ -59,8 +59,8 @@ const upsertTestModalRef = useTemplateRef('upsert-test-modal')
           @click="upsertTestModalRef.open()"
         >
           <PlusIcon
-            height="16px"
-            width="16px"
+              width="20"
+              :line-width="4"
           />
         </v-btn>
       </div>

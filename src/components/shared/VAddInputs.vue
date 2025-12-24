@@ -12,10 +12,7 @@
         @click="addFieldForNewResult"
       >
         <div class="flex justify-center items-center h-full">
-          <PlusIcon
-            height="16px"
-            width="16px"
-          />
+          <PlusIcon width="16" />
         </div>
       </v-btn>
     </div>
