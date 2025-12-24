@@ -15,6 +15,7 @@
           label="Название анализа"
           placeholder="Введите название анализа"
           :touch-id="touchId"
+          :callback-validator="validation.title.validator"
           @on-validate="validation.title.error = !$event"
         />
       </div>
@@ -172,6 +173,13 @@ const touchId = ref('')
 const validation = ref({
   title: {
     error: false,
+    validator: (value) => {
+      if (value.length > 45) {
+        showToast('Слишком длинное название анализа', {type: 'error'})
+        return false
+      }
+      return true
+    }
   },
   lowEdge: {
     error: false,

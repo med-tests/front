@@ -37,7 +37,9 @@ export const useTestStore = defineStore(
           const index = getIndexByTestId(id)
           fullData[index] = formatTest(res)
         })
-        .catch((err) => {})
+        .catch((err) => {
+          return Promise.reject(err)
+        })
     }
 
     const arrListData = computed(() => {
@@ -105,7 +107,9 @@ export const useTestStore = defineStore(
           const formattedTest = formatTest(test)
           fullData.push(formattedTest)
         })
-        .catch((err) => {})
+        .catch((err) => {
+          return Promise.reject(err)
+        })
     }
 
     const deleteTest = (id) => {
