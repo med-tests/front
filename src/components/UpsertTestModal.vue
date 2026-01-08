@@ -70,6 +70,7 @@
       <!-- Управление формой -->
       <div class="mt-3 ml-auto flex justify-end flex-row gap-x-4">
         <v-btn
+          :is-loading="isLoading"
           @click="testModal.close()"
         >
           <div class="px-2">
@@ -79,6 +80,7 @@
 
         <v-btn
           type="success"
+          :is-loading="isLoading"
           @click="saveTest"
         >
           <div class="px-2">
@@ -241,6 +243,7 @@ function onDeleteResult (result) {
   }
 }
 
+const isLoading = ref(false)
 const saveTest = async () => {
   touchId.value = getRandomUid(7)
   await nextTick()
@@ -270,9 +273,14 @@ const saveTest = async () => {
         })),
     }
 
+    isLoading.value = true
     testStore.addNewTest(sendData)
       .then(() => {
         testModal.value.close()
+      })
+      .catch((err) => { })
+      .finally(() => {
+        isLoading.value = false
       })
   }
   // редактирование анализа - отправляем только изменившиеся поля
@@ -325,9 +333,14 @@ const saveTest = async () => {
       return
     }
 
+    isLoading.value = true
     testStore.changeTest(props.editingTestId, sendData)
       .then(() => {
         testModal.value.close()
+      })
+      .catch((err) => { })
+      .finally(() => {
+        isLoading.value = false
       })
   }
 }

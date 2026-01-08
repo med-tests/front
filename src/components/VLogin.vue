@@ -47,6 +47,7 @@
         not-filling
         class="mb-3"
         type="success"
+        :disabled="isLoading"
         @click="toggleLoginRegister"
       >
         <div class="text-sm text-gray-600 hover:text-emerald-700">
@@ -56,6 +57,7 @@
 
       <v-btn
         type="success"
+        :is-loading="isLoading"
         @click="isLoginPage ? login() : register()"
       >
         <div class="uppercase px-3 py-1">
@@ -135,11 +137,13 @@ async function checkValidate () {
   return true
 }
 
+const isLoading = ref(false)
 const login = async () => {
   if (!await checkValidate()) {
     return
   }
 
+  isLoading.value = true
   userStore.login({
     login: username.value,
     password: password.value,
@@ -152,6 +156,9 @@ const login = async () => {
         console.log(err)
       }
     })
+    .finally(() => {
+      isLoading.value = false
+    })
 }
 
 const register = async () => {
@@ -159,6 +166,7 @@ const register = async () => {
     return
   }
 
+  isLoading.value = true
   userStore.register({
     login: username.value,
     password: password.value,
@@ -167,6 +175,9 @@ const register = async () => {
       if (!err.error) {
         console.log(err)
       }
+    })
+    .finally(() => {
+      isLoading.value = false
     })
 }
 

@@ -38,6 +38,7 @@ export const useTestStore = defineStore(
           fullData[index] = formatTest(res)
         })
         .catch((err) => {
+          showToast('Не удалось сохранить изменения', { type: 'error' })
           return Promise.reject(err)
         })
     }
@@ -97,28 +98,34 @@ export const useTestStore = defineStore(
             })
           }
         })
-        .catch(err => {})
+        .catch(err => {
+          showToast('Не удалось сохранить изменения', { type: 'error' })
+        })
     }
 
     const addNewTest = (test) => {
       return api.addTest(test)
         .then((test) => {
-          showToast('Новый тест добавлен')
+          showToast('Анализ добавлен')
           const formattedTest = formatTest(test)
           fullData.push(formattedTest)
         })
         .catch((err) => {
+          showToast('Не удалось добавить анализ', { type: 'error' })
           return Promise.reject(err)
         })
     }
 
     const deleteTest = (id) => {
-      api.deleteTest(id)
+      return api.deleteTest(id)
         .then(() => {
+          showToast('Анализ удален')
           const index = fullData.findIndex(test => test.id === id)
           fullData.splice(index, 1)
         })
-        .catch((err) => {})
+        .catch((err) => {
+          showToast('Не удалось удалить анализ', { type: 'error' })
+        })
     }
 
     const clearTests = () => {

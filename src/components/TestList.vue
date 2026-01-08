@@ -25,7 +25,7 @@
             {{ element.title }}
           </a>
 
-          <div class="ml-auto pl-3 flex gap-x-2">
+          <div class="ml-auto pl-3 flex gap-x-1">
             <v-btn
               not-bordered
               not-filling
@@ -73,6 +73,7 @@
 
     <div class="mt-3 ml-auto flex justify-end flex-row gap-x-4">
       <v-btn
+        :is-loading="isLoading"
         @click="deleteTestModal.close()"
       >
         Отменить
@@ -80,6 +81,7 @@
 
       <v-btn
         type="error"
+        :is-loading="isLoading"
         @click="deleteTest"
       >
         Удалить
@@ -129,8 +131,17 @@ async function showDeleteModal (test) {
   await nextTick()
   deleteTestModal.value.show()
 }
+
+const isLoading = ref(false)
 function deleteTest () {
+  isLoading.value = true
   testStore.deleteTest(deletingTest.value.id)
-  deleteTestModal.value.close()
+      .then(() => {
+        deleteTestModal.value.close()
+      })
+      .catch((err) => { })
+      .finally(() => {
+        isLoading.value = false
+      })
 }
 </script>
