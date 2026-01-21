@@ -10,7 +10,7 @@
       </div>
 
       <div class="w-full mb-3">
-        <V-Input
+        <VInput
           id="login"
           v-model="username.value"
           required
@@ -23,7 +23,7 @@
       </div>
 
       <div class="w-full mb-3">
-        <V-Input
+        <VInput
           id="password"
           v-model="password.value"
           required
@@ -52,7 +52,7 @@
         </div>
       </div>
 
-      <v-btn
+      <VBtn
         not-bordered
         not-filling
         class="mb-3"
@@ -63,9 +63,9 @@
         <div class="text-sm text-gray-600 hover:text-emerald-700">
           {{ isLoginPage ? 'У меня нет аккаунта' : 'У меня есть аккаунт' }}
         </div>
-      </v-btn>
+      </VBtn>
 
-      <v-btn
+      <VBtn
         type="success"
         :is-loading="computedIsLoading"
         @click="isLoginPage ? login() : register()"
@@ -73,7 +73,7 @@
         <div class="uppercase px-3 py-1">
           {{ isLoginPage ? 'Войти' : 'Зарегистрироваться' }}
         </div>
-      </v-btn>
+      </VBtn>
     </form>
   </div>
 </template>

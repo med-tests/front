@@ -1,7 +1,7 @@
 import { createWebHistory, createRouter } from 'vue-router'
 
-import VMain from '@/components/VMain.vue'
-import VLogin from '@/components/VLogin.vue'
+import VMain from '@/components/pages/VMain.vue'
+import VLogin from '@/components/pages/VLogin.vue'
 
 const routes = [
   {

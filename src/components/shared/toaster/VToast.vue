@@ -1,5 +1,5 @@
 <template>
-  <transition-group
+  <TransitionGroup
     class="fixed z-10 top-[16px] right-[16px] pointer-events-none max-w-[320px]"
     name="toast"
     tag="div"
@@ -13,7 +13,7 @@
         'bg-red-100 border-red-700': toast.type === 'error',
       }"
     >
-      <v-btn
+      <VBtn
         not-bordered
         not-filling
         class="ml-2 absolute"
@@ -26,13 +26,13 @@
           height="20px"
           width="20px"
         />
-      </v-btn>
+      </VBtn>
 
       <div class="text-lg text-gray-800">
         {{ toast.message }}
       </div>
     </div>
-  </transition-group>
+  </TransitionGroup>
 </template>
 
 <script setup>

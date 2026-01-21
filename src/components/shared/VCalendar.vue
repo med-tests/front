@@ -1,5 +1,5 @@
 <template>
-  <V-Input
+  <VInput
     :id="`input-${uniqId}`"
     readonly
     placeholder="Выберите дату"

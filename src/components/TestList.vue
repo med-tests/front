@@ -26,7 +26,7 @@
           </a>
 
           <div class="ml-auto pl-3 flex gap-x-1">
-            <v-btn
+            <VBtn
               not-bordered
               not-filling
               :disabled="loading.editTest"
@@ -35,9 +35,9 @@
             >
               <EyeClosedIcon v-if="element.isHidden" />
               <EyeIcon v-else />
-            </v-btn>
+            </VBtn>
 
-            <v-btn
+            <VBtn
               not-bordered
               not-filling
               title="Редактировать анализ"
@@ -48,9 +48,9 @@
                 height="17"
                 width="17"
               />
-            </v-btn>
+            </VBtn>
 
-            <v-btn
+            <VBtn
               not-bordered
               not-filling
               title="Удалить анализ"
@@ -59,14 +59,14 @@
               @click="showDeleteModal(element)"
             >
               <CloseIcon />
-            </v-btn>
+            </VBtn>
           </div>
         </div>
       </template>
     </draggable>
   </div>
 
-  <v-modal
+  <VModal
     ref="delete-test-modal"
     @on-close="deletingTest = null"
   >
@@ -75,23 +75,23 @@
     </div>
 
     <div class="mt-3 ml-auto flex justify-end flex-row gap-x-4">
-      <v-btn
+      <VBtn
         :is-loading="loading.deleteTest"
         @click="deleteTestModal.close()"
       >
         Отменить
-      </v-btn>
+      </VBtn>
 
-      <v-btn
+      <VBtn
         type="error"
         :is-loading="loading.deleteTest"
         @click="deleteTest"
       >
         Удалить
-      </v-btn>
+      </VBtn>
     </div>
-  </v-modal>
-  <upsert-test-modal
+  </VModal>
+  <UpsertTestModal
     ref="upsert-test-modal"
     :editing-test-id="editingTestId"
   />

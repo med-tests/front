@@ -1,5 +1,5 @@
 <template>
-  <v-modal
+  <VModal
     ref="test-modal"
     :title="isCreating ? 'Добавить анализ' : `Редактировать '${initTestName}'`"
     @on-close="onClose"
@@ -57,7 +57,7 @@
         <div>
           Чтобы добавить результаты анализа, нажмите на плюс
         </div>
-        <v-add-inputs
+        <VAddInputs
           title="Результаты"
           :data="results"
           :fields-settings="resultFieldSettings"
@@ -69,16 +69,16 @@
 
       <!-- Управление формой -->
       <div class="mt-3 ml-auto flex justify-end flex-row gap-x-4">
-        <v-btn
+        <VBtn
           :is-loading="computedIsLoading"
           @click="testModal.close()"
         >
           <div class="px-2">
             Отменить
           </div>
-        </v-btn>
+        </VBtn>
 
-        <v-btn
+        <VBtn
           type="success"
           :is-loading="computedIsLoading"
           @click="saveTest"
@@ -86,10 +86,10 @@
           <div class="px-2">
             {{ isCreating ? 'Добавить анализ' : 'Сохранить' }}
           </div>
-        </v-btn>
+        </VBtn>
       </div>
     </div>
-  </v-modal>
+  </VModal>
 </template>
 
 <script setup>
@@ -98,7 +98,6 @@ import { computed, nextTick, ref, useTemplateRef } from 'vue'
 import { useTestStore } from '@/stores/testStore.js'
 import VInput from '@/components/shared/VInput.vue'
 import { showToast } from '@/components/shared/toaster/toast.js'
-import VBtn from '@/components/shared/VBtn/index.vue'
 import { getRandomUid } from '@/helpers/index.js'
 import VAddInputs from '@/components/shared/VAddInputs.vue'
 import moment from 'moment'

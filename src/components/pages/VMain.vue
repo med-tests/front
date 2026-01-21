@@ -4,7 +4,6 @@ import { useTestStore } from '@/stores/testStore.js'
 import LineChart from '@/components/LineChart.vue'
 import TestList from '@/components/TestList.vue'
 import UpsertTestModal from '@/components/UpsertTestModal.vue'
-import VBtn from '@/components/shared/VBtn/index.vue'
 import PlusIcon from '@/components/icons/PlusIcon.vue'
 import { useUserStore } from '@/stores/userStore.js'
 import { useLoadingStore } from '@/stores/loadingStore.js'
@@ -49,7 +48,7 @@ const upsertTestModalRef = useTemplateRef('upsert-test-modal')
         <h3 class="font-medium text-xl text-gray-700">
           Список анализов
         </h3>
-        <v-btn
+        <VBtn
           not-bordered
           not-filling
           class="ml-auto"
@@ -62,7 +61,7 @@ const upsertTestModalRef = useTemplateRef('upsert-test-modal')
             width="20"
             :line-width="4"
           />
-        </v-btn>
+        </VBtn>
       </div>
 
       <div v-if="computedIsAllTestsLoading">
@@ -77,12 +76,12 @@ const upsertTestModalRef = useTemplateRef('upsert-test-modal')
         <h3 class="font-medium text-xl text-gray-700">
           Графики
         </h3>
-        <v-btn
+        <VBtn
           type="error"
           @click="userStore.logout()"
         >
           ВЫЙТИ
-        </v-btn>
+        </VBtn>
       </div>
 
       <div v-if="computedIsAllTestsLoading">
@@ -102,7 +101,7 @@ const upsertTestModalRef = useTemplateRef('upsert-test-modal')
           Анализы еще не добавлены.
           <div>
             Чтобы добавить анализ, нажмите на плюс возле списка анализов или
-            <v-btn
+            <VBtn
               not-bordered
               not-filling
               title="Добавить анализ"
@@ -112,7 +111,7 @@ const upsertTestModalRef = useTemplateRef('upsert-test-modal')
               <div class="text-xl">
                 сюда
               </div>
-            </v-btn>.
+            </VBtn>.
           </div>
         </template>
       </div>

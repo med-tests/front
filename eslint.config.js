@@ -28,8 +28,13 @@ export default [
         'alphabetical': true,
       }],
       'vue/multi-word-component-names': ['error', {
-        'ignores': ['index'],
+        'ignores': ['draggable'],
       }],
+      'vue/component-name-in-template-casing': ['error', 'PascalCase',
+        {
+          registeredComponentsOnly: false,
+          ignores: ['draggable'],
+        }],
     },
     languageOptions: {
       globals: {

@@ -5,7 +5,7 @@
       <h5 class="text-xl text-gray-700">
         {{ title }}
       </h5>
-      <v-btn
+      <VBtn
         style="height: 24px;"
         title="Добавить результат"
         type="success"
@@ -14,7 +14,7 @@
         <div class="flex justify-center items-center h-full">
           <PlusIcon width="16" />
         </div>
-      </v-btn>
+      </VBtn>
     </div>
 
     <!--  Названия колонок  -->
@@ -57,7 +57,7 @@
             :type="field.type || 'text'"
             @on-validate="data[rowIndex][fieldKey].error = !$event"
           />
-          <v-calendar
+          <VCalendar
             v-if="field.type === 'calendar'"
             class="grow"
             :callback-validator="field.validator"
@@ -72,7 +72,7 @@
             @on-validate="data[rowIndex][fieldKey].error = !$event"
           />
         </div>
-        <v-btn
+        <VBtn
           v-if="!hideDelete"
           not-bordered
           not-filling
@@ -84,7 +84,7 @@
             height="20px"
             width="20px"
           />
-        </v-btn>
+        </VBtn>
       </div>
     </template>
   </div>
@@ -94,7 +94,6 @@
 import VInput from '@/components/shared/VInput.vue'
 import { ref, watch } from 'vue'
 import PlusIcon from '@/components/icons/PlusIcon.vue'
-import VBtn from '@/components/shared/VBtn/index.vue'
 import CloseIcon from '@/components/icons/CloseIcon.vue'
 import VCalendar from '@/components/shared/VCalendar.vue'
 

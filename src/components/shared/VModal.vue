@@ -1,5 +1,5 @@
 <template>
-  <teleport
+  <Teleport
     v-if="isOpened"
     to="body"
   >
@@ -20,7 +20,7 @@
         <slot />
       </div>
     </div>
-  </teleport>
+  </Teleport>
 </template>
 
 <script setup>

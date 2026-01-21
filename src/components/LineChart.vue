@@ -5,7 +5,7 @@
       class="flex mb-3 items-center justify-between mx-auto"
       style="width: calc(100% - 64px)"
     >
-      <V-Calendar
+      <VCalendar
         forbid-toggle-selected
         class="mr-5 inline-block"
         label="Начало периода"
@@ -46,7 +46,7 @@
           />
         </div>
       </div>
-      <V-Calendar
+      <VCalendar
         forbid-toggle-selected
         class="inline-block"
         label="Конец периода"
