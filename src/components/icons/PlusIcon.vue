@@ -1,21 +1,21 @@
 <template>
   <svg
-      fill="inherit"
-      :height="width"
-      :width="width"
+    fill="inherit"
+    :height="width"
+    :width="width"
   >
     <rect
-        :x="horizontal.x"
-        :y="horizontal.y"
-        :width="horizontal.width"
-        :height="horizontal.height"
+      :height="horizontal.height"
+      :width="horizontal.width"
+      :x="horizontal.x"
+      :y="horizontal.y"
     />
 
     <rect
-        :x="vertical.x"
-        :y="vertical.y"
-        :width="vertical.width"
-        :height="vertical.height"
+      :height="vertical.height"
+      :width="vertical.width"
+      :x="vertical.x"
+      :y="vertical.y"
     />
   </svg>
 </template>

@@ -8,32 +8,32 @@
     <template v-if="!isLoading">
       <slot />
       <ToolTip
-          v-if="title"
-          :append-element-id="randomUid"
-          :text="title"
+        v-if="title"
+        :append-element-id="randomUid"
+        :text="title"
       />
     </template>
 
     <div
-        v-if="isLoading"
-        class="relative"
-        :style="{
-          'height': `${btnHeight}px`,
-          'width': `${btnWidth}px`
-        }"
+      v-if="isLoading"
+      class="relative"
+      :style="{
+        'height': `${btnHeight}px`,
+        'width': `${btnWidth}px`
+      }"
     >
       <div
-          class="absolute v-btn-loading"
-          :class="{
-            'text-gray-700': (type === 'default' || (['error'].includes(type) && notFilling)),
-            'text-white': ['success', 'error'].includes(type) && !notFilling,
-            'text-emerald-700': type === 'success' && notFilling,
-          }"
-          :style="{
-            'width': btnHeight / 2 + 'px',
-            'height': btnHeight / 2 + 'px',
-          }"
-      ></div>
+        class="absolute v-btn-loading"
+        :class="{
+          'text-gray-700': (type === 'default' || (['error'].includes(type) && notFilling)),
+          'text-white': ['success', 'error'].includes(type) && !notFilling,
+          'text-emerald-700': type === 'success' && notFilling,
+        }"
+        :style="{
+          'width': btnHeight / 2 + 'px',
+          'height': btnHeight / 2 + 'px'
+        }"
+      />
     </div>
   </div>
 </template>

@@ -14,8 +14,8 @@
           required
           label="Название анализа"
           placeholder="Введите название анализа"
-          :touch-id="touchId"
           :callback-validator="validation.title.validator"
+          :touch-id="touchId"
           @on-validate="validation.title.error = !$event"
         />
       </div>
@@ -181,7 +181,7 @@ const validation = ref({
         return false
       }
       return true
-    }
+    },
   },
   lowEdge: {
     error: false,
