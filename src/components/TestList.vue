@@ -29,6 +29,7 @@
             <v-btn
               not-bordered
               not-filling
+              :disabled="loading.editTest"
               :title="element.isHidden ? 'Показать' : 'Скрыть'"
               @click="testStore.changeTest(element.id, { isHidden: element.isHidden ? 0 : 1 })"
             >
@@ -40,6 +41,7 @@
               not-bordered
               not-filling
               title="Редактировать анализ"
+              :disabled="loading.editTest"
               @click="showUpsertTestModal(element.id)"
             >
               <PencilIcon
@@ -53,6 +55,7 @@
               not-filling
               title="Удалить анализ"
               type="error"
+              :disabled="loading.editTest"
               @click="showDeleteModal(element)"
             >
               <CloseIcon />
@@ -73,7 +76,7 @@
 
     <div class="mt-3 ml-auto flex justify-end flex-row gap-x-4">
       <v-btn
-        :is-loading="isLoading"
+        :is-loading="loading.deleteTest"
         @click="deleteTestModal.close()"
       >
         Отменить
@@ -81,7 +84,7 @@
 
       <v-btn
         type="error"
-        :is-loading="isLoading"
+        :is-loading="loading.deleteTest"
         @click="deleteTest"
       >
         Удалить
@@ -99,11 +102,12 @@ import draggable from 'vuedraggable'
 import EyeClosedIcon from '@/components/icons/EyeClosedIcon.vue'
 import EyeIcon from '@/components/icons/EyeIcon.vue'
 import {useTestStore} from '@/stores/testStore.js'
-import { nextTick, ref, useTemplateRef } from 'vue'
+import {nextTick, ref, useTemplateRef} from 'vue'
 import CloseIcon from '@/components/icons/CloseIcon.vue'
 import VModal from '@/components/shared/VModal.vue'
 import PencilIcon from '@/components/icons/PencilIcon.vue'
 import UpsertTestModal from '@/components/UpsertTestModal.vue'
+import {useLoadingStore} from '@/stores/loadingStore.js'
 
 const testStore = useTestStore()
 
@@ -132,16 +136,13 @@ async function showDeleteModal (test) {
   deleteTestModal.value.show()
 }
 
-const isLoading = ref(false)
+const { loading } = useLoadingStore()
+
 function deleteTest () {
-  isLoading.value = true
   testStore.deleteTest(deletingTest.value.id)
       .then(() => {
         deleteTestModal.value.close()
       })
       .catch((err) => { })
-      .finally(() => {
-        isLoading.value = false
-      })
 }
 </script>

@@ -3,13 +3,17 @@ import { computed, reactive } from 'vue'
 import api from '@/api.js'
 import { formatTest } from '@/helpers'
 import { showToast } from '@/components/shared/toaster/toast.js'
+import {useLoadingStore} from '@/stores/loadingStore.js'
 
 export const useTestStore = defineStore(
   'testStore',
   () => {
+    const loadingStore = useLoadingStore()
+
     const fullData = reactive([])
 
-    const fetchData = () => {
+    function getAllTests() {
+      loadingStore.setLoadingFor('getAllTests', true)
       fullData.splice(0, fullData.length)
 
       return api.getAllTests()
@@ -20,6 +24,9 @@ export const useTestStore = defineStore(
           })
         })
         .catch((err) => {})
+        .finally(() => {
+          loadingStore.setLoadingFor('getAllTests', false)
+        })
     }
 
     const changeTest = (id, data) => {
@@ -31,6 +38,7 @@ export const useTestStore = defineStore(
         }
       })
 
+      loadingStore.setLoadingFor('editTest', true)
       return api.editTest(id, sendData)
         .then((res) => {
           showToast('Изменения сохранены')
@@ -40,6 +48,9 @@ export const useTestStore = defineStore(
         .catch((err) => {
           showToast('Не удалось сохранить изменения', { type: 'error' })
           return Promise.reject(err)
+        })
+        .finally(() => {
+          loadingStore.setLoadingFor('editTest', false)
         })
     }
 
@@ -67,11 +78,11 @@ export const useTestStore = defineStore(
       const reversedNewPosition = fullData.length - newPosition
       const reversedOldPosition = fullData.length - oldPosition
 
-
       return api.changeTestPosition(id, {
         newPosition: reversedNewPosition,
         oldPosition: reversedOldPosition,
-      }).then(() => {
+      })
+        .then(() => {
           showToast('Изменения сохранены')
           const isGoUp = reversedNewPosition > reversedOldPosition
           if (isGoUp) {
@@ -104,6 +115,7 @@ export const useTestStore = defineStore(
     }
 
     const addNewTest = (test) => {
+      loadingStore.setLoadingFor('addTest', true)
       return api.addTest(test)
         .then((test) => {
           showToast('Анализ добавлен')
@@ -114,9 +126,13 @@ export const useTestStore = defineStore(
           showToast('Не удалось добавить анализ', { type: 'error' })
           return Promise.reject(err)
         })
+        .finally(() => {
+          loadingStore.setLoadingFor('addTest', false)
+        })
     }
 
     const deleteTest = (id) => {
+      loadingStore.setLoadingFor('deleteTest', true)
       return api.deleteTest(id)
         .then(() => {
           showToast('Анализ удален')
@@ -125,6 +141,9 @@ export const useTestStore = defineStore(
         })
         .catch((err) => {
           showToast('Не удалось удалить анализ', { type: 'error' })
+        })
+        .finally(() => {
+          loadingStore.setLoadingFor('deleteTest', false)
         })
     }
 
@@ -149,7 +168,7 @@ export const useTestStore = defineStore(
       sortedFullData,
 
       // actions
-      fetchData,
+      getAllTests,
       changeTest,
       updateOrder,
       addNewTest,

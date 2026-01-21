@@ -2,14 +2,17 @@ import { defineStore } from 'pinia'
 import api from '@/api.js'
 import { useTestStore } from '@/stores/testStore.js'
 import { useRouter } from 'vue-router'
+import {useLoadingStore} from '@/stores/loadingStore.js'
 
 export const useUserStore = defineStore(
   'userStore',
   () => {
     const testStore = useTestStore()
+    const loadingStore = useLoadingStore()
     const router = useRouter()
 
     function register ({ login, password }) {
+      loadingStore.setLoadingFor('register', true)
       return api.register({
         login,
         password,
@@ -19,9 +22,13 @@ export const useUserStore = defineStore(
           router.push({ name: 'main' })
         })
         .catch((err) => {})
+        .finally(() => {
+          loadingStore.setLoadingFor('register', false)
+        })
     }
 
     function login ({ login, password }) {
+      loadingStore.setLoadingFor('login', true)
       return api.login({
         login,
         password,
@@ -31,6 +38,9 @@ export const useUserStore = defineStore(
           router.push({ name: 'main' })
         })
         .catch((err) => {})
+        .finally(() => {
+          loadingStore.setLoadingFor('login', false)
+        })
     }
 
     function logout () {

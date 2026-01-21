@@ -70,7 +70,7 @@
       <!-- Управление формой -->
       <div class="mt-3 ml-auto flex justify-end flex-row gap-x-4">
         <v-btn
-          :is-loading="isLoading"
+          :is-loading="computedIsLoading"
           @click="testModal.close()"
         >
           <div class="px-2">
@@ -80,7 +80,7 @@
 
         <v-btn
           type="success"
-          :is-loading="isLoading"
+          :is-loading="computedIsLoading"
           @click="saveTest"
         >
           <div class="px-2">
@@ -102,6 +102,7 @@ import VBtn from '@/components/shared/VBtn/index.vue'
 import { getRandomUid } from '@/helpers/index.js'
 import VAddInputs from '@/components/shared/VAddInputs.vue'
 import moment from 'moment'
+import {useLoadingStore} from '@/stores/loadingStore.js'
 
 const testStore = useTestStore()
 
@@ -243,7 +244,10 @@ function onDeleteResult (result) {
   }
 }
 
-const isLoading = ref(false)
+const { loading } = useLoadingStore()
+const computedIsLoading = computed(() => {
+  return loading.addTest || loading.editTest || false
+})
 const saveTest = async () => {
   touchId.value = getRandomUid(7)
   await nextTick()
@@ -273,15 +277,11 @@ const saveTest = async () => {
         })),
     }
 
-    isLoading.value = true
     testStore.addNewTest(sendData)
       .then(() => {
         testModal.value.close()
       })
       .catch((err) => { })
-      .finally(() => {
-        isLoading.value = false
-      })
   }
   // редактирование анализа - отправляем только изменившиеся поля
   else {
@@ -333,15 +333,11 @@ const saveTest = async () => {
       return
     }
 
-    isLoading.value = true
     testStore.changeTest(props.editingTestId, sendData)
       .then(() => {
         testModal.value.close()
       })
       .catch((err) => { })
-      .finally(() => {
-        isLoading.value = false
-      })
   }
 }
 </script>

@@ -1,23 +1,23 @@
 <script setup>
-import {computed, onMounted, ref, useTemplateRef} from 'vue'
-import {useTestStore} from '@/stores/testStore.js'
+import { computed, onMounted, useTemplateRef } from 'vue'
+import { useTestStore } from '@/stores/testStore.js'
 import LineChart from '@/components/LineChart.vue'
 import TestList from '@/components/TestList.vue'
 import UpsertTestModal from '@/components/UpsertTestModal.vue'
 import VBtn from '@/components/shared/VBtn/index.vue'
 import PlusIcon from '@/components/icons/PlusIcon.vue'
 import { useUserStore } from '@/stores/userStore.js'
+import { useLoadingStore } from '@/stores/loadingStore.js'
+
+const { loading } = useLoadingStore()
+const computedIsAllTestsLoading = computed(() => {
+  return loading.getAllTests || false
+})
 
 const testStore = useTestStore()
 const userStore = useUserStore()
-const isLoading = ref(false)
-
 onMounted(() => {
-  isLoading.value = true
-  testStore.fetchData()
-      .finally(() => {
-        isLoading.value = false
-      })
+  testStore.getAllTests()
 })
 
 const computedIsNoTests = computed(() => {
@@ -55,17 +55,17 @@ const upsertTestModalRef = useTemplateRef('upsert-test-modal')
           class="ml-auto"
           title="Добавить анализ"
           type="success"
-          :disabled="isLoading"
+          :disabled="computedIsAllTestsLoading"
           @click="upsertTestModalRef.open()"
         >
           <PlusIcon
-              width="20"
-              :line-width="4"
+            width="20"
+            :line-width="4"
           />
         </v-btn>
       </div>
 
-      <div v-if="isLoading">
+      <div v-if="computedIsAllTestsLoading">
         Загрузка...
       </div>
       <TestList v-else />
@@ -73,8 +73,8 @@ const upsertTestModalRef = useTemplateRef('upsert-test-modal')
 
     <!--  Графики  -->
     <div class="grow-1 p-4 pr-0">
-      <div class="flex justify-between">
-        <h3 class="font-medium text-xl mb-3 text-gray-700">
+      <div class="flex justify-between mb-3">
+        <h3 class="font-medium text-xl text-gray-700">
           Графики
         </h3>
         <v-btn
@@ -85,13 +85,13 @@ const upsertTestModalRef = useTemplateRef('upsert-test-modal')
         </v-btn>
       </div>
 
-      <div v-if="isLoading">
+      <div v-if="computedIsAllTestsLoading">
         Загрузка...
       </div>
 
       <div
-          v-if="!isLoading && (computedAllTestsHidden || computedIsNoTests)"
-          class="text-red-800 text-xl p-6 font-semibold"
+        v-if="!computedIsAllTestsLoading && (computedAllTestsHidden || computedIsNoTests)"
+        class="text-red-800 text-xl p-6 font-semibold"
       >
         <template v-if="computedAllTestsHidden">
           Все графики скрыты.
@@ -100,13 +100,14 @@ const upsertTestModalRef = useTemplateRef('upsert-test-modal')
 
         <template v-else-if="computedIsNoTests">
           Анализы еще не добавлены.
-          <div>Чтобы добавить анализ, нажмите на плюс возле списка анализов или
+          <div>
+            Чтобы добавить анализ, нажмите на плюс возле списка анализов или
             <v-btn
-                not-bordered
-                not-filling
-                title="Добавить анализ"
-                type="success"
-                @click="upsertTestModalRef.open()"
+              not-bordered
+              not-filling
+              title="Добавить анализ"
+              type="success"
+              @click="upsertTestModalRef.open()"
             >
               <div class="text-xl">
                 сюда
@@ -117,7 +118,7 @@ const upsertTestModalRef = useTemplateRef('upsert-test-modal')
       </div>
 
       <div
-        v-if="!isLoading && !computedIsNoTests && !computedAllTestsHidden"
+        v-if="!computedIsAllTestsLoading && !computedIsNoTests && !computedAllTestsHidden"
         class="overflow-y-auto overflow-x-hidden"
         style="height: calc(100vh - 16px - 28px - 12px - 12px - 12px)"
       >
@@ -133,7 +134,7 @@ const upsertTestModalRef = useTemplateRef('upsert-test-modal')
 
     <!--  Модалка добавления анализа  -->
     <UpsertTestModal
-        ref="upsert-test-modal"
+      ref="upsert-test-modal"
     />
   </div>
 </template>

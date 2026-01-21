@@ -34,11 +34,21 @@
           @on-validate="password.error = !$event"
         />
         <div v-if="!isLoginPage">
-          <div class="text-sm">- Не менее 8 символов</div>
-          <div class="text-sm">- Xотя бы одно число</div>
-          <div class="text-sm">- Xотя бы один спецсимвол</div>
-          <div class="text-sm">- Xотя бы одна латинская буква в нижнем регистре</div>
-          <div class="text-sm">- Xотя бы одна латинская буква в верхнем регистре</div>
+          <div class="text-sm">
+            - Не менее 8 символов
+          </div>
+          <div class="text-sm">
+            - Xотя бы одно число
+          </div>
+          <div class="text-sm">
+            - Xотя бы один спецсимвол
+          </div>
+          <div class="text-sm">
+            - Xотя бы одна латинская буква в нижнем регистре
+          </div>
+          <div class="text-sm">
+            - Xотя бы одна латинская буква в верхнем регистре
+          </div>
         </div>
       </div>
 
@@ -47,7 +57,7 @@
         not-filling
         class="mb-3"
         type="success"
-        :disabled="isLoading"
+        :disabled="computedIsLoading"
         @click="toggleLoginRegister"
       >
         <div class="text-sm text-gray-600 hover:text-emerald-700">
@@ -57,7 +67,7 @@
 
       <v-btn
         type="success"
-        :is-loading="isLoading"
+        :is-loading="computedIsLoading"
         @click="isLoginPage ? login() : register()"
       >
         <div class="uppercase px-3 py-1">
@@ -70,11 +80,12 @@
 
 <script setup>
 import VInput from '@/components/shared/VInput.vue'
-import { nextTick, reactive, ref } from 'vue'
+import {computed, nextTick, reactive, ref} from 'vue'
 import { useUserStore } from '@/stores/userStore.js'
 import { useRouter } from 'vue-router'
 import { showToast } from '@/components/shared/toaster/toast.js'
 import { getRandomUid } from '@/helpers/index.js'
+import {useLoadingStore} from '@/stores/loadingStore.js'
 
 const userStore = useUserStore()
 const router = useRouter()
@@ -137,13 +148,16 @@ async function checkValidate () {
   return true
 }
 
-const isLoading = ref(false)
+const { loading } = useLoadingStore()
+const computedIsLoading = computed(() => {
+  return loading.login || loading.register
+})
+
 const login = async () => {
   if (!await checkValidate()) {
     return
   }
 
-  isLoading.value = true
   userStore.login({
     login: username.value,
     password: password.value,
@@ -156,9 +170,6 @@ const login = async () => {
         console.log(err)
       }
     })
-    .finally(() => {
-      isLoading.value = false
-    })
 }
 
 const register = async () => {
@@ -166,7 +177,6 @@ const register = async () => {
     return
   }
 
-  isLoading.value = true
   userStore.register({
     login: username.value,
     password: password.value,
@@ -175,9 +185,6 @@ const register = async () => {
       if (!err.error) {
         console.log(err)
       }
-    })
-    .finally(() => {
-      isLoading.value = false
     })
 }
 
