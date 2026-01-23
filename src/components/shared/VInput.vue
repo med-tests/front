@@ -97,8 +97,8 @@ const setValue = (newValue) => {
   if (props.disabled) {
     return
   }
-  value.value = newValue
-  emit('update:modelValue', props.type === 'number' && newValue ? Number(newValue) : newValue)
+  value.value = props.type === 'number' && newValue ? Number(newValue) : newValue
+  emit('update:modelValue', value.value)
 }
 watch(
   () => props.modelValue,

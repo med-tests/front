@@ -227,13 +227,6 @@ const resultFieldSettings = {
     type: 'number',
     required: true,
     hideCloseIcon: true,
-    validator: (value) => {
-      if (!/^\d+(\,\d+)?$/.test(value)) {
-        showToast('Результат анализа должен быть числом. Отделение дробной части запятой', {type: 'error'})
-        return false
-      }
-      return true
-    },
   },
 }
 
