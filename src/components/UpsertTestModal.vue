@@ -329,7 +329,9 @@ const saveTest = async () => {
       .then(() => {
         testModal.value.close()
       })
-      .catch((err) => { })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 }
 </script>

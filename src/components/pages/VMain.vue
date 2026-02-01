@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, useTemplateRef } from 'vue'
+import { computed, onMounted, ref, useTemplateRef } from 'vue'
 import { useTestStore } from '@/stores/testStore.js'
 import LineChart from '@/components/LineChart.vue'
 import TestList from '@/components/TestList.vue'
@@ -7,15 +7,28 @@ import UpsertTestModal from '@/components/UpsertTestModal.vue'
 import PlusIcon from '@/components/icons/PlusIcon.vue'
 import { useUserStore } from '@/stores/userStore.js'
 import { useLoadingStore } from '@/stores/loadingStore.js'
+import router from '@/router.js'
 
 const { loading } = useLoadingStore()
-const computedIsAllTestsLoading = computed(() => {
-  return loading.getAllTests || false
-})
 
 const testStore = useTestStore()
 const userStore = useUserStore()
+
+const scrollOffset = ref(0)
+const bannerHeight = ref(0)
 onMounted(() => {
+  const chartTitle = document.getElementById('chartTitle')
+  const chartTitleHeight = chartTitle.offsetHeight + +window.getComputedStyle(chartTitle).marginBottom.replace('px', '')
+
+  const chartWrap = document.getElementById('chartWrap')
+  const chartWrapPaddings = +window.getComputedStyle(chartWrap).paddingTop.replace('px', '')
+      + +window.getComputedStyle(chartWrap).paddingBottom.replace('px', '')
+
+  if (!userStore.isLoggedIn) {
+    bannerHeight.value = document.getElementById('banner').offsetHeight
+  }
+
+  scrollOffset.value = chartTitleHeight + chartWrapPaddings + bannerHeight.value
   testStore.getAllTests()
 })
 
@@ -36,98 +49,125 @@ const upsertTestModalRef = useTemplateRef('upsert-test-modal')
 
 <template>
   <div
-    class="mx-auto my-0 flex px-5 h-screen bg-white/95"
+    class="mx-auto my-0 h-screen bg-white/95 flex flex-col"
     style="max-width: 1600px;"
   >
-    <!--  Список анализов  -->
     <div
-      class="p-4 pl-0 border-r-4 border-emerald-800"
-      style="width: 350px"
+      v-if="!userStore.isLoggedIn"
+      id="banner"
+      class="font-medium text-lg text-red-600 text-center py-2 bg-red-100"
     >
-      <div class="mb-3 flex items-center justify-between">
-        <h3 class="font-medium text-xl text-gray-700">
-          Список анализов
-        </h3>
-        <VBtn
-          not-bordered
-          not-filling
-          class="ml-auto"
-          title="Добавить анализ"
-          type="success"
-          :disabled="computedIsAllTestsLoading"
-          @click="upsertTestModalRef.open()"
-        >
-          <PlusIcon
-            width="20"
-            :line-width="4"
-          />
-        </VBtn>
-      </div>
-
-      <div v-if="computedIsAllTestsLoading">
-        Загрузка...
-      </div>
-      <TestList v-else />
+      Войдите, чтобы не потерять изменения при перезагрузке страницы
     </div>
 
-    <!--  Графики  -->
-    <div class="grow-1 p-4 pr-0">
-      <div class="flex justify-between mb-3">
-        <h3 class="font-medium text-xl text-gray-700">
-          Графики
-        </h3>
-        <VBtn
-          type="error"
-          @click="userStore.logout()"
+    <div
+      class="flex px-5 grow-1"
+      :style="{ height: userStore.isLoggedIn ? '100%' : `calc(100% - ${bannerHeight}px)`}"
+    >
+      <!--  Список анализов  -->
+      <div
+        class="p-4 pl-0 border-r-4 border-emerald-800"
+        style="width: 350px"
+      >
+        <div class="mb-3 flex items-center justify-between">
+          <h3 class="font-medium text-xl text-gray-700">
+            Список анализов
+          </h3>
+          <VBtn
+            not-bordered
+            not-filling
+            class="ml-auto"
+            title="Добавить анализ"
+            type="success"
+            :disabled="loading.getAllTests"
+            @click="upsertTestModalRef.open()"
+          >
+            <PlusIcon
+              width="20"
+              :line-width="4"
+            />
+          </VBtn>
+        </div>
+
+        <div v-if="loading.getAllTests">
+          Загрузка...
+        </div>
+        <TestList v-else />
+      </div>
+
+      <!--  Графики  -->
+      <div
+        id="chartWrap"
+        class="grow-1 p-4 pr-0"
+      >
+        <div
+          id="chartTitle"
+          class="flex justify-between mb-3"
         >
-          ВЫЙТИ
-        </VBtn>
-      </div>
+          <h3 class="font-medium text-xl text-gray-700">
+            Графики
+          </h3>
+          <VBtn
+            v-if="userStore.isLoggedIn"
+            type="error"
+            @click="userStore.logout()"
+          >
+            ВЫЙТИ
+          </VBtn>
+          <VBtn
+            v-else
+            type="success"
+            @click="router.push({ name: 'login' })"
+          >
+            ВОЙТИ
+          </VBtn>
+        </div>
 
-      <div v-if="computedIsAllTestsLoading">
-        Загрузка...
-      </div>
+        <div v-if="loading.getAllTests">
+          Загрузка...
+        </div>
 
-      <div
-        v-if="!computedIsAllTestsLoading && (computedAllTestsHidden || computedIsNoTests)"
-        class="text-red-800 text-xl p-6 font-semibold"
-      >
-        <template v-if="computedAllTestsHidden">
-          Все графики скрыты.
-          <div>Чтобы изменить видимость графика, нажиме на иконку глаза напротив соответствующего анализа в списке.</div>
-        </template>
+        <div
+          v-if="!loading.getAllTests && (computedAllTestsHidden || computedIsNoTests)"
+          class="text-red-800 text-xl p-6 font-semibold"
+        >
+          <template v-if="computedAllTestsHidden">
+            Все графики скрыты.
+            <div>Чтобы изменить видимость графика, нажиме на иконку глаза напротив соответствующего анализа в списке.</div>
+          </template>
 
-        <template v-else-if="computedIsNoTests">
-          Анализы еще не добавлены.
-          <div>
-            Чтобы добавить анализ, нажмите на плюс возле списка анализов или
-            <VBtn
-              not-bordered
-              not-filling
-              title="Добавить анализ"
-              type="success"
-              @click="upsertTestModalRef.open()"
-            >
-              <div class="text-xl">
-                сюда
-              </div>
-            </VBtn>.
-          </div>
-        </template>
-      </div>
+          <template v-else-if="computedIsNoTests">
+            Анализы еще не добавлены.
+            <div>
+              Чтобы добавить анализ, нажмите на плюс возле списка анализов или
+              <VBtn
+                not-bordered
+                not-filling
+                title="Добавить анализ"
+                type="success"
+                @click="upsertTestModalRef.open()"
+              >
+                <div class="text-xl">
+                  сюда
+                </div>
+              </VBtn>.
+            </div>
+          </template>
+        </div>
 
-      <div
-        v-if="!computedIsAllTestsLoading && !computedIsNoTests && !computedAllTestsHidden"
-        class="overflow-y-auto overflow-x-hidden"
-        style="height: calc(100vh - 16px - 28px - 12px - 12px - 12px)"
-      >
-        <LineChart
-          v-for="test in testStore.sortedFullData"
-          :id="test.id"
-          :key="test.id"
-          class="py-15 first:pt-5 test-chart relative"
-          :test="test"
-        />
+        <div
+          v-if="!loading.getAllTests && !computedIsNoTests && !computedAllTestsHidden"
+          class="overflow-y-auto overflow-x-hidden"
+          :style="{ height: `calc(100vh - ${scrollOffset}px)` }"
+        >
+          <LineChart
+            v-for="test in testStore.sortedFullData"
+            :id="test.id"
+            :key="test.id"
+            class="py-15 first:pt-0 last:pb-0 test-chart relative"
+            :test="test"
+          />
+        </div>
       </div>
     </div>
 

@@ -3,6 +3,8 @@ import api from '@/api.js'
 import { useTestStore } from '@/stores/testStore.js'
 import { useRouter } from 'vue-router'
 import {useLoadingStore} from '@/stores/loadingStore.js'
+import {ref} from 'vue'
+import {showToast} from '@/components/shared/toaster/toast.js'
 
 export const useUserStore = defineStore(
   'userStore',
@@ -11,6 +13,12 @@ export const useUserStore = defineStore(
     const loadingStore = useLoadingStore()
     const router = useRouter()
 
+    const isLoggedIn = ref(false)
+
+    function checkIsLoggedIn () {
+      isLoggedIn.value = !!localStorage.getItem('token')
+    }
+
     function register ({ login, password }) {
       loadingStore.setLoadingFor('register', true)
       return api.register({
@@ -18,8 +26,14 @@ export const useUserStore = defineStore(
         password,
       })
         .then((res) => {
-          localStorage.setItem('token', res.token)
-          router.push({ name: 'main' })
+          if (res.token) {
+            localStorage.setItem('token', res.token)
+            isLoggedIn.value = true
+            router.push({ name: 'main' })
+          } else {
+            showToast('Ошибка регистрации. Свяжитесь с администрацией сайта', { type: 'error' })
+            isLoggedIn.value = false
+          }
         })
         .catch((err) => {})
         .finally(() => {
@@ -34,8 +48,14 @@ export const useUserStore = defineStore(
         password,
       })
         .then((res) => {
-          localStorage.setItem('token', res.token)
-          router.push({ name: 'main' })
+          if (res.token) {
+            localStorage.setItem('token', res.token)
+            isLoggedIn.value = true
+            router.push({ name: 'main' })
+          } else {
+            showToast('Ошибка входа. Свяжитесь с администрацией сайта', { type: 'error' })
+            isLoggedIn.value = false
+          }
         })
         .catch((err) => {})
         .finally(() => {
@@ -46,12 +66,16 @@ export const useUserStore = defineStore(
     function logout () {
       testStore.clearTests()
       localStorage.removeItem('token')
-      router.push({ name: 'login' })
+      isLoggedIn.value = false
     }
 
 
     return {
+      // state
+      isLoggedIn,
+
       // actions
+      checkIsLoggedIn,
       register,
       login,
       logout,

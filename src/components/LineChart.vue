@@ -66,7 +66,7 @@
       :id="`chart-${test.id}`"
       style="max-height: 400px;"
       :data="chartData"
-      :options="options"
+      :options="computedOptions"
     />
     <div
       v-else
@@ -100,7 +100,7 @@
   Tooltip,
   Legend,
 } from 'chart.js'
-  import {computed, toRefs } from 'vue'
+  import {computed, toRefs} from 'vue'
   import {useTestStore} from '@/stores/testStore.js'
   import VCalendar from '@/components/shared/VCalendar.vue'
   import moment from 'moment'
@@ -117,77 +117,76 @@
 
   const testStore = useTestStore()
 
-  const options = {
-    responsive: true,
-    elements: {
-      point: {
-        radius: 8,
-        hoverRadius: 10,
-        backgroundColor: (ctx) => {
-          const value = ctx.raw.y
-          const range = refProps.test.value.normalRange
+  const computedOptions = computed(() => {
+    const from = props.test.normalRange.from
+    const to = props.test.normalRange.to
+    return {
+      responsive: true,
+      elements: {
+        point: {
+          radius: 8,
+          hoverRadius: 10,
+          backgroundColor: (ctx) => {
+            const value = ctx.raw.y
 
-          if (!range) {
+            if (to && value > to) {
+              return '#ff0000'
+            }
+            if (from && value < from) {
+              return '#0033ff'
+            }
             return '#006045'
-          }
-
-          if (Object.hasOwn(range, 'to') && range.to && range.to < value) {
-            return '#ff0000'
-          }
-          if (Object.hasOwn(range, 'from') && range.from && range.from > value) {
-            return '#0033ff'
-          }
-          return '#006045'
+          },
+        },
+        line: {
+          borderColor: '#006045',
+          borderWidth: 4,
         },
       },
-      line: {
-        borderColor: '#006045',
-        borderWidth: 4,
-      },
-    },
-    plugins: {
-      legend: {
-        display: false,
-        labels: {
-          font: {
+      plugins: {
+        legend: {
+          display: false,
+          labels: {
+            font: {
+              size: 18,
+            },
+            color: '#000000',
+          },
+        },
+        tooltip: {
+          callbacks: {
+            title: function (context) {
+              const rawDate = context[0].label
+              return moment(new Date(rawDate)).format('DD.MM.YYYY')
+            },
+            label: function (context) {
+              return context.parsed.y
+            },
+          },
+          titleFont: {
             size: 18,
+            weight: 'bold',
           },
-          color: '#000000',
-        },
-      },
-      tooltip: {
-        callbacks: {
-          title: function (context) {
-            const rawDate = context[0].label
-            return moment(new Date(rawDate)).format('DD.MM.YYYY')
-          },
-          label: function (context) {
-            return context.parsed.y
-          },
-        },
-        titleFont: {
-          size: 18,
-          weight: 'bold',
-        },
-        bodyFont: {
-          size: 22,
-        },
-      },
-    },
-    scales: {
-      x: {
-        ticks: {
-          callback: function(value) {
-            const rawDate = this.getLabelForValue(value)
-            return moment(new Date(rawDate)).format('DD.MM.YYYY')
-          },
-          font: {
-            size: 16,
+          bodyFont: {
+            size: 22,
           },
         },
       },
-    },
-  }
+      scales: {
+        x: {
+          ticks: {
+            callback: function(value) {
+              const rawDate = this.getLabelForValue(value)
+              return moment(new Date(rawDate)).format('DD.MM.YYYY')
+            },
+            font: {
+              size: 16,
+            },
+          },
+        },
+      },
+    }
+  })
 
   function onBeforeSelectStart (value) {
     if (value

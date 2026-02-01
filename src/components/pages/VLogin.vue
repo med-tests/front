@@ -66,12 +66,27 @@
       </VBtn>
 
       <VBtn
+        class="mt-2"
         type="success"
         :is-loading="computedIsLoading"
         @click="isLoginPage ? login() : register()"
       >
         <div class="uppercase px-3 py-1">
           {{ isLoginPage ? 'Войти' : 'Зарегистрироваться' }}
+        </div>
+      </VBtn>
+
+      <VBtn
+        v-if="isLoginPage"
+        not-bordered
+        not-filling
+        class="mt-3"
+        type="default"
+        :is-loading="computedIsLoading"
+        @click="router.push({ name: 'main' })"
+      >
+        <div class="text-sm text-gray-600 hover:text-emerald-700">
+          Продолжить без входа
         </div>
       </VBtn>
     </form>

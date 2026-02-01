@@ -12,7 +12,6 @@ export default function (test) {
       end: test.showTo,
     },
     position: test.position,
-    order: 0,
     results: test.results,
   }
 }
