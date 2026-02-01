@@ -57,7 +57,7 @@ export const useUserStore = defineStore(
             isLoggedIn.value = false
           }
         })
-        .catch((err) => {})
+        .catch((err) => Promise.reject(err))
         .finally(() => {
           loadingStore.setLoadingFor('login', false)
         })

@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { showToast } from '@/components/shared/toaster/toast.js'
 import { useUserStore } from '@/stores/userStore.js'
+import router from '@/router.js'
 
 const apiUrl = import.meta.env.VITE_API_URL
 
@@ -25,6 +26,12 @@ apiInstance.interceptors.response.use(function (response) {
     if (response.data.error_code === 1) {
       const userStore = useUserStore()
       userStore.logout()
+    }
+
+    if (response.data.error_code === 2) {
+      const userStore = useUserStore()
+      userStore.logout()
+      router.push({ name: 'login' })
     }
 
     return Promise.reject(response.data)
