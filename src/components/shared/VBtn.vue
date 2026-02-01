@@ -3,7 +3,7 @@
     :id="randomUid"
     class="inline-block rounded-xs select-none text-lg"
     :class="computedStyles"
-    @click.stop.capture="(!disabled && !isLoading) && $emit('click')"
+    @click="click"
   >
     <template v-if="!isLoading">
       <slot />
@@ -51,7 +51,15 @@ const props = defineProps({
   isLoading: { type: Boolean, default: false },
 })
 
-defineEmits(['click'])
+const emit = defineEmits(['click'])
+
+function click (event) {
+  if (props.disabled || props.isLoading) {
+    event.stopPropagation()
+    return
+  }
+  emit('click')
+}
 
 const randomUid = getRandomUid()
 
@@ -79,7 +87,7 @@ const computedStyles = computed(() => {
     // 'fill-red-900 hover:fill-red-900': disabled && type === 'error' && !filling,
 
     // border and border-color (Не зависит от filling и disabled)
-    'border border-gray-700': bordered && type === 'default',
+    'border border-gray-400': bordered && type === 'default',
     'border border-emerald-700': bordered && type === 'success',
     'border border-red-700': bordered && type === 'error',
     'p-1': bordered && !props.isLoading,

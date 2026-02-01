@@ -7,6 +7,7 @@ import UpsertTestModal from '@/components/UpsertTestModal.vue'
 import PlusIcon from '@/components/icons/PlusIcon.vue'
 import { useUserStore } from '@/stores/userStore.js'
 import { useLoadingStore } from '@/stores/loadingStore.js'
+import ContextMenu from '@/components/shared/ContextMenu.vue'
 import router from '@/router.js'
 
 const { loading } = useLoadingStore()
@@ -45,6 +46,12 @@ const computedAllTestsHidden = computed(() => {
 })
 
 const upsertTestModalRef = useTemplateRef('upsert-test-modal')
+
+function onContextMenuClick (eventName) {
+  if (eventName === 'addTest') {
+    upsertTestModalRef.value.open()
+  }
+}
 </script>
 
 <template>
@@ -73,20 +80,27 @@ const upsertTestModalRef = useTemplateRef('upsert-test-modal')
           <h3 class="font-medium text-xl text-gray-700">
             Список анализов
           </h3>
-          <VBtn
-            not-bordered
-            not-filling
-            class="ml-auto"
-            title="Добавить анализ"
-            type="success"
-            :disabled="loading.getAllTests"
-            @click="upsertTestModalRef.open()"
+
+          <ContextMenu
+            :arr-items="[
+              {title: 'Добавить анализ', event: 'addTest'},
+            ]"
+            @click="onContextMenuClick"
           >
-            <PlusIcon
-              width="20"
-              :line-width="4"
-            />
-          </VBtn>
+            <template #trigger>
+              <VBtn
+                not-bordered
+                not-filling
+                type="success"
+                :disabled="loading.getAllTests"
+              >
+                <PlusIcon
+                  width="20"
+                  :line-width="4"
+                />
+              </VBtn>
+            </template>
+          </ContextMenu>
         </div>
 
         <div v-if="loading.getAllTests">
