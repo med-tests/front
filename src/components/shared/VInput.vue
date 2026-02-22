@@ -10,20 +10,20 @@
     </label>
     <div class="relative">
       <input
-        :id="id"
-        class="border rounded-xs p-2 text-gray-700 text-base w-full"
+        :id
+        class="border rounded-xs p-2 text-gray-700 text-base w-full outline-emerald-800"
         :class="{
-          'border-gray-400': disabled && !(isInvalid || isInvalidCalendar),
+          'border-gray-400 bg-gray-200 outline-none': disabled && !(isInvalid || isInvalidCalendar),
           'border-red-700': (isInvalid || isInvalidCalendar) && !disabled,
           'border-gray-600': !isInvalid && !isInvalidCalendar && !disabled,
         }"
-        :disabled="disabled"
+        :disabled
         :name="id"
-        :placeholder="placeholder"
-        :readonly="readonly"
+        :placeholder
+        :readonly
         :style="[type === 'password' || !hideCloseIcon ? 'padding-right: 30px;' : '']"
         :type="computedType"
-        :value="value"
+        :value
         @input="setValue($event.target.value)"
       >
 
@@ -46,7 +46,7 @@
         not-filling
         class="absolute"
         style="width: 24px; height: 24px; top: 50%; transform: translate(0, -50%); right: 5px;}"
-        :disabled="disabled"
+        :disabled
         :title="disabled ? '' : 'Очистить'"
         @click="$emit('onClickCloseIcon')"
       >
@@ -61,9 +61,22 @@ import { computed, ref, watch } from 'vue'
 import EyeIcon from '@/components/icons/EyeIcon.vue'
 import EyeClosedIcon from '@/components/icons/EyeClosedIcon.vue'
 import CloseIcon from '@/components/icons/CloseIcon.vue'
-import { showToast } from '@/components/shared/toaster/toast.js'
+import {useValidateInput} from '@/composables/useValidateInput.js'
 
-const props = defineProps({
+const {
+  modelValue,
+  label,
+  id,
+  placeholder,
+  readonly,
+  type,
+  hideCloseIcon,
+  required,
+  touchId,
+  callbackValidator,
+  isInvalidCalendar,
+  disabled,
+} = defineProps({
   modelValue: { type: [String, Number], default: ''},
   label: { type: String, default: '' },
   id: { type: String, required: true },
@@ -81,27 +94,31 @@ const props = defineProps({
   disabled: { type: Boolean, default: false },
 })
 
-const emit = defineEmits(['update:modelValue', 'onClickCloseIcon', 'onValidate'])
+const emit = defineEmits([
+  'update:modelValue',
+  'onClickCloseIcon',
+  'onValidate',
+])
 
 const passwordHidden = ref(true)
 
 const computedType = computed(() => {
-  if (props.type === 'password') {
+  if (type === 'password') {
     return passwordHidden.value ? 'password' : 'text'
   }
-  return props.type
+  return type
 })
 
 const value = ref('')
 const setValue = (newValue) => {
-  if (props.disabled) {
+  if (disabled) {
     return
   }
-  value.value = props.type === 'number' && newValue ? Number(newValue) : newValue
+  value.value = type === 'number' && newValue ? Number(newValue) : newValue
   emit('update:modelValue', value.value)
 }
 watch(
-  () => props.modelValue,
+  () => modelValue,
   (newVal) => {
     setValue(newVal)
   },
@@ -110,36 +127,33 @@ watch(
   },
 )
 
-const isInvalid = ref(false)
+const { isInvalid, validate, setIsInvalidTo } = useValidateInput()
+
 watch(
-  () => props.touchId,
-  () => {
-    if (props.required && (!value.value && value.value !== 0)) {
-      isInvalid.value = true
-      showToast('Заполните обязательные поля', {type: 'error'})
-      emit('onValidate', false)
-      return
-    }
-
-    const isCustomValid = props.callbackValidator(value.value)
-    if (!isCustomValid) {
-      isInvalid.value = true
-      emit('onValidate', false)
-      return
-    }
-
-    emit('onValidate', true)
-  },
+    () => touchId,
+    () => {
+      validate({
+        value: value.value,
+        required,
+        callbackValidator,
+      })
+    },
 )
 
 watch(
-  value,
-  () => {
-    if (isInvalid.value) {
-      isInvalid.value = false
-      emit('onValidate', true)
-    }
-  },
+    isInvalid,
+    () => {
+      emit('onValidate', isInvalid.value)
+    },
+)
+
+watch(
+    value,
+    () => {
+      if (isInvalid.value) {
+        setIsInvalidTo(false)
+      }
+    },
 )
 </script>
 
