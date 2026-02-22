@@ -1,3 +1,4 @@
+import 'vue3-select-component/styles'
 import './assets/main.css'
 
 import { createApp } from 'vue'

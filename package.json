@@ -25,6 +25,7 @@
     "vue": "^3.5.18",
     "vue-chartjs": "^5.3.2",
     "vue-router": "^4.5.1",
+    "vue3-select-component": "^0.16.0",
     "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
