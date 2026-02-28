@@ -2,6 +2,7 @@ import { createWebHistory, createRouter } from 'vue-router'
 
 import VMain from '@/components/pages/VMain.vue'
 import VLogin from '@/components/pages/VLogin.vue'
+import VRegister from '@/components/pages/VRegister.vue'
 
 const routes = [
   {
@@ -13,6 +14,11 @@ const routes = [
     name: 'login',
     path: '/login',
     component: VLogin,
+  },
+  {
+    name: 'register',
+    path: '/register',
+    component: VRegister,
   },
   {
     path: '/:pathMatch(.*)*',

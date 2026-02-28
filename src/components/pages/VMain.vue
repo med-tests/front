@@ -73,7 +73,7 @@ function onContextMenuClick (eventName) {
     >
       <!--  Список анализов  -->
       <div
-        class="p-4 pl-0 border-r-4 border-emerald-800"
+        class="p-4 pl-0 border-r-2 border-emerald-800"
         style="width: 350px"
       >
         <div class="mb-3 flex items-center justify-between">
@@ -121,20 +121,32 @@ function onContextMenuClick (eventName) {
           <h3 class="font-medium text-xl text-gray-700">
             Графики
           </h3>
-          <VBtn
-            v-if="userStore.isLoggedIn"
-            type="error"
-            @click="userStore.logout()"
-          >
-            ВЫЙТИ
-          </VBtn>
-          <VBtn
-            v-else
-            type="success"
-            @click="router.push({ name: 'login' })"
-          >
-            ВОЙТИ
-          </VBtn>
+
+          <div class="ml-auto">
+            <VBtn
+              v-if="userStore.isLoggedIn"
+              type="error"
+              @click="userStore.logout()"
+            >
+              ВЫЙТИ
+            </VBtn>
+            <template v-else>
+              <VBtn
+                class="mr-4"
+                type="default"
+                @click="router.push({ name: 'register' })"
+              >
+                <span class="px-2">ЗАРЕГИСТРИРОВАТЬСЯ</span>
+              </VBtn>
+
+              <VBtn
+                type="success"
+                @click="router.push({ name: 'login' })"
+              >
+                <span class="px-2">ВОЙТИ</span>
+              </VBtn>
+            </template>
+          </div>
         </div>
 
         <div v-if="loading.getAllTests">

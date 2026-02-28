@@ -8,6 +8,7 @@
     >
       {{ label }}
     </label>
+    <slot name="description" />
     <div class="relative">
       <input
         :id
