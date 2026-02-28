@@ -71,7 +71,7 @@
     @on-close="deletingTest = null"
   >
     <div class="mt-3">
-      Вы уверены, что хотите удалить {{ deletingTest.title || '' }}?
+      Вы уверены, что хотите удалить "{{ deletingTest.title || '' }}"?
     </div>
 
     <div class="mt-3 ml-auto flex justify-end flex-row gap-x-4">
