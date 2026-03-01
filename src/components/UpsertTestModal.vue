@@ -244,9 +244,6 @@ const saveTest = async () => {
   touchId.value = getRandomUid(7)
   await nextTick()
 
-  console.log(validation.value)
-  return
-
   const someFieldInvalid = Object.keys(validation.value).some(key => validation.value[key].error)
   const someResultFieldInvalid = formResults.value
     .filter(({ isHidden }) => !isHidden)
