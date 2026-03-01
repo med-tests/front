@@ -11,7 +11,7 @@ export function useValidateInput () {
   }) {
     if (required && (!value && value !== 0)) {
       isInvalid.value = true
-      showToast('Заполните обязательные поля', {type: 'error'})
+      showToast('Заполните обязательные поля', {type: 'error', duration: 5000})
       return
     }
 

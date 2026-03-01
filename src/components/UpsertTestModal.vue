@@ -16,7 +16,7 @@
           placeholder="Введите название анализа"
           :callback-validator="validation.title.validator"
           :touch-id="touchId"
-          @on-validate="validation.title.error = !$event"
+          @on-validate="validation.title.error = $event"
         />
       </div>
 
@@ -31,7 +31,7 @@
           type="number"
           :callback-validator="validation.lowEdge.validator"
           :touch-id="touchId"
-          @on-validate="validation.lowEdge.error = !$event"
+          @on-validate="validation.lowEdge.error = $event"
         />
 
         <!--  Верхняя граница нормы  -->
@@ -45,7 +45,7 @@
           type="number"
           :callback-validator="validation.highEdge.validator"
           :touch-id="touchId"
-          @on-validate="validation.highEdge.error = !$event"
+          @on-validate="validation.highEdge.error = $event"
         />
       </div>
 
@@ -243,6 +243,9 @@ const computedIsLoading = computed(() => {
 const saveTest = async () => {
   touchId.value = getRandomUid(7)
   await nextTick()
+
+  console.log(validation.value)
+  return
 
   const someFieldInvalid = Object.keys(validation.value).some(key => validation.value[key].error)
   const someResultFieldInvalid = formResults.value

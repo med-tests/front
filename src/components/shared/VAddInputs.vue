@@ -56,7 +56,7 @@
             :required="field.required"
             :touch-id="touchId"
             :type="field.type || 'text'"
-            @on-validate="data[rowIndex][fieldKey].error = !$event"
+            @on-validate="data[rowIndex][fieldKey].error = $event"
           />
           <VCalendar
             v-if="field.type === 'calendar'"
@@ -70,7 +70,7 @@
             :uniq-id="`${rowIndex}-${fieldKey}-calendar`"
             @clear="data[rowIndex][fieldKey].value = ''"
             @input="data[rowIndex][fieldKey].value = $event"
-            @on-validate="data[rowIndex][fieldKey].error = !$event"
+            @on-validate="data[rowIndex][fieldKey].error = $event"
           />
         </div>
         <VBtn
