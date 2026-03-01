@@ -128,7 +128,7 @@ function onContextMenuClick (eventName) {
               type="error"
               @click="userStore.logout()"
             >
-              ВЫЙТИ
+              <span class="px-2">Выйти</span>
             </VBtn>
             <template v-else>
               <VBtn
@@ -173,9 +173,9 @@ function onContextMenuClick (eventName) {
                 type="success"
                 @click="upsertTestModalRef.open()"
               >
-                <div class="text-xl">
+                <span class="text-xl">
                   сюда
-                </div>
+                </span>
               </VBtn>.
             </div>
           </template>

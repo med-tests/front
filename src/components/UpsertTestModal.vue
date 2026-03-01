@@ -84,7 +84,7 @@
           @click="saveTest"
         >
           <div class="px-2">
-            {{ isCreating ? 'Добавить анализ' : 'Сохранить' }}
+            Сохранить
           </div>
         </VBtn>
       </div>

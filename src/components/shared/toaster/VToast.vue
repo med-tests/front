@@ -22,13 +22,19 @@
         @click="removeToast(toast.id)"
       >
         <CloseIcon
-          class="fill-red-900"
+          class="fill-gray-600 hover:fill-gray-900"
           height="20px"
           width="20px"
         />
       </VBtn>
 
-      <div class="text-lg text-gray-800">
+      <div
+        class="text-lg font-medium"
+        :class="{
+          'text-red-950': toast.type === 'error',
+          'text-emerald-950': toast.type === 'success',
+        }"
+      >
         {{ toast.message }}
       </div>
     </div>

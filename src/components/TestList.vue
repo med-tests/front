@@ -70,25 +70,27 @@
     ref="delete-test-modal"
     @on-close="deletingTest = null"
   >
-    <div class="mt-3">
-      Вы уверены, что хотите удалить "{{ deletingTest.title || '' }}"?
-    </div>
+    <div style="min-width: 380px;">
+      <div class="mt-3 text-center my-2 text-lg">
+        Вы уверены, что хотите удалить "{{ deletingTest.title || '' }}"?
+      </div>
 
-    <div class="mt-3 ml-auto flex justify-end flex-row gap-x-4">
-      <VBtn
-        :is-loading="loading.deleteTest"
-        @click="deleteTestModal.close()"
-      >
-        Отменить
-      </VBtn>
+      <div class="mt-3 ml-auto flex justify-end flex-row gap-x-4">
+        <VBtn
+          :is-loading="loading.deleteTest"
+          @click="deleteTestModal.close()"
+        >
+          <span class="px-3">Отменить</span>
+        </VBtn>
 
-      <VBtn
-        type="error"
-        :is-loading="loading.deleteTest"
-        @click="deleteTest"
-      >
-        Удалить
-      </VBtn>
+        <VBtn
+          type="error"
+          :is-loading="loading.deleteTest"
+          @click="deleteTest"
+        >
+          <span class="px-2">Удалить</span>
+        </VBtn>
+      </div>
     </div>
   </VModal>
   <UpsertTestModal

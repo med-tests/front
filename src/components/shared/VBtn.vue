@@ -89,7 +89,7 @@ const computedStyles = computed(() => {
     // border and border-color (Не зависит от filling и disabled)
     'border border-gray-400': bordered && type === 'default',
     'border border-emerald-700': bordered && type === 'success',
-    'border border-red-700': bordered && type === 'error',
+    'border border-red-500': bordered && type === 'error',
     'p-1': bordered && !props.isLoading,
 
     // filling (background-color)
@@ -97,7 +97,7 @@ const computedStyles = computed(() => {
     'bg-black/10 hover:bg-black/10': type === 'default' && filling && disabled,
     'bg-emerald-700 hover:bg-emerald-600': type === 'success' && filling && !disabled,
     'hover:bg-emerald-500 bg-emerald-500': type === 'success' && filling && disabled,
-    'bg-red-600 hover:bg-red-500': type === 'error' && filling && !disabled,
+    'bg-red-500 hover:bg-red-600': type === 'error' && filling && !disabled,
     'bg-red-400 hover:bg-red-400': type === 'error' && filling && disabled,
   }
   const res = []

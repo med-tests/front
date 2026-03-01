@@ -19,6 +19,7 @@
 
     <!--  Названия колонок  -->
     <div
+      v-if="!data.every(({ isHidden }) => isHidden)"
       class="mb-2 flex justify-between"
       :style="hideDelete ? 'width: 100%;' : 'width: calc(100% - 30px);'"
     >
