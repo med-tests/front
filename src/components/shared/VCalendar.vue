@@ -3,8 +3,9 @@
     :id="`input-${uniqId}`"
     readonly
     placeholder="Выберите дату"
-    :disabled="disabled"
-    :hide-close-icon="hideCloseIcon"
+    :clear-title
+    :disabled
+    :hide-close-icon
     :is-invalid-calendar="isInvalid"
     :label="label"
     @on-click-close-icon="emit('clear')"
@@ -67,6 +68,7 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  clearTitle: { type: String, default: '' },
 })
 const refProps = toRefs(props)
 

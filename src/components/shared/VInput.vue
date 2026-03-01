@@ -48,7 +48,7 @@
         class="absolute"
         style="width: 24px; height: 24px; top: 50%; transform: translate(0, -50%); right: 5px;}"
         :disabled
-        :title="disabled ? '' : 'Очистить'"
+        :title="disabled ? '' : clearTitle"
         @click="$emit('onClickCloseIcon')"
       >
         <CloseIcon />
@@ -93,6 +93,7 @@ const {
   // только для календаря. Инпут используется только на вывод. Ввод контролирует библиотека
   isInvalidCalendar: { type: Boolean, default: false},
   disabled: { type: Boolean, default: false },
+  clearTitle: { type: String, default: 'Очистить' },
 })
 
 const emit = defineEmits([

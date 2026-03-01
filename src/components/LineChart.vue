@@ -8,6 +8,7 @@
       <VCalendar
         forbid-toggle-selected
         class="mr-5 inline-block"
+        clear-title="Сбросить"
         label="Начало периода"
         :colored-dates="computedTestDates"
         :disabled="!test.results.length"
@@ -49,6 +50,7 @@
       <VCalendar
         forbid-toggle-selected
         class="inline-block"
+        clear-title="Сбросить"
         label="Конец периода"
         :colored-dates="computedTestDates"
         :disabled="!test.results.length"

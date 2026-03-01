@@ -40,7 +40,7 @@
             <VBtn
               not-bordered
               not-filling
-              title="Редактировать анализ"
+              title="Редактировать"
               :disabled="loading.editTest"
               @click="showUpsertTestModal(element.id)"
             >
@@ -53,7 +53,7 @@
             <VBtn
               not-bordered
               not-filling
-              title="Удалить анализ"
+              title="Удалить"
               type="error"
               :disabled="loading.editTest"
               @click="showDeleteModal(element)"

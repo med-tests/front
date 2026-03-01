@@ -5,7 +5,9 @@
       style="min-width: 300px;"
       @submit.prevent
     >
-      <div class="text-xl uppercase mb-3">Вход</div>
+      <div class="text-xl uppercase mb-3">
+        Вход
+      </div>
 
       <div class="w-full mb-3">
         <VInput
@@ -50,7 +52,9 @@
         :is-loading="loading.login"
         @click="login"
       >
-        <div class="uppercase px-3 py-1">Войти</div>
+        <div class="uppercase px-3 py-1">
+          Войти
+        </div>
       </VBtn>
 
       <VBtn
