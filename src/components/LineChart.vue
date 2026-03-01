@@ -69,6 +69,7 @@
       style="max-height: 400px;"
       :data="chartData"
       :options="computedOptions"
+      :plugins="[verticalHoverLine]"
     />
     <div
       v-else
@@ -107,6 +108,26 @@
   import VCalendar from '@/components/shared/VCalendar.vue'
   import moment from 'moment'
   import {showToast} from '@/components/shared/toaster/toast.js'
+  import {colors} from '@/assets/vars.js'
+
+  const verticalHoverLine = {
+    id: 'verticalHoverLine',
+    beforeDatasetsDraw (chart) {
+      const  {ctx, chartArea: {top, bottom } } = chart
+      ctx.save()
+
+      chart.getDatasetMeta(0).data.forEach(dataPoint => {
+        if (dataPoint.active) {
+          ctx.beginPath()
+          ctx.strokeStyle = colors.accentGreen
+          ctx.lineWidth = 2
+          ctx.moveTo(dataPoint.x, top)
+          ctx.lineTo(dataPoint.x, bottom)
+          ctx.stroke()
+        }
+      })
+    },
+  }
 
   ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
 
@@ -122,7 +143,11 @@
   const computedOptions = computed(() => {
     const from = props.test.normalRange.from
     const to = props.test.normalRange.to
+
     return {
+      interaction: {
+        intersect: false,
+      },
       responsive: true,
       elements: {
         point: {
