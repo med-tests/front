@@ -12,7 +12,7 @@
     >
       <template #item="{element, index}">
         <div
-          class="py-2 flex border-emerald-800"
+          class="py-2 flex border-emerald-800 hover:bg-emerald-600/15"
           :class="{
             'border-b-1': index !== testStore.arrListData.length - 1,
             'opacity-60': element.isHidden
