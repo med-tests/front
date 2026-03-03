@@ -18,7 +18,7 @@ import VInput from '@/components/shared/VInput.vue'
 import 'air-datepicker/air-datepicker.css'
 import { onMounted, ref, toRefs, watch } from 'vue'
 import moment from 'moment'
-import { showToast } from '@/components/shared/toaster/toast.js'
+import {useValidateInput} from '@/composables/useValidateInput.js'
 
 const props = defineProps({
   uniqId: {
@@ -172,26 +172,33 @@ watch(
   },
 )
 
-const isInvalid = ref(false)
+const { isInvalid, validate, setIsInvalidTo } = useValidateInput()
 
 watch(
-  () => props.touchId,
-  () => {
-    if (props.required && !dateValue.value) {
-      isInvalid.value = true
-      showToast('Заполните обязательные поля', {type: 'error'})
-      emit('onValidate', false)
-      return
-    }
+    () => props.touchId,
+    () => {
+      validate({
+        value: dateValue.value,
+        required: props.required,
+        callbackValidator: props.callbackValidator,
+      })
+    },
+)
 
-    const isCustomValid = props.callbackValidator(dateValue.value)
-    if (!isCustomValid) {
-      isInvalid.value = true
-      emit('onValidate', false)
-    }
+watch(
+    isInvalid,
+    () => {
+      emit('onValidate', isInvalid.value)
+    },
+)
 
-    emit('onValidate', true)
-  },
+watch(
+    dateValue,
+    () => {
+      if (isInvalid.value) {
+        setIsInvalidTo(false)
+      }
+    },
 )
 
 function setClassForColoredCells (coloredDates, cellType, date) {
