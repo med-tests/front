@@ -13,6 +13,7 @@ const {
   required: { type: Boolean, default: false },
   id: { type: String, required: true },
   touchId: { type: String, default: '' },
+  // true = все ок
   callbackValidator: { type: Function, default: () => true },
 })
 
@@ -62,6 +63,7 @@ watch(
     <label
       v-if="label"
       class="block mb-1 text-gray-700"
+      data-test="label"
       :class="{'required': required }"
       :for="id"
     >
@@ -72,6 +74,7 @@ watch(
       <input
         :id
         v-model="model"
+        data-test="checkbox-input"
         style="width: 16px;"
         type="checkbox"
         :class="{
@@ -82,9 +85,9 @@ watch(
       >
       <div
         class="px-1"
-        :class="{'required': required }"
+        data-test="description"
       >
-        <slot />
+        <slot name="description" />
       </div>
     </div>
   </div>

@@ -12,7 +12,8 @@
     "preview": "vite preview",
     "lint": "npx eslint src/",
     "lint:fix": "npx eslint src/ --fix",
-    "back": "cd ../back && npm start"
+    "back": "cd ../back && npm start",
+    "test": "vitest"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.13",
@@ -31,11 +32,14 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.13",
     "@vitejs/plugin-vue": "^6.0.1",
+    "@vue/test-utils": "^2.4.6",
     "autoprefixer": "^10.4.21",
     "eslint": "^9.37.0",
     "eslint-plugin-vue": "^10.5.0",
     "globals": "^16.4.0",
+    "jsdom": "^28.1.0",
     "tailwindcss": "^4.1.13",
-    "vite": "^7.0.6"
+    "vite": "^7.0.6",
+    "vitest": "^4.1.0"
   }
 }
