@@ -10,9 +10,13 @@ export default defineConfig({
     vue(),
     tailwindcss(),
   ],
+  test: {
+    globals: true,          // позволяет использовать describe, it, expect без импорта
+    environment: 'jsdom',   // эмулирует браузерное окружение
+  },
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
 })

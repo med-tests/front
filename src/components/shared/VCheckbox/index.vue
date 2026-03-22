@@ -13,6 +13,7 @@ const {
   required: { type: Boolean, default: false },
   id: { type: String, required: true },
   touchId: { type: String, default: '' },
+  // true = все ок
   callbackValidator: { type: Function, default: () => true },
 })
 

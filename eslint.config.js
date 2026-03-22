@@ -28,7 +28,7 @@ export default [
         'alphabetical': true,
       }],
       'vue/multi-word-component-names': ['error', {
-        'ignores': ['draggable'],
+        'ignores': ['draggable', 'index'],
       }],
       'vue/component-name-in-template-casing': ['error', 'PascalCase',
         {
