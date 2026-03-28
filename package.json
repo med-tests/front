@@ -7,7 +7,8 @@
     "node": "^20.19.0 || >=22.12.0"
   },
   "scripts": {
-    "dev": "vite",
+    "front:only": "vite",
+    "dev": "vite && npm run back",
     "build": "vite build --emptyOutDir --outDir /var/www/med-tests",
     "preview": "vite preview",
     "lint": "npx eslint src/",
