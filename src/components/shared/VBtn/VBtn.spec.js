@@ -1211,7 +1211,7 @@ describe('VBtn', () => {
 
         const approvedClasses = [
           ...generalClasses,
-          'text-gray-700',
+          'text-red-500',
         ]
 
         // классы могут быть в любом порядке
@@ -1289,7 +1289,7 @@ describe('VBtn', () => {
 
         const approvedClasses = [
           ...generalClasses,
-          'text-gray-700',
+          'text-red-500',
         ]
 
         // классы могут быть в любом порядке
@@ -1316,7 +1316,7 @@ describe('VBtn', () => {
 
         const approvedClasses = [
           ...generalClasses,
-          'text-gray-700',
+          'text-red-500',
         ]
 
         // классы могут быть в любом порядке
@@ -1394,7 +1394,7 @@ describe('VBtn', () => {
 
         const approvedClasses = [
           ...generalClasses,
-          'text-gray-700',
+          'text-red-500',
         ]
 
         // классы могут быть в любом порядке

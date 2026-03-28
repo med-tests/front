@@ -28,8 +28,9 @@
         class="absolute v-btn-loading"
         data-test="spinner"
         :class="{
-          'text-gray-700': (type === 'default' || (['error'].includes(type) && notFilling)),
-          'text-white': ['success', 'error'].includes(type) && !notFilling,
+          'text-white': !notFilling && (type === 'error' || type === 'success'),
+          'text-gray-700': type === 'default',
+          'text-red-500':type === 'error' && notFilling,
           'text-emerald-700': type === 'success' && notFilling,
         }"
         :style="{
@@ -72,50 +73,52 @@ function typeIs(arr, type) {
 }
 
 const computedStyles = computed(() => {
-  const { type, disabled } = props
-  const bordered = !props.notBordered
-  const filling = !props.notFilling
+  const { type, disabled, notBordered, notFilling, isLoading } = props
 
-  const obj = {
-    // font-color
-    'text-gray-700 hover:text-gray-900': !disabled && (type === 'default' || (type === 'error' && !filling)),
-    'text-white': !disabled && typeIs(['success', 'error'], type) && filling,
-    'text-emerald-700 hover:text-emerald-800': !disabled && type === 'success' && !filling,
-    'text-gray-500': disabled && !(typeIs(['success', 'error'], type) && filling),
-    'text-gray-200': disabled && typeIs(['success', 'error'], type) && filling,
+  const isDefault = type === 'default'
+  const isSuccess = type === 'success'
+  const isError = type === 'error'
+  const isSuccessOrError = isSuccess || isError
+  const isFilled = !notFilling
+  const isBordered = !notBordered
 
+  // Правила: [условие, класс]
+  const rules = [
+    // Цвет текста
+    [!disabled && (isDefault || (isError && !isFilled)), 'text-gray-700 hover:text-gray-900'],
+    [!disabled && isSuccessOrError && isFilled, 'text-white'],
+    [!disabled && isSuccess && !isFilled, 'text-emerald-700 hover:text-emerald-800'],
+    [disabled && !(isSuccessOrError && isFilled), 'text-gray-500'],
+    [disabled && isSuccessOrError && isFilled, 'text-gray-200'],
 
-    // fill (for svg)
-    'fill-gray-600 hover:fill-gray-900': !disabled && type === 'default',
-    'fill-emerald-900 hover:fill-emerald-600': !disabled && type === 'success' && !filling,
-    'fill-red-900 hover:fill-red-600': !disabled && type === 'error' && !filling,
-    'fill-white hover:fill-white': typeIs(['success', 'error'], type) && filling,
-    'fill-gray-500 hover:fill-gray-500': disabled && (type === 'default' || (typeIs(['success', 'error'], type) && !filling)),
+    // Заливка SVG
+    [!disabled && isDefault, 'fill-gray-600 hover:fill-gray-900'],
+    [!disabled && isSuccess && !isFilled, 'fill-emerald-900 hover:fill-emerald-600'],
+    [!disabled && isError && !isFilled, 'fill-red-900 hover:fill-red-600'],
+    [isSuccessOrError && isFilled, 'fill-white hover:fill-white'],
+    [disabled && (isDefault || (isSuccessOrError && !isFilled)), 'fill-gray-500 hover:fill-gray-500'],
 
-    // border and border-color (Не зависит от filling и disabled)
-    'border border-gray-400': bordered && type === 'default',
-    'border border-emerald-700': bordered && type === 'success',
-    'border border-red-500': bordered && type === 'error',
-    'p-1': bordered && !props.isLoading,
+    // Рамка (не зависит от filling/disabled)
+    [isBordered && isDefault, 'border border-gray-400'],
+    [isBordered && isSuccess, 'border border-emerald-700'],
+    [isBordered && isError, 'border border-red-500'],
+    [isBordered && !isLoading, 'p-1'],
 
-    // filling (background-color)
-    'bg-white hover:bg-black/5': type === 'default' && filling && !disabled,
-    'bg-black/10 hover:bg-black/10': type === 'default' && filling && disabled,
-    'bg-emerald-700 hover:bg-emerald-600': type === 'success' && filling && !disabled,
-    'hover:bg-emerald-500 bg-emerald-500': type === 'success' && filling && disabled,
-    'bg-red-500 hover:bg-red-600': type === 'error' && filling && !disabled,
-    'bg-red-400 hover:bg-red-400': type === 'error' && filling && disabled,
-  }
-  const res = []
-  disabled || props.isLoading ? res.push('cursor-not-allowed') : res.push('cursor-pointer')
+    // Фон
+    [isDefault && isFilled && !disabled, 'bg-white hover:bg-black/5'],
+    [isDefault && isFilled && disabled, 'bg-black/10 hover:bg-black/10'],
+    [isSuccess && isFilled && !disabled, 'bg-emerald-700 hover:bg-emerald-600'],
+    [isSuccess && isFilled && disabled, 'hover:bg-emerald-500 bg-emerald-500'],
+    [isError && isFilled && !disabled, 'bg-red-500 hover:bg-red-600'],
+    [isError && isFilled && disabled, 'bg-red-400 hover:bg-red-400'],
+  ]
 
-  Object.entries(obj).forEach(([key, value]) => {
-    if (value) {
-      res.push(key)
-    }
-  })
-
-  return res
+  return [
+    (!disabled && !isLoading) ? 'cursor-pointer' : 'cursor-not-allowed',
+    ...rules
+        .filter(([condition]) => condition)
+        .map(([, className]) => className),
+  ]
 })
 
 const btnWidth = ref(100)
