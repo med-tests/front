@@ -27,6 +27,7 @@ function initTippy() {
     delay: 50,
     placement: 'auto',
     theme: 'light',
+    appendTo: document.getElementById(props.appendElementId),
 
     // чтоб не скрывалось для удобства отладки
     // hideOnClick: 'toggle',

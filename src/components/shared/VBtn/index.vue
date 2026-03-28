@@ -6,6 +6,7 @@
     @click="click"
   >
     <template v-if="!isLoading">
+      <!--  Ответственность за отступы лежит на слоте!  -->
       <slot />
       <ToolTip
         v-if="title"
@@ -17,6 +18,7 @@
     <div
       v-if="isLoading"
       class="relative"
+      data-test="loading-wrapper"
       :style="{
         'height': `${btnHeight}px`,
         'width': `${btnWidth}px`
@@ -24,6 +26,7 @@
     >
       <div
         class="absolute v-btn-loading"
+        data-test="spinner"
         :class="{
           'text-gray-700': (type === 'default' || (['error'].includes(type) && notFilling)),
           'text-white': ['success', 'error'].includes(type) && !notFilling,
@@ -41,6 +44,7 @@
 <script setup>
 import { getRandomUid } from '@/helpers/index.js'
 import {computed, onMounted, ref} from 'vue'
+import ToolTip from '@/plugins/ToolTipPlugin/ToolTip.vue'
 
 const props = defineProps({
   notBordered: { type: Boolean, default: false },
@@ -63,6 +67,10 @@ function click (event) {
 
 const randomUid = getRandomUid()
 
+function typeIs(arr, type) {
+  return arr.includes(type)
+}
+
 const computedStyles = computed(() => {
   const { type, disabled } = props
   const bordered = !props.notBordered
@@ -70,21 +78,19 @@ const computedStyles = computed(() => {
 
   const obj = {
     // font-color
-    'text-gray-700': !disabled && (type === 'default' || (['error'].includes(type) && !filling)),
-    'text-white': !disabled && ['success', 'error'].includes(type) && filling,
+    'text-gray-700 hover:text-gray-900': !disabled && (type === 'default' || (type === 'error' && !filling)),
+    'text-white': !disabled && typeIs(['success', 'error'], type) && filling,
     'text-emerald-700 hover:text-emerald-800': !disabled && type === 'success' && !filling,
-    'text-gray-500': disabled,
-    'text-gray-200': disabled && ['success', 'error'].includes(type) && filling,
+    'text-gray-500': disabled && !(typeIs(['success', 'error'], type) && filling),
+    'text-gray-200': disabled && typeIs(['success', 'error'], type) && filling,
 
 
     // fill (for svg)
     'fill-gray-600 hover:fill-gray-900': !disabled && type === 'default',
     'fill-emerald-900 hover:fill-emerald-600': !disabled && type === 'success' && !filling,
     'fill-red-900 hover:fill-red-600': !disabled && type === 'error' && !filling,
-    'fill-white hover:fill-white':['success', 'error'].includes(type) && filling,
-    'fill-gray-500 hover:fill-gray-500': disabled && (type === 'default' || (['success', 'error'].includes(type) && !filling)),
-    // 'fill-emerald-900 hover:fill-emerald-900': disabled && type === 'success' && !filling,
-    // 'fill-red-900 hover:fill-red-900': disabled && type === 'error' && !filling,
+    'fill-white hover:fill-white': typeIs(['success', 'error'], type) && filling,
+    'fill-gray-500 hover:fill-gray-500': disabled && (type === 'default' || (typeIs(['success', 'error'], type) && !filling)),
 
     // border and border-color (Не зависит от filling и disabled)
     'border border-gray-400': bordered && type === 'default',

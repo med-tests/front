@@ -5,7 +5,7 @@ import { createApp } from 'vue'
 import {createPinia} from 'pinia'
 import router from '@/router.js'
 import { toolTipPlugin } from '@/plugins'
-import VBtn from '@/components/shared/VBtn.vue'
+import VBtn from '@/components/shared/VBtn/index.vue'
 
 import App from './App.vue'
 
