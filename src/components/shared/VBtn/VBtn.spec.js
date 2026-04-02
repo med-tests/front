@@ -1407,7 +1407,7 @@ describe('VBtn', () => {
 
 function getWrapper (data) {
   return mount(VBtn, {
-    // attachTo нужен, чтобы не обвалилось обращение к document в onMounted в компоненте кнопки
+    // attachTo нужен, чтобы не обвалилось обращение к document у tippy
     attachTo: document.body,
     ...data,
   })

@@ -1,6 +1,7 @@
 <template>
   <div
     :id="randomUid"
+    :ref="`ref-${randomUid}`"
     class="inline-block rounded-xs select-none text-lg"
     :class="computedStyles"
     @click="click"
@@ -44,7 +45,7 @@
 
 <script setup>
 import { getRandomUid } from '@/helpers/index.js'
-import {computed, onMounted, ref} from 'vue'
+import {computed, onMounted, ref, useTemplateRef} from 'vue'
 import ToolTip from '@/plugins/ToolTipPlugin/ToolTip.vue'
 
 const props = defineProps({
@@ -64,12 +65,6 @@ function click (event) {
     return
   }
   emit('click')
-}
-
-const randomUid = getRandomUid()
-
-function typeIs(arr, type) {
-  return arr.includes(type)
 }
 
 const computedStyles = computed(() => {
@@ -121,10 +116,12 @@ const computedStyles = computed(() => {
   ]
 })
 
+const randomUid = getRandomUid()
 const btnWidth = ref(100)
 const btnHeight = ref(25)
+const elRef = useTemplateRef(`ref-${randomUid}`)
 onMounted(() => {
-  const elBounding = document.getElementById(randomUid).getBoundingClientRect()
+  const elBounding = elRef.value.getBoundingClientRect()
 
   btnWidth.value = elBounding.width - (props.notBordered ? 0 : 2)
   btnHeight.value = elBounding.height - (props.notBordered ? 0 : 2)
