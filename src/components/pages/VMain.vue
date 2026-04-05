@@ -52,6 +52,10 @@ function onContextMenuClick (eventName) {
     upsertTestModalRef.value.open()
   }
 }
+
+const computedVisibleTests = computed(() => {
+  return testStore.sortedFullData.filter(({ isHidden }) => !isHidden)
+})
 </script>
 
 <template>
@@ -187,7 +191,7 @@ function onContextMenuClick (eventName) {
           :style="{ height: `calc(100vh - ${scrollOffset}px)` }"
         >
           <LineChart
-            v-for="test in testStore.sortedFullData"
+            v-for="test in computedVisibleTests"
             :id="test.id"
             :key="test.id"
             class="py-15 first:pt-0 last:pb-0 test-chart relative"

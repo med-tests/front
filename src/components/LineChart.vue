@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!test.isHidden">
+  <div>
     <div
       :id="`test-${id}`"
       class="flex mb-3 items-end justify-between mx-auto"
