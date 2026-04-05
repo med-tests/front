@@ -15,6 +15,9 @@ export default defineConfig({
     environment: 'jsdom',   // эмулирует браузерное окружение
   },
   resolve: {
+    // чтобы работали импорты типа
+    // import ContextMenu from '@/components/shared/ContextMenu' без /index.vue
+    extensions: ['.vue', '.js', '.ts', '.json'],
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },

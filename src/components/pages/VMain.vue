@@ -7,7 +7,7 @@ import UpsertTestModal from '@/components/UpsertTestModal.vue'
 import PlusIcon from '@/components/icons/PlusIcon.vue'
 import { useUserStore } from '@/stores/userStore.js'
 import { useLoadingStore } from '@/stores/loadingStore.js'
-import ContextMenu from '@/components/shared/ContextMenu.vue'
+import ContextMenu from '@/components/shared/ContextMenu'
 import router from '@/router.js'
 
 const { loading } = useLoadingStore()
@@ -85,26 +85,30 @@ const computedVisibleTests = computed(() => {
             Список анализов
           </h3>
 
-          <ContextMenu
-            :arr-items="[
-              {title: 'Добавить анализ', event: 'addTest'},
-            ]"
-            @click="onContextMenuClick"
-          >
-            <template #trigger>
-              <VBtn
-                not-bordered
-                not-filling
-                type="success"
-                :disabled="loading.getAllTests"
-              >
-                <PlusIcon
-                  width="20"
-                  :line-width="4"
-                />
-              </VBtn>
-            </template>
-          </ContextMenu>
+          <div>
+            <ContextMenu
+              :arr-items="[
+                {title: 'Добавить анализ', event: 'addTest'},
+              ]"
+              @click="onContextMenuClick"
+            >
+              <template #toggler>
+                <div class="flex">
+                  <VBtn
+                    not-bordered
+                    not-filling
+                    type="success"
+                    :disabled="loading.getAllTests"
+                  >
+                    <PlusIcon
+                      width="20"
+                      :line-width="4"
+                    />
+                  </VBtn>
+                </div>
+              </template>
+            </ContextMenu>
+          </div>
         </div>
 
         <div v-if="loading.getAllTests">
