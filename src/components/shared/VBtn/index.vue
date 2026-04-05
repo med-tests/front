@@ -46,7 +46,6 @@
 <script setup>
 import { getRandomUid } from '@/helpers/index.js'
 import {computed, onMounted, ref, useTemplateRef} from 'vue'
-import ToolTip from '@/plugins/ToolTipPlugin/ToolTip.vue'
 
 const props = defineProps({
   notBordered: { type: Boolean, default: false },
