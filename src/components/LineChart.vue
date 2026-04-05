@@ -2,7 +2,7 @@
   <div v-if="!test.isHidden">
     <div
       :id="`test-${id}`"
-      class="flex mb-3 items-center justify-between mx-auto"
+      class="flex mb-3 items-end justify-between mx-auto"
       style="width: calc(100% - 64px)"
     >
       <VCalendar
@@ -22,6 +22,7 @@
       />
       <div class="text-lg text-gray-700 leading-none font-medium text-center">
         {{ chartData.datasets[0].label }}
+        <!-- Норма     -->
         <div
           v-if="computedIsNormalFromExist || computedIsNormalToExist"
           :id="`normal-${id}`"
@@ -45,6 +46,20 @@
             text="Норма"
             :append-element-id="`normal-${id}`"
           />
+        </div>
+        <!-- Среднее значение в выбранном периоде -->
+        <div
+          v-if="computedAverageInPeriod"
+          class="flex justify-center"
+        >
+          <div :id="`average-${id}`">
+            μ
+            <span class="text-base">{{ computedAverageInPeriod }}</span>
+            <ToolTip
+              text="Среднее значение"
+              :append-element-id="`average-${id}`"
+            />
+          </div>
         </div>
       </div>
       <VCalendar
@@ -288,5 +303,15 @@
 
   const computedIsNormalToExist = computed(() => {
     return refProps.test.value.normalRange.to || refProps.test.value.normalRange.to === 0
+  })
+
+  const computedAverageInPeriod = computed(() => {
+    const amount = chartData.value.datasets[0].data.length
+    if (!amount) {
+      return ''
+    }
+    const sum = chartData.value.datasets[0].data
+        .reduce((a, b) => a + b.y, 0)
+    return (sum / amount).toFixed(1)
   })
 </script>
