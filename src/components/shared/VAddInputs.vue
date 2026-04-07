@@ -26,7 +26,10 @@
       <div
         v-for="(field, fieldKey) in fieldsSettings"
         :key="`label-${fieldKey}`"
-        class="w-1/2 required"
+        class="w-1/2"
+        :class="{
+          'required': field.required
+        }"
       >
         {{ field.label }}
       </div>
@@ -39,7 +42,7 @@
     >
       <div
         v-if="!row.isHidden"
-        class="flex justify-between items-center gap-x-4 mb-2"
+        class="flex justify-between items-center gap-x-4 mb-2 hover:bg-emerald-300/20 rounded"
       >
         <div
           v-for="(field, fieldKey) in fieldsSettings"
