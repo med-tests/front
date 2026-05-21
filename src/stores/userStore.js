@@ -64,7 +64,7 @@ export const useUserStore = defineStore(
     }
 
     function logout () {
-      testStore.clearTests()
+      testStore.clearData()
       localStorage.removeItem('token')
       isLoggedIn.value = false
     }

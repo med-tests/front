@@ -2,18 +2,24 @@
 import { computed, onMounted, ref, useTemplateRef } from 'vue'
 import { useTestStore } from '@/stores/testStore.js'
 import LineChart from '@/components/LineChart.vue'
-import TestList from '@/components/TestList.vue'
-import UpsertTestModal from '@/components/UpsertTestModal.vue'
+import ChartItemList from '@/components/ChartItemList.vue'
+import UpsertParamModal from '@/components/UpsertParamModal.vue'
 import PlusIcon from '@/components/icons/PlusIcon.vue'
 import { useUserStore } from '@/stores/userStore.js'
 import { useLoadingStore } from '@/stores/loadingStore.js'
 import ContextMenu from '@/components/shared/ContextMenu'
 import router from '@/router.js'
+import {storeToRefs} from 'pinia'
 
 const { loading } = useLoadingStore()
 
 const testStore = useTestStore()
+const { fullData, sortedFullData } = storeToRefs(testStore)
+const { getParams } = testStore
+
 const userStore = useUserStore()
+const { isLoggedIn } = storeToRefs(userStore)
+const { logout } = userStore
 
 const scrollOffset = ref(0)
 const bannerHeight = ref(0)
@@ -25,36 +31,34 @@ onMounted(() => {
   const chartWrapPaddings = +window.getComputedStyle(chartWrap).paddingTop.replace('px', '')
       + +window.getComputedStyle(chartWrap).paddingBottom.replace('px', '')
 
-  if (!userStore.isLoggedIn) {
+  if (!isLoggedIn.value) {
     bannerHeight.value = document.getElementById('banner').offsetHeight
   }
 
   scrollOffset.value = chartTitleHeight + chartWrapPaddings + bannerHeight.value
-  testStore.getAllTests()
+  getParams()
 })
 
-const computedIsNoTests = computed(() => {
-  return !testStore.fullData.length
+const computedIsNoData = computed(() => {
+  return !fullData.value.length
 })
 
-const computedAllTestsHidden = computed(() => {
-  if (testStore.fullData.length) {
-    return Object.values(testStore.fullData).every(({isHidden}) => isHidden)
-  } else {
-    return false
-  }
+const computedAllItemsHidden = computed(() => {
+  return fullData.value.length
+     ? Object.values(fullData.value).every(({isHidden}) => isHidden)
+     : false
 })
 
-const upsertTestModalRef = useTemplateRef('upsert-test-modal')
+const upsertParamModalRef = useTemplateRef('upsert-param-modal')
 
 function onContextMenuClick (eventName) {
-  if (eventName === 'addTest') {
-    upsertTestModalRef.value.open()
+  if (eventName === 'createParameter') {
+    upsertParamModalRef.value.open()
   }
 }
 
-const computedVisibleTests = computed(() => {
-  return testStore.sortedFullData.filter(({ isHidden }) => !isHidden)
+const computedVisibleItems = computed(() => {
+  return sortedFullData.value.filter(({ isHidden }) => !isHidden)
 })
 </script>
 
@@ -64,31 +68,45 @@ const computedVisibleTests = computed(() => {
     style="max-width: 1600px;"
   >
     <div
-      v-if="!userStore.isLoggedIn"
+      v-if="!isLoggedIn"
       id="banner"
       class="font-medium text-lg text-red-600 text-center py-2 bg-red-100"
     >
-      Войдите, чтобы не потерять изменения при перезагрузке страницы
+      <VBtn
+        not-bordered
+        not-filling
+        type="success"
+        @click="router.push({ name: 'login' })"
+      >
+        Войдите
+      </VBtn> или <VBtn
+        not-bordered
+        not-filling
+        type="success"
+        @click="router.push({ name: 'register' })"
+      >
+        зарегистрируйтесь
+      </VBtn>, чтобы не потерять изменения при перезагрузке страницы
     </div>
 
     <div
-      class="flex px-5 grow-1"
-      :style="{ height: userStore.isLoggedIn ? '100%' : `calc(100% - ${bannerHeight}px)`}"
+      class="flex px-4 grow-1"
+      :style="{ height: isLoggedIn ? '100%' : `calc(100% - ${bannerHeight}px)`}"
     >
-      <!--  Список анализов  -->
+      <!--  Панель управления  -->
       <div
-        class="p-4 pl-0 border-r-2 border-emerald-800"
+        class="py-4 px-2 pl-0 border-r-2 border-emerald-800"
         style="width: 350px"
       >
         <div class="mb-3 flex items-center justify-between">
           <h3 class="font-medium text-xl text-gray-700">
-            Список анализов
+            Панель управления
           </h3>
 
           <div>
             <ContextMenu
               :arr-items="[
-                {title: 'Добавить анализ', event: 'addTest'},
+                {title: 'Создать показатель', event: 'createParameter'},
               ]"
               @click="onContextMenuClick"
             >
@@ -98,7 +116,7 @@ const computedVisibleTests = computed(() => {
                     not-bordered
                     not-filling
                     type="success"
-                    :disabled="loading.getAllTests"
+                    :disabled="loading.getParams"
                   >
                     <PlusIcon
                       width="20"
@@ -111,10 +129,11 @@ const computedVisibleTests = computed(() => {
           </div>
         </div>
 
-        <div v-if="loading.getAllTests">
+        <div v-if="loading.getParams">
           Загрузка...
         </div>
-        <TestList v-else />
+
+        <ChartItemList v-else />
       </div>
 
       <!--  Графики  -->
@@ -132,9 +151,9 @@ const computedVisibleTests = computed(() => {
 
           <div class="ml-auto">
             <VBtn
-              v-if="userStore.isLoggedIn"
+              v-if="isLoggedIn"
               type="error"
-              @click="userStore.logout()"
+              @click="logout()"
             >
               <span class="px-2">Выйти</span>
             </VBtn>
@@ -157,63 +176,58 @@ const computedVisibleTests = computed(() => {
           </div>
         </div>
 
-        <div v-if="loading.getAllTests">
+        <div v-if="loading.getParams">
           Загрузка...
         </div>
 
         <div
-          v-if="!loading.getAllTests && (computedAllTestsHidden || computedIsNoTests)"
+          v-if="!loading.getParams && (computedAllItemsHidden || computedIsNoData)"
           class="text-red-800 text-xl p-6 font-semibold"
         >
-          <template v-if="computedAllTestsHidden">
+          <template v-if="computedAllItemsHidden">
             Все графики скрыты.
-            <div>Чтобы изменить видимость графика, нажиме на иконку глаза напротив соответствующего анализа в списке.</div>
+            <div>Чтобы изменить видимость графика, нажиме на иконку глаза напротив соответствующего названия в панели управления.</div>
           </template>
 
-          <template v-else-if="computedIsNoTests">
-            Анализы еще не добавлены.
-            <div>
-              Чтобы добавить анализ, нажмите на плюс возле списка анализов или
+          <template v-else-if="computedIsNoData">
+            Графики еще не созданы.
+            <div class="my-2">
+              Чтобы начать, необходимо
               <VBtn
-                not-bordered
-                not-filling
-                title="Добавить анализ"
                 type="success"
-                @click="upsertTestModalRef.open()"
+                @click="upsertParamModalRef.open()"
               >
-                <span class="text-xl">
-                  сюда
-                </span>
-              </VBtn>.
+                <span class="px-2">Cоздать показатель</span>
+              </VBtn>
             </div>
           </template>
         </div>
 
         <div
-          v-if="!loading.getAllTests && !computedIsNoTests && !computedAllTestsHidden"
+          v-if="!loading.getParams && !computedIsNoData && !computedAllItemsHidden"
           class="overflow-y-auto overflow-x-hidden"
           :style="{ height: `calc(100vh - ${scrollOffset}px)` }"
         >
           <LineChart
-            v-for="test in computedVisibleTests"
-            :id="test.id"
-            :key="test.id"
-            class="py-15 first:pt-0 last:pb-0 test-chart relative"
-            :test="test"
+            v-for="item in computedVisibleItems"
+            :id="item.id"
+            :key="item.id"
+            class="py-15 first:pt-0 last:pb-0 param-chart relative"
+            :item="item"
           />
         </div>
       </div>
     </div>
 
-    <!--  Модалка добавления анализа  -->
-    <UpsertTestModal
-      ref="upsert-test-modal"
+    <!--  Модалка создания показателя  -->
+    <UpsertParamModal
+      ref="upsert-param-modal"
     />
   </div>
 </template>
 
 <style>
-.test-chart:not(:last-child)::after {
+.param-chart:not(:last-child)::after {
   content: '';
   position: absolute;
   width: 70%;

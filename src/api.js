@@ -52,19 +52,19 @@ export default {
   register: function (credentials) {
     return apiInstance.post('/register', credentials)
   },
-  getAllTests: function () {
+  getParams: function () {
     return apiInstance.get('/get-tests')
   },
-  addTest: function (data) {
+  addParameter: function (data) {
     return apiInstance.post('/add-test', data)
   },
-  editTest: function (id, data) {
+  editParameter: function (id, data) {
     return apiInstance.patch(`/edit-test/${id}`, data)
   },
-  deleteTest: function (id) {
+  deleteParameter: function (id) {
     return apiInstance.delete(`/delete-test/${id}`)
   },
-  changeTestPosition: function (id, data) {
+  changeParameterPosition: function (id, data) {
     return apiInstance.patch(`/position/${id}`, data)
   },
 }

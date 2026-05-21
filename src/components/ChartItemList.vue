@@ -5,22 +5,22 @@
   >
     <draggable
       class="pr-3"
-      group="test"
+      group="items"
       item-key="id"
-      :list="testStore.arrListData"
+      :list="arrListData"
       @change="change"
     >
       <template #item="{element, index}">
         <div
-          class="py-2 flex border-emerald-800 hover:bg-emerald-600/15"
+          class="p-2 flex border-emerald-800 hover:bg-emerald-600/15"
           :class="{
-            'border-b-1': index !== testStore.arrListData.length - 1,
+            'border-b-1': index !== arrListData.length - 1,
             'opacity-60': element.isHidden
           }"
         >
           <a
             class="pr-1 cursor-pointer text-lg text-gray-600 hover:text-gray-900"
-            :href="`#test-${element.id}`"
+            :href="`#chart-${element.id}`"
           >
             {{ element.title }}
           </a>
@@ -29,9 +29,9 @@
             <VBtn
               not-bordered
               not-filling
-              :disabled="loading.editTest"
+              :disabled="loading.editParameter"
               :title="element.isHidden ? 'Показать' : 'Скрыть'"
-              @click="testStore.changeTest(element.id, { isHidden: element.isHidden ? 0 : 1 })"
+              @click="changeParameter(element.id, { isHidden: element.isHidden ? 0 : 1 })"
             >
               <EyeClosedIcon v-if="element.isHidden" />
               <EyeIcon v-else />
@@ -41,8 +41,8 @@
               not-bordered
               not-filling
               title="Редактировать"
-              :disabled="loading.editTest"
-              @click="showUpsertTestModal(element.id)"
+              :disabled="loading.editParameter"
+              @click="showUpsertParamModal(element.id)"
             >
               <PencilIcon
                 height="17"
@@ -55,7 +55,7 @@
               not-filling
               title="Удалить"
               type="error"
-              :disabled="loading.editTest"
+              :disabled="loading.editParameter"
               @click="showDeleteModal(element)"
             >
               <CloseIcon />
@@ -67,35 +67,35 @@
   </div>
 
   <VModal
-    ref="delete-test-modal"
-    @on-close="deletingTest = null"
+    ref="delete-param-modal"
+    @on-close="deletingParameter = null"
   >
     <div style="min-width: 380px;">
       <div class="mt-3 text-center my-2 text-lg">
-        Вы уверены, что хотите удалить "{{ deletingTest.title || '' }}"?
+        Вы уверены, что хотите удалить "{{ deletingParameter.title || '' }}"?
       </div>
 
       <div class="mt-3 ml-auto flex justify-end flex-row gap-x-4">
         <VBtn
-          :is-loading="loading.deleteTest"
-          @click="deleteTestModal.close()"
+          :is-loading="loading.deleteParameter"
+          @click="deleteParamModal.close()"
         >
           <span class="px-3">Отменить</span>
         </VBtn>
 
         <VBtn
           type="error"
-          :is-loading="loading.deleteTest"
-          @click="deleteTest"
+          :is-loading="loading.deleteParameter"
+          @click="deleteParam"
         >
           <span class="px-2">Удалить</span>
         </VBtn>
       </div>
     </div>
   </VModal>
-  <UpsertTestModal
-    ref="upsert-test-modal"
-    :editing-test-id="editingTestId"
+  <UpsertParamModal
+    ref="upsert-param-modal"
+    :editing-param-id="editingParamId"
   />
 </template>
 
@@ -108,42 +108,45 @@ import {nextTick, ref, useTemplateRef} from 'vue'
 import CloseIcon from '@/components/icons/CloseIcon.vue'
 import VModal from '@/components/shared/VModal.vue'
 import PencilIcon from '@/components/icons/PencilIcon.vue'
-import UpsertTestModal from '@/components/UpsertTestModal.vue'
+import UpsertParamModal from '@/components/UpsertParamModal.vue'
 import {useLoadingStore} from '@/stores/loadingStore.js'
+import {storeToRefs} from 'pinia'
 
 const testStore = useTestStore()
+const { arrListData } = storeToRefs(testStore)
+const { changeParameter, updateOrder, deleteParameter } = testStore
 
-const editingTestId = ref(0)
-const upsertTestModalRef = useTemplateRef('upsert-test-modal')
+const editingParamId = ref(0)
+const upsertParamModalRef = useTemplateRef('upsert-param-modal')
 
-async function showUpsertTestModal (id) {
-  editingTestId.value = id
+async function showUpsertParamModal (id) {
+  editingParamId.value = id
   await nextTick()
-  upsertTestModalRef.value.open()
+  upsertParamModalRef.value.open()
 }
 
 function change ({ moved }) {
-  testStore.updateOrder({
+  updateOrder({
     id: moved.element.id,
     newPosition: moved.newIndex,
     oldPosition: moved.oldIndex,
   })
 }
 
-const deletingTest = ref(null)
-const deleteTestModal = useTemplateRef('delete-test-modal')
-async function showDeleteModal (test) {
-  deletingTest.value = test
+const deletingParameter = ref(null)
+const deleteParamModal = useTemplateRef('delete-param-modal')
+async function showDeleteModal (param) {
+  deletingParameter.value = param
   await nextTick()
-  deleteTestModal.value.show()
+  deleteParamModal.value.show()
 }
 
 const { loading } = useLoadingStore()
 
-function deleteTest () {
-  testStore.deleteTest(deletingTest.value.id)
+function deleteParam () {
+  deleteParameter(deletingParameter.value.id, deletingParameter.value.title)
       .then(() => {
-        deleteTestModal.value.close()
+        deleteParamModal.value.close()
       })
       .catch((err) => { })
 }

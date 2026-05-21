@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      :id="`test-${id}`"
+      :id="`chart-${id}`"
       class="flex mb-3 items-end justify-between mx-auto"
       style="width: calc(100% - 64px)"
     >
@@ -10,23 +10,23 @@
         class="mr-5 inline-block"
         clear-title="Сбросить"
         label="Начало периода"
-        :colored-dates="computedTestDates"
-        :disabled="!test.results.length"
+        :colored-dates="computedParamDates"
+        :disabled="!item.results.length"
         :max-date="computedLastDate"
         :min-date="computedFirstDate"
         :on-before-select="onBeforeSelectStart"
-        :selected-dates="test.shownPeriod.start"
+        :selected-dates="item.shownPeriod.start"
         :uniq-id="`${id}-start`"
         @clear="changePeriod('start', computedFirstDate)"
         @input="changePeriod('start', $event)"
       />
       <div class="text-lg text-gray-700 leading-none font-medium text-center">
         {{ chartData.datasets[0].label }}
-        <!-- Норма     -->
+        <!-- Норма -->
         <div
           v-if="computedIsNormalFromExist || computedIsNormalToExist"
           :id="`normal-${id}`"
-          class="flex items-center mt-2"
+          class="flex items-center justify-center mt-2"
           style="column-gap: 6px;"
         >
           ✅
@@ -34,13 +34,13 @@
             v-if="computedIsNormalFromExist"
             class="text-base font-normal"
           >
-            от <span class="font-medium">{{ test.normalRange.from }}</span>
+            от <span class="font-medium">{{ item.normalRange.from }}</span>
           </div>
           <div
             v-if="computedIsNormalToExist"
             class="text-base font-normal"
           >
-            до <span class="font-medium">{{ test.normalRange.to }}</span>
+            до <span class="font-medium">{{ item.normalRange.to }}</span>
           </div>
           <ToolTip
             text="Норма"
@@ -67,12 +67,12 @@
         class="inline-block"
         clear-title="Сбросить"
         label="Конец периода"
-        :colored-dates="computedTestDates"
-        :disabled="!test.results.length"
+        :colored-dates="computedParamDates"
+        :disabled="!item.results.length"
         :max-date="computedLastDate"
         :min-date="computedFirstDate"
         :on-before-select="onBeforeSelectEnd"
-        :selected-dates="test.shownPeriod.end"
+        :selected-dates="item.shownPeriod.end"
         :uniq-id="`${id}-end`"
         @clear="changePeriod('end', computedLastDate)"
         @input="changePeriod('end', $event)"
@@ -80,7 +80,7 @@
     </div>
     <Line
       v-if="chartData.datasets[0].data.length"
-      :id="`chart-${test.id}`"
+      :id="`chart-${id}`"
       style="max-height: 400px;"
       :data="chartData"
       :options="computedOptions"
@@ -90,15 +90,16 @@
       v-else
       class="pt-7 text-center text-xl"
     >
-      <div v-if="!test.results.length">
-        Не было сдано ни одного анализа
+      <div v-if="!item.results.length">
+        Результаты, необходимые для построения графика, не добавлены.
+        <p>Чтобы добавить их, отредактируйте показатель.</p>
       </div>
+
       <div v-else>
         <p class="mb-2">
-          Кажется,
-          с <span class="font-medium">{{ moment(test.shownPeriod.start).format('DD.MM.YYYY') }}</span>
-          по <span class="font-medium">{{ moment(test.shownPeriod.end).format('DD.MM.YYYY') }}</span>
-          не было анализов <span class="font-medium">"{{ test.title }}"</span>.
+          С <span class="font-medium">{{ moment(item.shownPeriod.start).format('DD.MM.YYYY') }}</span>
+          по <span class="font-medium">{{ moment(item.shownPeriod.end).format('DD.MM.YYYY') }}</span>
+          нет результатов.
         </p>
         <p>Попробуйте выбрать другой временной период.</p>
       </div>
@@ -118,7 +119,7 @@
   Tooltip,
   Legend,
 } from 'chart.js'
-  import {computed, toRefs} from 'vue'
+  import {computed} from 'vue'
   import {useTestStore} from '@/stores/testStore.js'
   import VCalendar from '@/components/shared/VCalendar.vue'
   import moment from 'moment'
@@ -146,18 +147,16 @@
 
   ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
 
-  const props = defineProps({
-    test: { type: Object, required: true },
+  const { item, id } = defineProps({
+    item: { type: Object, required: true },
     id: { type: Number, required: true },
   })
-
-  const refProps = toRefs(props)
 
   const testStore = useTestStore()
 
   const computedOptions = computed(() => {
-    const from = props.test.normalRange.from
-    const to = props.test.normalRange.to
+    const from = item.normalRange.from
+    const to = item.normalRange.to
 
     return {
       interaction: {
@@ -232,8 +231,8 @@
 
   function onBeforeSelectStart (value) {
     if (value
-        && refProps.test.value.shownPeriod.end
-        && moment(value).isAfter(refProps.test.value.shownPeriod.end)
+        && item.shownPeriod.end
+        && moment(value).isAfter(item.shownPeriod.end)
     ) {
       showToast('Начало периода не может быть позже конца периода', {  type: 'error' })
       return false
@@ -244,8 +243,8 @@
 
   function onBeforeSelectEnd (value) {
     if (value
-        && refProps.test.value.shownPeriod.start
-        && moment(value).isBefore(refProps.test.value.shownPeriod.start)
+        && item.shownPeriod.start
+        && moment(value).isBefore(item.shownPeriod.start)
     ) {
       showToast('Конец периода не может быть раньше начала периода', {  type: 'error' })
       return false
@@ -255,54 +254,54 @@
   }
 
   const changePeriod = (period, value) => {
-    if (!refProps.test.value.results.length) {
+    if (!item.results.length) {
       return
     }
-    const sameStart = period === 'start' && refProps.test.value.shownPeriod.start === value
-    const sameEnd = period === 'end' && refProps.test.value.shownPeriod.end === value
+    const sameStart = period === 'start' && item.shownPeriod.start === value
+    const sameEnd = period === 'end' && item.shownPeriod.end === value
     if (sameStart || sameEnd) {
       return
     }
 
-    testStore.changeTest(refProps.id.value, { [period === 'start' ? 'showFrom' : 'showTo']: value })
+    testStore.changeParameter(id, { [period === 'start' ? 'showFrom' : 'showTo']: value })
   }
 
   const chartData = computed(() => {
-    const data = refProps.test.value.results
+    const data = item.results
         .filter(res => {
           return moment(res.date, 'YYYY-MM-DD')
-            .isBetween(refProps.test.value.shownPeriod.start, refProps.test.value.shownPeriod.end, 'day', '[]')
+            .isBetween(item.shownPeriod.start, item.shownPeriod.end, 'day', '[]')
         })
         .map((res) => ({x: res.date, y: res.value })) || []
 
     return  {
       datasets: [
         {
-          label: refProps.test.value.title,
+          label: item.title,
           data,
         },
       ],
     }
   })
 
-  const computedTestDates = computed(() => {
-    return refProps.test.value.results.map(({ date }) => date) || []
+  const computedParamDates = computed(() => {
+    return item.results.map(({ date }) => date) || []
   })
 
   const computedFirstDate = computed(() => {
-    return refProps.test.value.results[0]?.date || ''
+    return item.results[0]?.date || ''
   })
 
   const computedLastDate = computed(() => {
-    return refProps.test.value.results[refProps.test.value.results.length - 1]?.date || ''
+    return item.results[item.results.length - 1]?.date || ''
   })
 
   const computedIsNormalFromExist = computed(() => {
-    return refProps.test.value.normalRange.from || refProps.test.value.normalRange.from === 0
+    return item.normalRange.from || item.normalRange.from === 0
   })
 
   const computedIsNormalToExist = computed(() => {
-    return refProps.test.value.normalRange.to || refProps.test.value.normalRange.to === 0
+    return item.normalRange.to || item.normalRange.to === 0
   })
 
   const computedAverageInPeriod = computed(() => {

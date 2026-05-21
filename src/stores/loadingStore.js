@@ -5,10 +5,10 @@ export const useLoadingStore = defineStore(
   'loadingStore',
   () => {
     const loading = reactive({
-      getAllTests: false,
-      addTest: false,
-      editTest: false,
-      deleteTest: false,
+      getParams: false,
+      addParameter: false,
+      editParameter: false,
+      deleteParameter: false,
       login: false,
       register: false,
     })

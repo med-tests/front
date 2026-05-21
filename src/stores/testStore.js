@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { computed, reactive } from 'vue'
 import api from '@/api.js'
-import { formatTest } from '@/helpers'
+import { formatParameter } from '@/helpers'
 import { showToast } from '@/components/shared/toaster/toast.js'
 import {useLoadingStore} from '@/stores/loadingStore.js'
 import {useUserStore} from '@/stores/userStore.js'
@@ -14,29 +14,29 @@ export const useTestStore = defineStore(
     const userStore = useUserStore()
     const fullData = reactive([])
 
-    function getAllTests() {
+    function getParams() {
       fullData.splice(0, fullData.length)
 
       if (!userStore.isLoggedIn) {
         return
       }
 
-      loadingStore.setLoadingFor('getAllTests', true)
+      loadingStore.setLoadingFor('getParams', true)
 
-      return api.getAllTests()
+      return api.getParams()
         .then(data => {
-          data.forEach(test => {
-            const formattedTest = formatTest(test)
-            fullData.push(formattedTest)
+          data.forEach(parameter => {
+            const formattedParam = formatParameter(parameter)
+            fullData.push(formattedParam)
           })
         })
         .catch((err) => {})
         .finally(() => {
-          loadingStore.setLoadingFor('getAllTests', false)
+          loadingStore.setLoadingFor('getParams', false)
         })
     }
 
-    const changeTest = async (id, data) => {
+    const changeParameter = async (id, data) => {
       const allowedFields = ['title', 'normalFrom', 'normalTo', 'isHidden', 'showFrom', 'showTo', 'results']
       const sendData = {}
       allowedFields.forEach(field => {
@@ -45,66 +45,67 @@ export const useTestStore = defineStore(
         }
       })
 
-      const index = getIndexByTestId(id)
+      const index = getIndexByParameterId(id)
       try {
         if (userStore.isLoggedIn) {
-          loadingStore.setLoadingFor('editTest', true)
-          const res = await api.editTest(id, sendData)
-          showToast('Изменения сохранены')
-          fullData[index] = formatTest(res)
+          loadingStore.setLoadingFor('editParameter', true)
+          const res = await api.editParameter(id, sendData)
+          showToast('Сохранено')
+          fullData[index] = formatParameter(res)
         }
         else {
+          const param = fullData[index]
           if (Object.hasOwn(sendData, 'title')) {
-            fullData[index].title = sendData.title
+            param.title = sendData.title
           }
           if (Object.hasOwn(sendData, 'normalFrom')) {
-            fullData[index].normalRange.from = sendData.normalFrom
+            param.normalRange.from = sendData.normalFrom
           }
           if (Object.hasOwn(sendData, 'normalTo')) {
-            fullData[index].normalRange.to = sendData.normalTo
+            param.normalRange.to = sendData.normalTo
           }
           if (Object.hasOwn(sendData, 'isHidden')) {
-            fullData[index].isHidden = sendData.isHidden
+            param.isHidden = sendData.isHidden
           }
           if (Object.hasOwn(sendData, 'showFrom')) {
-            fullData[index].shownPeriod.start = sendData.showFrom
+            param.shownPeriod.start = sendData.showFrom
           }
           if (Object.hasOwn(sendData, 'showTo')) {
-            fullData[index].shownPeriod.end = sendData.showTo
+            param.shownPeriod.end = sendData.showTo
           }
           if (Object.hasOwn(sendData, 'results')) {
             sendData.results.map((result) => {
-              const existingResIndex = fullData[index].results.findIndex(r => r.id === result.id)
+              const existingResIndex = param.results.findIndex(r => r.id === result.id)
               if (existingResIndex !== -1) {
                 if (result.status !== 0) {
-                  Object.hasOwn(result, 'value') && (fullData[index].results[existingResIndex].value = result.value)
-                  Object.hasOwn(result, 'date') && (fullData[index].results[existingResIndex].date = result.date)
+                  Object.hasOwn(result, 'value') && (param.results[existingResIndex].value = result.value)
+                  Object.hasOwn(result, 'date') && (param.results[existingResIndex].date = result.date)
                 }
                 else {
-                  fullData[index].results.splice(existingResIndex, 1)
+                  param.results.splice(existingResIndex, 1)
                 }
               }
               else {
-                fullData[index].results.push({
-                  id: fullData[index].results.length + 1,
+                param.results.push({
+                  id: param.results.length + 1,
                   value: result.value,
                   date: result.date,
                 })
               }
             })
 
-            if (fullData[index].results.length) {
-              fullData[index].results.sort((a,b) => moment(a.date, 'YYYY-MM-DD').unix() - moment(b.date, 'YYYY-MM-DD').unix())
+            if (param.results.length) {
+              param.results.sort((a,b) => moment(a.date, 'YYYY-MM-DD').unix() - moment(b.date, 'YYYY-MM-DD').unix())
 
-              if (!fullData[index].shownPeriod.start && !fullData[index].shownPeriod.end) {
-                fullData[index].shownPeriod = {
-                  start: fullData[index].results[0].date,
-                  end: fullData[index].results[fullData[index].results.length - 1].date,
+              if (!param.shownPeriod.start && !param.shownPeriod.end) {
+                param.shownPeriod = {
+                  start: param.results[0].date,
+                  end: param.results[param.results.length - 1].date,
                 }
               }
             }
           }
-          showToast('Изменения сохранены до перезагрузки страницы')
+          showToast('Сохранено до перезагрузки страницы')
         }
       }
       catch (err) {
@@ -113,15 +114,15 @@ export const useTestStore = defineStore(
       }
       finally {
         if (userStore.isLoggedIn) {
-          loadingStore.setLoadingFor('editTest', false)
+          loadingStore.setLoadingFor('editParameter', false)
         }
       }
     }
 
     const arrListData = computed(() => {
       return fullData
-        .map(test => {
-          const { title, id, isHidden, position } = test
+        .map(parameter => {
+          const { title, id, isHidden, position } = parameter
           return {
             id,
             title,
@@ -134,7 +135,7 @@ export const useTestStore = defineStore(
 
     const sortedFullData = computed(() => {
       return fullData
-        .map(test => test)
+        .map(param => param)
         .sort((a, b) => b.position - a.position)
     })
 
@@ -146,33 +147,33 @@ export const useTestStore = defineStore(
       const reversedNewPosition = fullData.length - newPosition
       const reversedOldPosition = fullData.length - oldPosition
 
-      return api.changeTestPosition(id, {
+      return api.changeParameterPosition(id, {
         newPosition: reversedNewPosition,
         oldPosition: reversedOldPosition,
       })
         .then(() => {
-          showToast('Изменения сохранены')
+          showToast('Сохранено')
           const isGoUp = reversedNewPosition > reversedOldPosition
           if (isGoUp) {
-            fullData.forEach(test => {
-              if (test.position > reversedOldPosition
-                && test.position <= reversedNewPosition
-                && test.id !== id) {
-                test.position = test.position - 1
+            fullData.forEach(item => {
+              if (item.position > reversedOldPosition
+                && item.position <= reversedNewPosition
+                && item.id !== id) {
+                item.position = item.position - 1
               }
-              if (test.id === id) {
-                test.position = reversedNewPosition
+              if (item.id === id) {
+                item.position = reversedNewPosition
               }
             })
           } else {
-            fullData.forEach(test => {
-              if (test.position >= reversedNewPosition
-                && test.position < reversedOldPosition
-                && test.id !== id) {
-                test.position = test.position + 1
+            fullData.forEach(param => {
+              if (param.position >= reversedNewPosition
+                && param.position < reversedOldPosition
+                && param.id !== id) {
+                param.position = param.position + 1
               }
-              if (test.id === id) {
-                test.position = reversedNewPosition
+              if (param.id === id) {
+                param.position = reversedNewPosition
               }
             })
           }
@@ -182,83 +183,84 @@ export const useTestStore = defineStore(
         })
     }
 
-    const addNewTest = async (test) => {
+    const addParameter = async (rawParameter) => {
       try {
-        let formattedTest
+        let formattedParameter
         if (userStore.isLoggedIn) {
-          loadingStore.setLoadingFor('addTest', true)
-          const res = await api.addTest(test)
-          showToast('Анализ добавлен')
-          formattedTest = formatTest(res)
+          loadingStore.setLoadingFor('addParameter', true)
+          const response = await api.addParameter(rawParameter)
+          showToast('Сохранено')
+          formattedParameter = formatParameter(response)
         } else {
-          const formattedResults = test.results
+          const formattedResults = rawParameter.results
             .map((result, index) => ({
               id: index + 1,
               date: result.date,
               value: result.value,
             }))
-            .sort((a,b) => moment(a.date, 'YYYY-MM-DD') - moment(b.date, 'YYYY-MM-DD'))
+            .sort((a,b) => a.date.localeCompare(b.date))
             || []
 
-          formattedTest = {
+          formattedParameter = {
             id: fullData.length + 1,
-            title: test.title,
+            title: rawParameter.title,
             normalRange: {
-              from: test.normalFrom,
-              to: test.normalTo,
+              from: rawParameter.normalFrom,
+              to: rawParameter.normalTo,
             },
             isHidden: false,
             shownPeriod: {
               start: formattedResults[0]?.date || '',
               end: formattedResults[formattedResults.length - 1]?.date || '',
             },
-            position: test.position,
+            position: rawParameter.position,
             results: formattedResults,
           }
-          showToast('Анализ добавлен до перезагрузки страницы')
+          showToast('Сохранено до перезагрузки страницы')
         }
-        fullData.push(formattedTest)
+        fullData.push(formattedParameter)
       } catch (err) {
-        showToast('Не удалось добавить анализ', { type: 'error' })
+        console.error(err)
+        showToast('Не удалось создать показатель', { type: 'error' })
         return Promise.reject(err)
       }
       finally {
         if (userStore.isLoggedIn) {
-          loadingStore.setLoadingFor('addTest', false)
+          loadingStore.setLoadingFor('addParameter', false)
         }
       }
     }
 
-    const deleteTest = async (id) => {
+    const deleteParameter = async (id, title) => {
       try {
         if (userStore.isLoggedIn) {
-          loadingStore.setLoadingFor('deleteTest', true)
-          await api.deleteTest(id)
+          loadingStore.setLoadingFor('deleteParameter', true)
+          await api.deleteParameter(id)
         }
-        showToast('Анализ удален')
-        const index = getIndexByTestId(id)
+        showToast(`Показатель "${title}" удален`)
+        const index = getIndexByParameterId(id)
         fullData.splice(index, 1)
       }
       catch (err) {
-        showToast('Не удалось удалить анализ', { type: 'error' })
+        showToast('Не удалось удалить показатель', { type: 'error' })
       }
       finally {
         if (userStore.isLoggedIn) {
-          loadingStore.setLoadingFor('deleteTest', false)
+          loadingStore.setLoadingFor('deleteParameter', false)
         }
       }
     }
 
-    const clearTests = () => {
+    const clearData = () => {
       fullData.splice(0, fullData.length)
     }
 
-    function getFullTestById (id) {
-      return fullData.find(test => Number(test.id) === Number(id))
+    function getFullParameterById (id) {
+      return fullData.find(param => Number(param.id) === Number(id))
     }
 
-    function getIndexByTestId (id) {
-      return fullData.findIndex(test => test.id === id)
+    function getIndexByParameterId (id) {
+      return fullData.findIndex(param => param.id === id)
     }
 
     return {
@@ -270,13 +272,13 @@ export const useTestStore = defineStore(
       sortedFullData,
 
       // actions
-      getAllTests,
-      changeTest,
+      getParams,
+      changeParameter,
       updateOrder,
-      addNewTest,
-      deleteTest,
-      getFullTestById,
-      clearTests,
+      addParameter,
+      deleteParameter,
+      getFullParameterById,
+      clearData,
     }
   },
 )

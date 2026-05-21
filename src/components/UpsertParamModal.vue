@@ -1,19 +1,19 @@
 <template>
   <VModal
-    ref="test-modal"
-    :title="isCreating ? 'Добавить анализ' : `Редактировать '${initTestName}'`"
+    ref="upsert-param-modal"
+    :title="computedModalTitle"
     @on-close="onClose"
   >
     <div style="min-width: 480px;">
       <div>
         <!--  Название  -->
         <VInput
-          id="testName"
-          v-model="testName"
+          id="paramTitle"
+          v-model="paramTitle"
           hide-close-icon
           required
-          label="Название анализа"
-          placeholder="Введите название анализа"
+          label="Название"
+          placeholder="Введите название"
           :callback-validator="validation.title.validator"
           :touch-id="touchId"
           @on-validate="validation.title.error = $event"
@@ -36,7 +36,7 @@
 
         <!--  Верхняя граница нормы  -->
         <VInput
-          id="testName"
+          id="highEdge"
           v-model="highEdge"
           hide-close-icon
           class="ml-4"
@@ -54,11 +54,13 @@
         class="overflow-y-auto p-1"
         style="max-height: 350px; min-width: 450px;"
       >
-        <div>
-          Чтобы добавить результаты анализа, нажмите на плюс
+        <div class="text-right">
+          Чтобы добавить результаты анализов или измерений показателя,
+          <br>
+          нажмите на плюс
         </div>
         <VAddInputs
-          title="Результаты"
+          title="Результаты анализов или измерений"
           :data="results"
           :fields-settings="resultFieldSettings"
           :touch-id="touchId"
@@ -71,7 +73,7 @@
       <div class="mt-3 ml-auto flex justify-end flex-row gap-x-4">
         <VBtn
           :is-loading="computedIsLoading"
-          @click="testModal.close()"
+          @click="upsertParamModal.close()"
         >
           <div class="px-2">
             Отменить
@@ -81,7 +83,7 @@
         <VBtn
           type="success"
           :is-loading="computedIsLoading"
-          @click="saveTest"
+          @click="saveParam"
         >
           <div class="px-2">
             Сохранить
@@ -106,7 +108,7 @@ import {useLoadingStore} from '@/stores/loadingStore.js'
 const testStore = useTestStore()
 
 const props = defineProps({
-  editingTestId: {
+  editingParamId: {
     type: Number,
     default: 0,
   },
@@ -114,10 +116,10 @@ const props = defineProps({
 
 const emit = defineEmits(['close'])
 
-const testModal = useTemplateRef('test-modal')
+const upsertParamModal = useTemplateRef('upsert-param-modal')
 
-const testName = ref('')
-const initTestName = ref('')
+const paramTitle = ref('')
+const initParamName = ref('')
 const lowEdge = ref('')
 const highEdge = ref('')
 const results = ref([])
@@ -126,7 +128,13 @@ const formResults = ref([])
 defineExpose({ open })
 
 const isCreating = computed(() => {
-  return props.editingTestId === 0
+  return props.editingParamId === 0
+})
+
+const computedModalTitle = computed(() => {
+  return isCreating.value
+      ? 'Создать показатель'
+      : `Редактировать "${initParamName.value}"`
 })
 
 function open () {
@@ -134,18 +142,18 @@ function open () {
     initEditing()
   }
   nextTick(() => {
-    testModal.value.show()
+    upsertParamModal.value.show()
   })
 }
 
 function initEditing () {
-  const editingTest = JSON.parse(JSON.stringify(testStore.getFullTestById(props.editingTestId)))
+  const editingParam = JSON.parse(JSON.stringify(testStore.getFullParameterById(props.editingParamId)))
 
-  initTestName.value = editingTest.title
-  testName.value = editingTest.title
-  lowEdge.value = editingTest.normalRange.from
-  highEdge.value = editingTest.normalRange.to
-  editingTest.results
+  initParamName.value = editingParam.title
+  paramTitle.value = editingParam.title
+  lowEdge.value = editingParam.normalRange.from
+  highEdge.value = editingParam.normalRange.to
+  editingParam.results
     .reverse()
     .forEach(({ date, value, id }) => {
       results.value.push({
@@ -162,7 +170,7 @@ function initEditing () {
 
 const deletedResultIds = ref([])
 const onClose = () => {
-  testName.value = ''
+  paramTitle.value = ''
   lowEdge.value = ''
   highEdge.value = ''
   results.value = []
@@ -177,7 +185,7 @@ const validation = ref({
     error: false,
     validator: (value) => {
       if (value.length > 45) {
-        showToast('Слишком длинное название анализа', {type: 'error'})
+        showToast('Слишком длинное название', {type: 'error'})
         return false
       }
       return true
@@ -212,7 +220,7 @@ const validation = ref({
 
 const resultFieldSettings = {
   date: {
-    label: 'Дата анализа',
+    label: 'Дата',
     type: 'calendar',
     required: true,
     hideCloseIcon: true,
@@ -238,9 +246,9 @@ function onDeleteResult (result) {
 
 const { loading } = useLoadingStore()
 const computedIsLoading = computed(() => {
-  return loading.addTest || loading.editTest || false
+  return loading.addParameter || loading.editParameter || false
 })
-const saveTest = async () => {
+const saveParam = async () => {
   touchId.value = getRandomUid(7)
   await nextTick()
 
@@ -257,7 +265,7 @@ const saveTest = async () => {
   // создание анализа - сохраняем все поля
   if (isCreating.value) {
     const sendData = {
-      title: testName.value,
+      title: paramTitle.value,
       normalFrom: lowEdge.value,
       normalTo: highEdge.value,
       position: testStore.fullData.length + 1,
@@ -269,23 +277,23 @@ const saveTest = async () => {
         })),
     }
 
-    testStore.addNewTest(sendData)
+    testStore.addParameter(sendData)
       .then(() => {
-        testModal.value.close()
+        upsertParamModal.value.close()
       })
       .catch((err) => { })
   }
   // редактирование анализа - отправляем только изменившиеся поля
   else {
-    const initTest = testStore.getFullTestById(props.editingTestId)
+    const initParam = testStore.getFullParameterById(props.editingParamId)
     const sendData = {}
-    if (testName.value !== initTest.title) {
-      sendData.title = testName.value
+    if (paramTitle.value !== initParam.title) {
+      sendData.title = paramTitle.value
     }
-    if (lowEdge.value !== initTest.normalRange.from) {
+    if (lowEdge.value !== initParam.normalRange.from) {
       sendData.normalFrom = lowEdge.value
     }
-    if (highEdge.value !== initTest.normalRange.to) {
+    if (highEdge.value !== initParam.normalRange.to) {
       sendData.normalTo = highEdge.value
     }
 
@@ -294,7 +302,7 @@ const saveTest = async () => {
       .filter(({ date, resValue }) => date.value && (resValue.value || resValue.value === 0))
       .forEach(({ date, resValue, id }) => {
       if (id) {
-        const initResult = initTest.results.find(initRes => initRes.id === id)
+        const initResult = initParam.results.find(initRes => initRes.id === id)
         const changedResult = {}
         if (initResult.date !== date.value) {
           changedResult.date =  date.value
@@ -321,13 +329,13 @@ const saveTest = async () => {
     }
 
     if (!Object.keys(sendData).length) {
-      testModal.value.close()
+      upsertParamModal.value.close()
       return
     }
 
-    testStore.changeTest(props.editingTestId, sendData)
+    testStore.changeParameter(props.editingParamId, sendData)
       .then(() => {
-        testModal.value.close()
+        upsertParamModal.value.close()
       })
       .catch((err) => {
         console.log(err)
