@@ -2,7 +2,7 @@
   <div>
     <!--  Заголовок и кнопка добавить  -->
     <div class="flex justify-between mb-3">
-      <h5 class="text-xl text-gray-700">
+      <h5 class="text-lg text-gray-700">
         {{ title }}
       </h5>
       <AppBtn
