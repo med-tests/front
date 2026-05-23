@@ -1427,6 +1427,11 @@ function getWrapper (data) {
   return mount(AppBtn, {
     // attachTo нужен, чтобы не обвалилось обращение к document у tippy
     attachTo: document.body,
+    global: {
+      stubs: {
+        ToolTip: true,
+      },
+    },
     ...data,
   })
 }
