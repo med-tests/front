@@ -5,7 +5,7 @@
       <h5 class="text-xl text-gray-700">
         {{ title }}
       </h5>
-      <VBtn
+      <AppBtn
         style="height: 24px;"
         title="Добавить результат"
         type="success"
@@ -14,7 +14,7 @@
         <div class="flex justify-center items-center h-full">
           <PlusIcon width="16" />
         </div>
-      </VBtn>
+      </AppBtn>
     </div>
 
     <!--  Названия колонок  -->
@@ -48,7 +48,7 @@
           v-for="(field, fieldKey) in fieldsSettings"
           :key="`row-${rowIndex}-${fieldKey}`"
         >
-          <VInput
+          <AppInput
             v-if="['text', 'number'].includes(field.type)"
             :id="`${fieldKey}-${field.type || 'text'}-row-${rowIndex}`"
             v-model="data[rowIndex][fieldKey].value"
@@ -61,7 +61,7 @@
             :type="field.type || 'text'"
             @on-validate="data[rowIndex][fieldKey].error = $event"
           />
-          <VCalendar
+          <AppCalendar
             v-if="field.type === 'calendar'"
             class="grow"
             :callback-validator="field.validator"
@@ -76,7 +76,7 @@
             @on-validate="data[rowIndex][fieldKey].error = $event"
           />
         </div>
-        <VBtn
+        <AppBtn
           v-if="!hideDelete"
           not-bordered
           not-filling
@@ -88,18 +88,18 @@
             height="20px"
             width="20px"
           />
-        </VBtn>
+        </AppBtn>
       </div>
     </template>
   </div>
 </template>
 
 <script setup>
-import VInput from '@/components/shared/VInput.vue'
+import AppInput from '@/components/shared/AppInput.vue'
 import { ref, watch } from 'vue'
 import PlusIcon from '@/components/icons/PlusIcon.vue'
 import CloseIcon from '@/components/icons/CloseIcon.vue'
-import VCalendar from '@/components/shared/VCalendar.vue'
+import AppCalendar from '@/components/shared/AppCalendar.vue'
 
 const props = defineProps({
   title: { type: String, default: '' },

@@ -10,7 +10,7 @@
       </div>
 
       <div class="w-full mb-3">
-        <VInput
+        <AppInput
           id="login"
           v-model="username.value"
           required
@@ -22,7 +22,7 @@
       </div>
 
       <div class="w-full mb-3">
-        <VInput
+        <AppInput
           id="password"
           v-model="password.value"
           required
@@ -33,7 +33,7 @@
         />
       </div>
 
-      <VBtn
+      <AppBtn
         not-bordered
         not-filling
         class="mb-3"
@@ -44,9 +44,9 @@
         <div class="text-sm text-gray-600 hover:text-emerald-700">
           У меня нет аккаунта
         </div>
-      </VBtn>
+      </AppBtn>
 
-      <VBtn
+      <AppBtn
         class="mt-2"
         type="success"
         :is-loading="loading.login"
@@ -55,9 +55,9 @@
         <div class="uppercase px-3 py-1">
           Войти
         </div>
-      </VBtn>
+      </AppBtn>
 
-      <VBtn
+      <AppBtn
         not-bordered
         not-filling
         class="mt-3"
@@ -68,13 +68,13 @@
         <div class="text-sm text-gray-600 hover:text-emerald-700">
           Продолжить без входа
         </div>
-      </VBtn>
+      </AppBtn>
     </form>
   </div>
 </template>
 
 <script setup>
-import VInput from '@/components/shared/VInput.vue'
+import AppInput from '@/components/shared/AppInput.vue'
 import { nextTick, reactive, ref} from 'vue'
 import { useUserStore } from '@/stores/userStore.js'
 import { useRouter } from 'vue-router'

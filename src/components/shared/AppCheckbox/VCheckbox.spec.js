@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import VCheckbox from '@/components/shared/VCheckbox/index.vue'
+import AppCheckbox from '@/components/shared/AppCheckbox'
 import {getRandomUid} from '@/helpers/index.js'
 
 const getWrapper = (customProps, slots = null) => {
@@ -11,10 +11,10 @@ const getWrapper = (customProps, slots = null) => {
     options.slots = slots
   }
 
-  return mount(VCheckbox, options)
+  return mount(AppCheckbox, options)
 }
 
-describe('VCheckbox', () => {
+describe('AppCheckbox', () => {
   // label
   it('отображает заголовок, когда он передан', () => {
     const labelText = 'Hello, I am a checkbox label.'

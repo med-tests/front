@@ -7,7 +7,7 @@ import UpsertParamModal from '@/components/UpsertParamModal.vue'
 import PlusIcon from '@/components/icons/PlusIcon.vue'
 import { useUserStore } from '@/stores/userStore.js'
 import { useLoadingStore } from '@/stores/loadingStore.js'
-import ContextMenu from '@/components/shared/ContextMenu'
+import AppContextMenu from '@/components/shared/AppContextMenu'
 import router from '@/router.js'
 import {storeToRefs} from 'pinia'
 
@@ -72,21 +72,21 @@ const computedVisibleItems = computed(() => {
       id="banner"
       class="font-medium text-lg text-red-600 text-center py-2 bg-red-100"
     >
-      <VBtn
+      <AppBtn
         not-bordered
         not-filling
         type="success"
         @click="router.push({ name: 'login' })"
       >
         Войдите
-      </VBtn> или <VBtn
+      </AppBtn> или <AppBtn
         not-bordered
         not-filling
         type="success"
         @click="router.push({ name: 'register' })"
       >
         зарегистрируйтесь
-      </VBtn>, чтобы не потерять изменения при перезагрузке страницы
+      </AppBtn>, чтобы не потерять изменения при перезагрузке страницы
     </div>
 
     <div
@@ -104,7 +104,7 @@ const computedVisibleItems = computed(() => {
           </h3>
 
           <div>
-            <ContextMenu
+            <AppContextMenu
               :arr-items="[
                 {title: 'Создать показатель', event: 'createParameter'},
               ]"
@@ -112,7 +112,7 @@ const computedVisibleItems = computed(() => {
             >
               <template #toggler>
                 <div class="flex">
-                  <VBtn
+                  <AppBtn
                     not-bordered
                     not-filling
                     type="success"
@@ -122,10 +122,10 @@ const computedVisibleItems = computed(() => {
                       width="20"
                       :line-width="4"
                     />
-                  </VBtn>
+                  </AppBtn>
                 </div>
               </template>
-            </ContextMenu>
+            </AppContextMenu>
           </div>
         </div>
 
@@ -150,28 +150,28 @@ const computedVisibleItems = computed(() => {
           </h3>
 
           <div class="ml-auto">
-            <VBtn
+            <AppBtn
               v-if="isLoggedIn"
               type="error"
               @click="logout()"
             >
               <span class="px-2">Выйти</span>
-            </VBtn>
+            </AppBtn>
             <template v-else>
-              <VBtn
+              <AppBtn
                 class="mr-4"
                 type="default"
                 @click="router.push({ name: 'register' })"
               >
                 <span class="px-2">ЗАРЕГИСТРИРОВАТЬСЯ</span>
-              </VBtn>
+              </AppBtn>
 
-              <VBtn
+              <AppBtn
                 type="success"
                 @click="router.push({ name: 'login' })"
               >
                 <span class="px-2">ВОЙТИ</span>
-              </VBtn>
+              </AppBtn>
             </template>
           </div>
         </div>
@@ -193,12 +193,12 @@ const computedVisibleItems = computed(() => {
             Графики еще не созданы.
             <div class="my-2">
               Чтобы начать, необходимо
-              <VBtn
+              <AppBtn
                 type="success"
                 @click="upsertParamModalRef.open()"
               >
                 <span class="px-2">Cоздать показатель</span>
-              </VBtn>
+              </AppBtn>
             </div>
           </template>
         </div>

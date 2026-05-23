@@ -4,7 +4,7 @@ import { useTestStore } from '@/stores/testStore.js'
 import { useRouter } from 'vue-router'
 import {useLoadingStore} from '@/stores/loadingStore.js'
 import {ref} from 'vue'
-import {showToast} from '@/components/shared/toaster/toast.js'
+import {showToast} from '@/components/shared/AppToaster/toast.js'
 
 export const useUserStore = defineStore(
   'userStore',

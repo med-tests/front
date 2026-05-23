@@ -1,7 +1,8 @@
 import {flushPromises, mount} from '@vue/test-utils'
-import VBtn from '@/components/shared/VBtn/index.vue'
+import AppBtn from '@/components/shared/AppBtn'
+import { toolTipPlugin } from '@/plugins'
 
-describe('VBtn', () => {
+describe('AppBtn', () => {
   it ('отрисовывает кнопку из слота', async () => {
     const btnId = 'test-btn'
     const btnMarkup = `<div id="${btnId}">Текст кнопки</div>`
@@ -678,12 +679,17 @@ describe('VBtn', () => {
   it('отображает тултип при наведении, если передан его текст', async () => {
     const title = 'Тестовый тултип'
     const wrapper = getWrapper({
+        global: {
+          plugins: [toolTipPlugin],
+        },
         props: { title },
         slots: {
           default: 'Текст кнопки',
         },
       },
     )
+
+    await vi.dynamicImportSettled()
 
     vi.useFakeTimers()
 
@@ -701,8 +707,13 @@ describe('VBtn', () => {
         slots: {
           default: 'Текст кнопки',
         },
+        global: {
+          plugins: [toolTipPlugin],
+        },
       },
     )
+
+    await vi.dynamicImportSettled()
 
     vi.useFakeTimers()
 
@@ -717,6 +728,9 @@ describe('VBtn', () => {
   it('не отображает тултип при наведении во время загрузки', async () => {
     const title = 'Тестовый тултип'
     const wrapper = getWrapper({
+        global: {
+          plugins: [toolTipPlugin],
+        },
         props: {
           title,
         },
@@ -725,6 +739,8 @@ describe('VBtn', () => {
         },
       },
     )
+    await vi.dynamicImportSettled()
+
     vi.useFakeTimers()
 
     await wrapper.trigger('mouseenter')
@@ -732,6 +748,8 @@ describe('VBtn', () => {
 
     vi.advanceTimersByTime(tippyDelay)
     await flushPromises()
+    await wrapper.vm.$nextTick()
+
     expect(wrapper.find('.tippy-content').exists()).toBeTruthy()
     expect(wrapper.find('.tippy-content').html()).toContain(title)
 
@@ -1406,7 +1424,7 @@ describe('VBtn', () => {
 })
 
 function getWrapper (data) {
-  return mount(VBtn, {
+  return mount(AppBtn, {
     // attachTo нужен, чтобы не обвалилось обращение к document у tippy
     attachTo: document.body,
     ...data,

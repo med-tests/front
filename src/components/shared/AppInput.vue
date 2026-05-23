@@ -28,7 +28,7 @@
         @input="setValue($event.target.value)"
       >
 
-      <VBtn
+      <AppBtn
         v-if="type === 'password'"
         not-bordered
         not-filling
@@ -39,9 +39,9 @@
       >
         <EyeIcon v-if="passwordHidden" />
         <EyeClosedIcon v-else />
-      </VBtn>
+      </AppBtn>
 
-      <VBtn
+      <AppBtn
         v-if="type !== 'password' && !hideCloseIcon"
         not-bordered
         not-filling
@@ -52,7 +52,7 @@
         @click="$emit('onClickCloseIcon')"
       >
         <CloseIcon />
-      </VBtn>
+      </AppBtn>
     </div>
   </div>
 </template>

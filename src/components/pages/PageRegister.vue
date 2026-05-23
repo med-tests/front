@@ -10,7 +10,7 @@
       </div>
 
       <div class="w-full mb-3">
-        <VInput
+        <AppInput
           id="login"
           v-model="username.value"
           required
@@ -23,7 +23,7 @@
       </div>
 
       <div class="w-full mb-3">
-        <VInput
+        <AppInput
           id="password"
           v-model="password.value"
           required
@@ -52,10 +52,10 @@
               </div>
             </div>
           </template>
-        </VInput>
+        </AppInput>
       </div>
 
-      <VBtn
+      <AppBtn
         not-bordered
         not-filling
         class="mb-3"
@@ -66,8 +66,8 @@
         <div class="text-sm text-gray-600 hover:text-emerald-700">
           У меня есть аккаунт
         </div>
-      </VBtn>
-      <VBtn
+      </AppBtn>
+      <AppBtn
         class="mt-2"
         type="success"
         :is-loading="loading.register"
@@ -76,17 +76,17 @@
         <div class="uppercase px-3 py-1">
           Зарегистрироваться
         </div>
-      </VBtn>
+      </AppBtn>
     </form>
   </div>
 </template>
 
 <script setup>
-import VInput from '@/components/shared/VInput.vue'
+import AppInput from '@/components/shared/AppInput.vue'
 import { nextTick, reactive, ref } from 'vue'
 import { useUserStore } from '@/stores/userStore.js'
 import { useRouter } from 'vue-router'
-import { showToast } from '@/components/shared/toaster/toast.js'
+import { showToast } from '@/components/shared/AppToaster/toast.js'
 import { getRandomUid } from '@/helpers/index.js'
 import {useLoadingStore} from '@/stores/loadingStore.js'
 import {storeToRefs} from 'pinia'

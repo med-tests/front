@@ -5,7 +5,7 @@
       class="flex mb-3 items-end justify-between mx-auto"
       style="width: calc(100% - 64px)"
     >
-      <VCalendar
+      <AppCalendar
         forbid-toggle-selected
         class="mr-5 inline-block"
         clear-title="Сбросить"
@@ -62,7 +62,7 @@
           </div>
         </div>
       </div>
-      <VCalendar
+      <AppCalendar
         forbid-toggle-selected
         class="inline-block"
         clear-title="Сбросить"
@@ -121,9 +121,9 @@
 } from 'chart.js'
   import {computed} from 'vue'
   import {useTestStore} from '@/stores/testStore.js'
-  import VCalendar from '@/components/shared/VCalendar.vue'
+  import AppCalendar from '@/components/shared/AppCalendar.vue'
   import moment from 'moment'
-  import {showToast} from '@/components/shared/toaster/toast.js'
+  import {showToast} from '@/components/shared/AppToaster/toast.js'
   import {colors} from '@/assets/vars.js'
 
   const verticalHoverLine = {

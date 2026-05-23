@@ -1,5 +1,5 @@
 import {ref} from 'vue'
-import {showToast} from '@/components/shared/toaster/toast.js'
+import {showToast} from '@/components/shared/AppToaster/toast.js'
 
 export function useValidateInput () {
   const isInvalid = ref(false)

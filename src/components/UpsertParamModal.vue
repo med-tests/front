@@ -1,5 +1,5 @@
 <template>
-  <VModal
+  <AppModal
     ref="upsert-param-modal"
     :title="computedModalTitle"
     @on-close="onClose"
@@ -7,7 +7,7 @@
     <div style="min-width: 480px;">
       <div>
         <!--  Название  -->
-        <VInput
+        <AppInput
           id="paramTitle"
           v-model="paramTitle"
           hide-close-icon
@@ -22,7 +22,7 @@
 
       <div class="mt-4 mb-6 flex justify-between">
         <!--  Нижняя граница нормы  -->
-        <VInput
+        <AppInput
           id="lowEdge"
           v-model="lowEdge"
           hide-close-icon
@@ -35,7 +35,7 @@
         />
 
         <!--  Верхняя граница нормы  -->
-        <VInput
+        <AppInput
           id="highEdge"
           v-model="highEdge"
           hide-close-icon
@@ -59,7 +59,7 @@
           <br>
           нажмите на плюс
         </div>
-        <VAddInputs
+        <AppAddInputs
           title="Результаты анализов или измерений"
           :data="results"
           :fields-settings="resultFieldSettings"
@@ -71,16 +71,16 @@
 
       <!-- Управление формой -->
       <div class="mt-3 ml-auto flex justify-end flex-row gap-x-4">
-        <VBtn
+        <AppBtn
           :is-loading="computedIsLoading"
           @click="upsertParamModal.close()"
         >
           <div class="px-2">
             Отменить
           </div>
-        </VBtn>
+        </AppBtn>
 
-        <VBtn
+        <AppBtn
           type="success"
           :is-loading="computedIsLoading"
           @click="saveParam"
@@ -88,20 +88,20 @@
           <div class="px-2">
             Сохранить
           </div>
-        </VBtn>
+        </AppBtn>
       </div>
     </div>
-  </VModal>
+  </AppModal>
 </template>
 
 <script setup>
-import VModal from '@/components/shared/VModal.vue'
+import AppModal from '@/components/shared/AppModal.vue'
 import { computed, nextTick, ref, useTemplateRef } from 'vue'
 import { useTestStore } from '@/stores/testStore.js'
-import VInput from '@/components/shared/VInput.vue'
-import { showToast } from '@/components/shared/toaster/toast.js'
+import AppInput from '@/components/shared/AppInput.vue'
+import { showToast } from '@/components/shared/AppToaster/toast.js'
 import { getRandomUid } from '@/helpers/index.js'
-import VAddInputs from '@/components/shared/VAddInputs.vue'
+import AppAddInputs from '@/components/shared/AppAddInputs.vue'
 import moment from 'moment'
 import {useLoadingStore} from '@/stores/loadingStore.js'
 

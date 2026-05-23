@@ -26,7 +26,7 @@
           </a>
 
           <div class="ml-auto pl-3 flex gap-x-1">
-            <VBtn
+            <AppBtn
               not-bordered
               not-filling
               :disabled="loading.editParameter"
@@ -35,9 +35,9 @@
             >
               <EyeClosedIcon v-if="element.isHidden" />
               <EyeIcon v-else />
-            </VBtn>
+            </AppBtn>
 
-            <VBtn
+            <AppBtn
               not-bordered
               not-filling
               title="Редактировать"
@@ -48,9 +48,9 @@
                 height="17"
                 width="17"
               />
-            </VBtn>
+            </AppBtn>
 
-            <VBtn
+            <AppBtn
               not-bordered
               not-filling
               title="Удалить"
@@ -59,14 +59,14 @@
               @click="showDeleteModal(element)"
             >
               <CloseIcon />
-            </VBtn>
+            </AppBtn>
           </div>
         </div>
       </template>
     </draggable>
   </div>
 
-  <VModal
+  <AppModal
     ref="delete-param-modal"
     @on-close="deletingParameter = null"
   >
@@ -76,23 +76,23 @@
       </div>
 
       <div class="mt-3 ml-auto flex justify-end flex-row gap-x-4">
-        <VBtn
+        <AppBtn
           :is-loading="loading.deleteParameter"
           @click="deleteParamModal.close()"
         >
           <span class="px-3">Отменить</span>
-        </VBtn>
+        </AppBtn>
 
-        <VBtn
+        <AppBtn
           type="error"
           :is-loading="loading.deleteParameter"
           @click="deleteParam"
         >
           <span class="px-2">Удалить</span>
-        </VBtn>
+        </AppBtn>
       </div>
     </div>
-  </VModal>
+  </AppModal>
   <UpsertParamModal
     ref="upsert-param-modal"
     :editing-param-id="editingParamId"
@@ -106,7 +106,7 @@ import EyeIcon from '@/components/icons/EyeIcon.vue'
 import {useTestStore} from '@/stores/testStore.js'
 import {nextTick, ref, useTemplateRef} from 'vue'
 import CloseIcon from '@/components/icons/CloseIcon.vue'
-import VModal from '@/components/shared/VModal.vue'
+import AppModal from '@/components/shared/AppModal.vue'
 import PencilIcon from '@/components/icons/PencilIcon.vue'
 import UpsertParamModal from '@/components/UpsertParamModal.vue'
 import {useLoadingStore} from '@/stores/loadingStore.js'

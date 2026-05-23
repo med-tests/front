@@ -13,7 +13,7 @@
         'bg-red-100 border-red-700': toast.type === 'error',
       }"
     >
-      <VBtn
+      <AppBtn
         not-bordered
         not-filling
         class="ml-2 absolute"
@@ -26,7 +26,7 @@
           height="20px"
           width="20px"
         />
-      </VBtn>
+      </AppBtn>
 
       <div
         class="text-lg font-medium"

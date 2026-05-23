@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { showToast } from '@/components/shared/toaster/toast.js'
+import { showToast } from '@/components/shared/AppToaster/toast.js'
 import { useUserStore } from '@/stores/userStore.js'
 import router from '@/router.js'
 

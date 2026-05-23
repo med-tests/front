@@ -1,8 +1,8 @@
 import { defineAsyncComponent } from 'vue'
 
-export const toolTipPlugin = (app)=>{
+export const toolTipPlugin = (app) => {
   app.component(
     'ToolTip',
-    defineAsyncComponent(() => import('./ToolTipPlugin/ToolTip.vue')),
+    defineAsyncComponent(() => import('@/plugins/ToolTipPlugin/ToolTip.vue')),
   )
 }

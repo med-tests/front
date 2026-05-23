@@ -1,5 +1,5 @@
-import getRandomUid from './getRandomUid.js'
-import formatParameter from '@/helpers/formatParameter.js'
+import getRandomUid from './lib/getRandomUid.js'
+import formatParameter from './lib/formatParameter.js'
 
 export {
   getRandomUid,

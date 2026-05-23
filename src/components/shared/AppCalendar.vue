@@ -1,5 +1,5 @@
 <template>
-  <VInput
+  <AppInput
     :id="`input-${uniqId}`"
     readonly
     placeholder="Выберите дату"
@@ -14,7 +14,7 @@
 
 <script setup>
 import AirDatepicker from 'air-datepicker'
-import VInput from '@/components/shared/VInput.vue'
+import AppInput from '@/components/shared/AppInput.vue'
 import 'air-datepicker/air-datepicker.css'
 import { onMounted, ref, toRefs, watch } from 'vue'
 import moment from 'moment'

@@ -1,9 +1,9 @@
 import {mount} from '@vue/test-utils'
-import ContextMenu from '@/components/shared/ContextMenu/index.vue'
-import VBtn from '@/components/shared/VBtn/index.vue'
+import AppContextMenu from '@/components/shared/AppContextMenu'
+import AppBtn from '@/components/shared/AppBtn'
 import { nextTick } from 'vue'
 
-describe('ContextMenu', () => {
+describe('AppContextMenu', () => {
   describe('должен отрисовывать триггер', () => {
     it('из текстового слота', () => {
       const togglerSlotValue = 'Hello, I am context menu toggler'
@@ -27,17 +27,17 @@ describe('ContextMenu', () => {
     it('из компоненты', () => {
       const togglerText = 'Hello, I am toggler button!'
       const wrp = getWrapper({
-        togglerSlot: `<VBtn>${togglerText}</VBtn>`,
+        togglerSlot: `<AppBtn>${togglerText}</AppBtn>`,
         global: {
           components: {
-            VBtn,
+            AppBtn,
           },
         },
       })
 
-      const VBtnSlot = wrp.findComponent(VBtn)
-      expect(VBtnSlot.exists()).toBe(true)
-      expect(VBtnSlot.text()).toContain(togglerText)
+      const AppBtnSlot = wrp.findComponent(AppBtn)
+      expect(AppBtnSlot.exists()).toBe(true)
+      expect(AppBtnSlot.text()).toContain(togglerText)
     })
   })
 
@@ -207,7 +207,7 @@ function getWrapper (options = {}) {
     { title: 'Название пункта', event: 'Название события' },
   ]
 
-  return mount(ContextMenu, {
+  return mount(AppContextMenu, {
     props: {
       arrItems: defaultArrItems,
       ...options?.props,

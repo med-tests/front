@@ -5,7 +5,7 @@ import { createApp } from 'vue'
 import {createPinia} from 'pinia'
 import router from '@/router.js'
 import { toolTipPlugin } from '@/plugins'
-import VBtn from '@/components/shared/VBtn/index.vue'
+import AppBtn from '@/components/shared/AppBtn'
 
 import App from './App.vue'
 
@@ -13,5 +13,5 @@ createApp(App)
   .use(router)
   .use(toolTipPlugin)
   .use(createPinia())
-  .component('VBtn', VBtn)
+  .component('AppBtn', AppBtn)
   .mount('#app')
