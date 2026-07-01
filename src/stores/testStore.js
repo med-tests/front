@@ -3,14 +3,14 @@ import { computed, reactive } from 'vue'
 import api from '@/api.js'
 import { formatParameter } from '@/helpers'
 import { showToast } from '@/components/shared/AppToaster/toast.js'
-import {useLoadingStore} from '@/stores/loadingStore.js'
 import {useUserStore} from '@/stores/userStore.js'
 import moment from 'moment'
+import {useApiStore} from '@/stores/apiStore.js'
 
 export const useTestStore = defineStore(
   'testStore',
   () => {
-    const loadingStore = useLoadingStore()
+    const apiStore = useApiStore()
     const userStore = useUserStore()
     const fullData = reactive([])
 
@@ -21,19 +21,13 @@ export const useTestStore = defineStore(
         return
       }
 
-      loadingStore.setLoadingFor('getParams', true)
-
-      return api.getParams()
+      apiStore.getParams()
         .then(data => {
           data.forEach(parameter => {
             const formattedParam = formatParameter(parameter)
             fullData.push(formattedParam)
           })
-        })
-        .catch((err) => {})
-        .finally(() => {
-          loadingStore.setLoadingFor('getParams', false)
-        })
+      })
     }
 
     const changeParameter = async (id, data) => {
@@ -46,76 +40,65 @@ export const useTestStore = defineStore(
       })
 
       const index = getIndexByParameterId(id)
-      try {
-        if (userStore.isLoggedIn) {
-          loadingStore.setLoadingFor('editParameter', true)
-          const res = await api.editParameter(id, sendData)
-          showToast('Сохранено')
-          fullData[index] = formatParameter(res)
+      if (userStore.isLoggedIn) {
+        apiStore.editParameter({id, data: sendData})
+          .then(data => {
+            showToast('Сохранено')
+            fullData[index] = formatParameter(data)
+          })
+      } else {
+        const param = fullData[index]
+        if (Object.hasOwn(sendData, 'title')) {
+          param.title = sendData.title
         }
-        else {
-          const param = fullData[index]
-          if (Object.hasOwn(sendData, 'title')) {
-            param.title = sendData.title
-          }
-          if (Object.hasOwn(sendData, 'normalFrom')) {
-            param.normalRange.from = sendData.normalFrom
-          }
-          if (Object.hasOwn(sendData, 'normalTo')) {
-            param.normalRange.to = sendData.normalTo
-          }
-          if (Object.hasOwn(sendData, 'isHidden')) {
-            param.isHidden = sendData.isHidden
-          }
-          if (Object.hasOwn(sendData, 'showFrom')) {
-            param.shownPeriod.start = sendData.showFrom
-          }
-          if (Object.hasOwn(sendData, 'showTo')) {
-            param.shownPeriod.end = sendData.showTo
-          }
-          if (Object.hasOwn(sendData, 'results')) {
-            sendData.results.map((result) => {
-              const existingResIndex = param.results.findIndex(r => r.id === result.id)
-              if (existingResIndex !== -1) {
-                if (result.status !== 0) {
-                  Object.hasOwn(result, 'value') && (param.results[existingResIndex].value = result.value)
-                  Object.hasOwn(result, 'date') && (param.results[existingResIndex].date = result.date)
-                }
-                else {
-                  param.results.splice(existingResIndex, 1)
-                }
+        if (Object.hasOwn(sendData, 'normalFrom')) {
+          param.normalRange.from = sendData.normalFrom
+        }
+        if (Object.hasOwn(sendData, 'normalTo')) {
+          param.normalRange.to = sendData.normalTo
+        }
+        if (Object.hasOwn(sendData, 'isHidden')) {
+          param.isHidden = sendData.isHidden
+        }
+        if (Object.hasOwn(sendData, 'showFrom')) {
+          param.shownPeriod.start = sendData.showFrom
+        }
+        if (Object.hasOwn(sendData, 'showTo')) {
+          param.shownPeriod.end = sendData.showTo
+        }
+        if (Object.hasOwn(sendData, 'results')) {
+          sendData.results.map((result) => {
+            const existingResIndex = param.results.findIndex(r => r.id === result.id)
+            if (existingResIndex !== -1) {
+              if (result.status !== 0) {
+                Object.hasOwn(result, 'value') && (param.results[existingResIndex].value = result.value)
+                Object.hasOwn(result, 'date') && (param.results[existingResIndex].date = result.date)
               }
               else {
-                param.results.push({
-                  id: param.results.length + 1,
-                  value: result.value,
-                  date: result.date,
-                })
+                param.results.splice(existingResIndex, 1)
               }
-            })
+            }
+            else {
+              param.results.push({
+                id: param.results.length + 1,
+                value: result.value,
+                date: result.date,
+              })
+            }
+          })
 
-            if (param.results.length) {
-              param.results.sort((a,b) => moment(a.date, 'YYYY-MM-DD').unix() - moment(b.date, 'YYYY-MM-DD').unix())
+          if (param.results.length) {
+            param.results.sort((a,b) => moment(a.date, 'YYYY-MM-DD').unix() - moment(b.date, 'YYYY-MM-DD').unix())
 
-              if (!param.shownPeriod.start && !param.shownPeriod.end) {
-                param.shownPeriod = {
-                  start: param.results[0].date,
-                  end: param.results[param.results.length - 1].date,
-                }
+            if (!param.shownPeriod.start && !param.shownPeriod.end) {
+              param.shownPeriod = {
+                start: param.results[0].date,
+                end: param.results[param.results.length - 1].date,
               }
             }
           }
-          showToast('Сохранено до перезагрузки страницы')
         }
-      }
-      catch (err) {
-        showToast('Не удалось сохранить изменения', { type: 'error' })
-        return Promise.reject(err)
-      }
-      finally {
-        if (userStore.isLoggedIn) {
-          loadingStore.setLoadingFor('editParameter', false)
-        }
+        showToast('Сохранено до перезагрузки страницы')
       }
     }
 
@@ -180,74 +163,61 @@ export const useTestStore = defineStore(
         })
         .catch(err => {
           showToast('Не удалось сохранить изменения', { type: 'error' })
+          console.error(err)
         })
     }
 
     const addParameter = async (rawParameter) => {
-      try {
-        let formattedParameter
-        if (userStore.isLoggedIn) {
-          loadingStore.setLoadingFor('addParameter', true)
-          const response = await api.addParameter(rawParameter)
-          showToast('Сохранено')
-          formattedParameter = formatParameter(response)
-        } else {
-          const formattedResults = rawParameter.results
+      if (userStore.isLoggedIn) {
+        apiStore.addParameter(rawParameter)
+          .then(data => {
+            showToast('Сохранено')
+            fullData.push(formatParameter(data))
+          })
+      }
+      else {
+        const formattedResults = rawParameter.results
             .map((result, index) => ({
               id: index + 1,
               date: result.date,
               value: result.value,
             }))
             .sort((a,b) => a.date.localeCompare(b.date))
-            || []
+          || []
 
-          formattedParameter = {
-            id: fullData.length + 1,
-            title: rawParameter.title,
-            normalRange: {
-              from: rawParameter.normalFrom,
-              to: rawParameter.normalTo,
-            },
-            isHidden: false,
-            shownPeriod: {
-              start: formattedResults[0]?.date || '',
-              end: formattedResults[formattedResults.length - 1]?.date || '',
-            },
-            position: rawParameter.position,
-            results: formattedResults,
-          }
-          showToast('Сохранено до перезагрузки страницы')
-        }
-        fullData.push(formattedParameter)
-      } catch (err) {
-        console.error(err)
-        showToast('Не удалось создать показатель', { type: 'error' })
-        return Promise.reject(err)
-      }
-      finally {
-        if (userStore.isLoggedIn) {
-          loadingStore.setLoadingFor('addParameter', false)
-        }
+        fullData.push({
+          id: fullData.length + 1,
+          title: rawParameter.title,
+          normalRange: {
+            from: rawParameter.normalFrom,
+            to: rawParameter.normalTo,
+          },
+          isHidden: false,
+          shownPeriod: {
+            start: formattedResults[0]?.date || '',
+            end: formattedResults[formattedResults.length - 1]?.date || '',
+          },
+          position: rawParameter.position,
+          results: formattedResults,
+        })
+        showToast('Сохранено до перезагрузки страницы')
       }
     }
 
     const deleteParameter = async (id, title) => {
-      try {
-        if (userStore.isLoggedIn) {
-          loadingStore.setLoadingFor('deleteParameter', true)
-          await api.deleteParameter(id)
-        }
+      if (userStore.isLoggedIn) {
+        apiStore.deleteParameter(id)
+          .then(() => {
+            showToast(`Показатель "${title}" удален`)
+            const index = getIndexByParameterId(id)
+            fullData.splice(index, 1)
+          })
+
+      }
+      else {
         showToast(`Показатель "${title}" удален`)
         const index = getIndexByParameterId(id)
         fullData.splice(index, 1)
-      }
-      catch (err) {
-        showToast('Не удалось удалить показатель', { type: 'error' })
-      }
-      finally {
-        if (userStore.isLoggedIn) {
-          loadingStore.setLoadingFor('deleteParameter', false)
-        }
       }
     }
 

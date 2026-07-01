@@ -6,12 +6,12 @@ import ChartItemList from '@/components/ChartItemList.vue'
 import UpsertParamModal from '@/components/UpsertParamModal.vue'
 import PlusIcon from '@/components/icons/PlusIcon.vue'
 import { useUserStore } from '@/stores/userStore.js'
-import { useLoadingStore } from '@/stores/loadingStore.js'
 import AppContextMenu from '@/components/shared/AppContextMenu'
 import router from '@/router.js'
 import {storeToRefs} from 'pinia'
+import {useApiStore} from '@/stores/apiStore.js'
 
-const { loading } = useLoadingStore()
+const { loading } = storeToRefs(useApiStore())
 
 const testStore = useTestStore()
 const { fullData, sortedFullData } = storeToRefs(testStore)

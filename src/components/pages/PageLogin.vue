@@ -79,7 +79,7 @@ import { nextTick, reactive, ref} from 'vue'
 import { useUserStore } from '@/stores/userStore.js'
 import { useRouter } from 'vue-router'
 import { getRandomUid } from '@/helpers/index.js'
-import {useLoadingStore} from '@/stores/loadingStore.js'
+import {useApiStore} from '@/stores/apiStore.js'
 import {storeToRefs} from 'pinia'
 
 const userStore = useUserStore()
@@ -106,7 +106,7 @@ async function checkValidate () {
   return true
 }
 
-const { loading } = storeToRefs(useLoadingStore())
+const { loading } = storeToRefs(useApiStore())
 
 const login = async () => {
   if (!await checkValidate()) {
@@ -117,9 +117,6 @@ const login = async () => {
     login: username.value,
     password: password.value,
   })
-    .then(() => {
-      router.push({ name: 'main' })
-    })
     .catch(err => {
       if (!err.error) {
         console.log(err)

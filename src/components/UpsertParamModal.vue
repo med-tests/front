@@ -103,7 +103,8 @@ import { showToast } from '@/components/shared/AppToaster/toast.js'
 import { getRandomUid } from '@/helpers/index.js'
 import AppAddInputs from '@/components/shared/AppAddInputs.vue'
 import moment from 'moment'
-import {useLoadingStore} from '@/stores/loadingStore.js'
+import {storeToRefs} from 'pinia'
+import {useApiStore} from '@/stores/apiStore.js'
 
 const testStore = useTestStore()
 
@@ -244,7 +245,7 @@ function onDeleteResult (result) {
   }
 }
 
-const { loading } = useLoadingStore()
+const { loading } = storeToRefs(useApiStore())
 const computedIsLoading = computed(() => {
   return loading.addParameter || loading.editParameter || false
 })
@@ -281,7 +282,6 @@ const saveParam = async () => {
       .then(() => {
         upsertParamModal.value.close()
       })
-      .catch((err) => { })
   }
   // редактирование анализа - отправляем только изменившиеся поля
   else {

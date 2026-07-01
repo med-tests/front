@@ -58,7 +58,7 @@ export default {
   addParameter: function (data) {
     return apiInstance.post('/add-test', data)
   },
-  editParameter: function (id, data) {
+  editParameter: function ({id, data}) {
     return apiInstance.patch(`/edit-test/${id}`, data)
   },
   deleteParameter: function (id) {

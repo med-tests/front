@@ -88,7 +88,7 @@ import { useUserStore } from '@/stores/userStore.js'
 import { useRouter } from 'vue-router'
 import { showToast } from '@/components/shared/AppToaster/toast.js'
 import { getRandomUid } from '@/helpers/index.js'
-import {useLoadingStore} from '@/stores/loadingStore.js'
+import {useApiStore} from '@/stores/apiStore.js'
 import {storeToRefs} from 'pinia'
 
 const userStore = useUserStore()
@@ -143,7 +143,7 @@ async function checkValidate () {
   return true
 }
 
-const { loading } = storeToRefs(useLoadingStore())
+const { loading } = storeToRefs(useApiStore())
 
 const register = async () => {
   if (!await checkValidate()) {

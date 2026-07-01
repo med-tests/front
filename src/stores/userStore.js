@@ -1,16 +1,15 @@
 import { defineStore } from 'pinia'
-import api from '@/api.js'
 import { useTestStore } from '@/stores/testStore.js'
 import { useRouter } from 'vue-router'
-import {useLoadingStore} from '@/stores/loadingStore.js'
 import {ref} from 'vue'
 import {showToast} from '@/components/shared/AppToaster/toast.js'
+import {useApiStore} from '@/stores/apiStore.js'
 
 export const useUserStore = defineStore(
   'userStore',
   () => {
+    const apiStore = useApiStore()
     const testStore = useTestStore()
-    const loadingStore = useLoadingStore()
     const router = useRouter()
 
     const isLoggedIn = ref(false)
@@ -20,8 +19,7 @@ export const useUserStore = defineStore(
     }
 
     function register ({ login, password }) {
-      loadingStore.setLoadingFor('register', true)
-      return api.register({
+      return apiStore.register({
         login,
         password,
       })
@@ -34,16 +32,11 @@ export const useUserStore = defineStore(
             showToast('Ошибка регистрации. Свяжитесь с администрацией сайта', { type: 'error' })
             isLoggedIn.value = false
           }
-        })
-        .catch((err) => {})
-        .finally(() => {
-          loadingStore.setLoadingFor('register', false)
-        })
+      })
     }
 
     function login ({ login, password }) {
-      loadingStore.setLoadingFor('login', true)
-      return api.login({
+      return apiStore.login({
         login,
         password,
       })
@@ -56,10 +49,6 @@ export const useUserStore = defineStore(
             showToast('Ошибка входа. Свяжитесь с администрацией сайта', { type: 'error' })
             isLoggedIn.value = false
           }
-        })
-        .catch((err) => Promise.reject(err))
-        .finally(() => {
-          loadingStore.setLoadingFor('login', false)
         })
     }
 

@@ -109,8 +109,8 @@ import CloseIcon from '@/components/icons/CloseIcon.vue'
 import AppModal from '@/components/shared/AppModal.vue'
 import PencilIcon from '@/components/icons/PencilIcon.vue'
 import UpsertParamModal from '@/components/UpsertParamModal.vue'
-import {useLoadingStore} from '@/stores/loadingStore.js'
 import {storeToRefs} from 'pinia'
+import {useApiStore} from '@/stores/apiStore.js'
 
 const testStore = useTestStore()
 const { arrListData } = storeToRefs(testStore)
@@ -141,13 +141,12 @@ async function showDeleteModal (param) {
   deleteParamModal.value.show()
 }
 
-const { loading } = useLoadingStore()
+const { loading } = storeToRefs(useApiStore())
 
 function deleteParam () {
   deleteParameter(deletingParameter.value.id, deletingParameter.value.title)
       .then(() => {
         deleteParamModal.value.close()
       })
-      .catch((err) => { })
 }
 </script>
