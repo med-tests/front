@@ -23,36 +23,11 @@
       </div>
 
       <div class="w-full mb-3">
-        <AppInput
-          id="password"
-          v-model="password.value"
-          required
-          label="Пароль"
-          type="password"
-          :callback-validator="validatePassword"
-          :touch-id="touchId"
-          @on-validate="password.error = $event"
-        >
-          <template #description>
-            <div class="mb-1">
-              <div class="text-sm">
-                - Не менее 8 символов
-              </div>
-              <div class="text-sm">
-                - Xотя бы одно число
-              </div>
-              <div class="text-sm">
-                - Xотя бы один спецсимвол
-              </div>
-              <div class="text-sm">
-                - Xотя бы одна латинская буква в нижнем регистре
-              </div>
-              <div class="text-sm">
-                - Xотя бы одна латинская буква в верхнем регистре
-              </div>
-            </div>
-          </template>
-        </AppInput>
+        <AppPasswordInput
+          id="register-password"
+          v-model="password"
+          :touch-id
+        />
       </div>
 
       <AppBtn
@@ -83,6 +58,7 @@
 
 <script setup>
 import AppInput from '@/components/shared/AppInput.vue'
+import AppPasswordInput from '@/components/shared/AppPasswordInput'
 import { nextTick, reactive, ref } from 'vue'
 import { useUserStore } from '@/stores/userStore.js'
 import { useRouter } from 'vue-router'
@@ -116,24 +92,9 @@ const password =  reactive({
   value: '',
   error: false,
 })
-function validatePassword (value) {
-  if (value.length < 8) {
-    showToast('Не менее 8 символов в пароле.', {type: 'error'})
-    return false
-  }
-  if (!/(?=.*[0-9])(?=.*[!"№;%:?*()=@#$^&></|~+_\\,])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!"№;%:?*()=@#$^&></|~+_\\,]/g.test(value)) {
-    // (?=.*[0-9]) - строка содержит хотя бы одно число
-    // (?=.*[!"№;%:?*()=@#$^&></|~+_\\,]) - строка содержит хотя бы один спецсимвол
-    // (?=.*[a-z]) - строка содержит хотя бы одну латинскую букву в нижнем регистре
-    // (?=.*[A-Z]) - строка содержит хотя бы одну латинскую букву в верхнем регистре
-    showToast('Пароль должен содержать заглавные и строчные латинские буквы, цифры и символы', {type: 'error'})
-    return false
-  }
-
-  return true
-}
 
 const touchId = ref('')
+
 async function checkValidate () {
   touchId.value = getRandomUid(7)
   await nextTick()
