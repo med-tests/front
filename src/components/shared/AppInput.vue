@@ -12,6 +12,7 @@
     <div class="relative">
       <input
         :id
+        autocomplete="new-password"
         class="border rounded-xs p-2 text-gray-700 text-base w-full outline-emerald-800"
         :class="{
           'border-gray-400 bg-gray-200 outline-none': disabled && !(isInvalid || isInvalidCalendar),
