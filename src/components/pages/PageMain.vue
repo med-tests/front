@@ -40,13 +40,14 @@ onMounted(() => {
 })
 
 const computedIsNoData = computed(() => {
-  return !fullData.value.length
+  return !loading.getParams && !fullData.value.length
 })
 
 const computedAllItemsHidden = computed(() => {
-  return fullData.value.length
+  const isAllHidden = fullData.value.length
      ? Object.values(fullData.value).every(({isHidden}) => isHidden)
      : false
+  return !loading.getParams && isAllHidden
 })
 
 const upsertParamModalRef = useTemplateRef('upsert-param-modal')
@@ -95,6 +96,7 @@ const computedVisibleItems = computed(() => {
     >
       <!--  Панель управления  -->
       <div
+        v-if="!computedIsNoData"
         class="py-4 px-2 pl-0 border-r-2 border-emerald-800"
         style="width: 350px"
       >
@@ -145,7 +147,10 @@ const computedVisibleItems = computed(() => {
           id="chartTitle"
           class="flex justify-between mb-3"
         >
-          <h3 class="font-medium text-xl text-gray-700">
+          <h3
+            v-if="!computedIsNoData"
+            class="font-medium text-xl text-gray-700"
+          >
             Графики
           </h3>
 
@@ -179,32 +184,33 @@ const computedVisibleItems = computed(() => {
         <div v-if="loading.getParams">
           Загрузка...
         </div>
-
-        <div
-          v-if="!loading.getParams && (computedAllItemsHidden || computedIsNoData)"
+        
+        <div 
+          v-if="computedAllItemsHidden"
           class="text-red-800 text-xl p-6 font-semibold"
         >
-          <template v-if="computedAllItemsHidden">
-            Все графики скрыты.
-            <div>Чтобы изменить видимость графика, нажиме на иконку глаза напротив соответствующего названия в панели управления.</div>
-          </template>
-
-          <template v-else-if="computedIsNoData">
-            Графики еще не созданы.
-            <div class="my-2">
-              Чтобы начать, необходимо
-              <AppBtn
-                type="success"
-                @click="upsertParamModalRef.open()"
-              >
-                <span class="px-2">Cоздать показатель</span>
-              </AppBtn>
-            </div>
-          </template>
+          Все графики скрыты.
+          <div>Чтобы изменить видимость графика, нажиме на иконку глаза напротив соответствующего названия в панели управления.</div>
         </div>
 
         <div
-          v-if="!loading.getParams && !computedIsNoData && !computedAllItemsHidden"
+          v-if="computedIsNoData"
+          class="text-red-800 text-xl p-6 font-semibold text-center"
+        >
+          Графики еще не созданы.
+          <div class="my-2">
+            Чтобы начать, необходимо
+            <AppBtn
+              type="success"
+              @click="upsertParamModalRef.open()"
+            >
+              <span class="px-2">Cоздать показатель</span>
+            </AppBtn>
+          </div>
+        </div>
+
+        <div
+          v-if="!computedIsNoData && !computedAllItemsHidden"
           class="overflow-y-auto overflow-x-hidden"
           :style="{ height: `calc(100vh - ${scrollOffset}px)` }"
         >
