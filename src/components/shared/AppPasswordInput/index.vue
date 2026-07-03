@@ -4,6 +4,7 @@ import {computed } from 'vue'
 import {showToast} from '@/components/shared/AppToaster/toast.js'
 import PlusIcon from '@/components/icons/PlusIcon.vue'
 import CheckIcon from '@/components/icons/CheckIcon.vue'
+import CloseIcon from '@/components/icons/CloseIcon.vue'
 
 const {
   id,
@@ -76,9 +77,9 @@ const computedConditions = computed(() => {
           :key="index"
         >
           <div class="flex items-center mb-1">
-            <PlusIcon
+            <CloseIcon
               v-if="!condition.isValid"
-              class="fill-red-800 rotate-45"
+              class="fill-red-800"
               width="16"
             />
             <CheckIcon
