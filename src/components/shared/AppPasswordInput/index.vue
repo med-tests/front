@@ -2,7 +2,6 @@
 import AppInput from '@/components/shared/AppInput'
 import {computed } from 'vue'
 import {showToast} from '@/components/shared/AppToaster/toast.js'
-import PlusIcon from '@/components/icons/PlusIcon.vue'
 import CheckIcon from '@/components/icons/CheckIcon.vue'
 import CloseIcon from '@/components/icons/CloseIcon.vue'
 
