@@ -1,5 +1,5 @@
 <script setup>
-import AppInput from '@/components/shared/AppInput.vue'
+import AppInput from '@/components/shared/AppInput'
 import {computed } from 'vue'
 import {showToast} from '@/components/shared/AppToaster/toast.js'
 import PlusIcon from '@/components/icons/PlusIcon.vue'

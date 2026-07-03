@@ -95,7 +95,7 @@
 </template>
 
 <script setup>
-import AppInput from '@/components/shared/AppInput.vue'
+import AppInput from '@/components/shared/AppInput'
 import { ref, watch } from 'vue'
 import PlusIcon from '@/components/icons/PlusIcon.vue'
 import CloseIcon from '@/components/icons/CloseIcon.vue'

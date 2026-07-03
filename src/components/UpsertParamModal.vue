@@ -98,7 +98,7 @@
 import AppModal from '@/components/shared/AppModal.vue'
 import { computed, nextTick, ref, useTemplateRef } from 'vue'
 import { useTestStore } from '@/stores/testStore.js'
-import AppInput from '@/components/shared/AppInput.vue'
+import AppInput from '@/components/shared/AppInput'
 import { showToast } from '@/components/shared/AppToaster/toast.js'
 import { getRandomUid } from '@/helpers/index.js'
 import AppAddInputs from '@/components/shared/AppAddInputs.vue'

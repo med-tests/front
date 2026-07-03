@@ -74,7 +74,7 @@
 </template>
 
 <script setup>
-import AppInput from '@/components/shared/AppInput.vue'
+import AppInput from '@/components/shared/AppInput'
 import { nextTick, reactive, ref} from 'vue'
 import { useUserStore } from '@/stores/userStore.js'
 import { useRouter } from 'vue-router'
