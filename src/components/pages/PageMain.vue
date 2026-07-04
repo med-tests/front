@@ -40,14 +40,14 @@ onMounted(() => {
 })
 
 const computedIsNoData = computed(() => {
-  return !loading.getParams && !fullData.value.length
+  return !loading.value.getParams && !fullData.value.length
 })
 
 const computedAllItemsHidden = computed(() => {
   const isAllHidden = fullData.value.length
      ? Object.values(fullData.value).every(({isHidden}) => isHidden)
      : false
-  return !loading.getParams && isAllHidden
+  return !loading.value.getParams && isAllHidden
 })
 
 const upsertParamModalRef = useTemplateRef('upsert-param-modal')
@@ -184,7 +184,7 @@ const computedVisibleItems = computed(() => {
         <div v-if="loading.getParams">
           Загрузка...
         </div>
-        
+
         <div 
           v-if="computedAllItemsHidden"
           class="text-red-800 text-xl p-6 font-semibold"
@@ -204,7 +204,7 @@ const computedVisibleItems = computed(() => {
               type="success"
               @click="upsertParamModalRef.open()"
             >
-              <span class="px-2">Cоздать показатель</span>
+              <span class="px-2">Создать показатель</span>
             </AppBtn>
           </div>
         </div>
