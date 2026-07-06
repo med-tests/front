@@ -10,6 +10,7 @@ import AppContextMenu from '@/components/shared/AppContextMenu'
 import router from '@/router.js'
 import {storeToRefs} from 'pinia'
 import {useApiStore} from '@/stores/apiStore.js'
+import NotLoggedInBanner from '@/components/NotLoggedInBanner'
 
 const { loading } = storeToRefs(useApiStore())
 
@@ -68,27 +69,10 @@ const computedVisibleItems = computed(() => {
     class="mx-auto my-0 h-screen bg-white/95 flex flex-col"
     style="max-width: 1600px;"
   >
-    <div
+    <NotLoggedInBanner
       v-if="!isLoggedIn"
       id="banner"
-      class="font-medium text-lg text-red-600 text-center py-2 bg-red-100"
-    >
-      <AppBtn
-        not-bordered
-        not-filling
-        type="success"
-        @click="router.push({ name: 'login' })"
-      >
-        Войдите
-      </AppBtn> или <AppBtn
-        not-bordered
-        not-filling
-        type="success"
-        @click="router.push({ name: 'register' })"
-      >
-        зарегистрируйтесь
-      </AppBtn>, чтобы не потерять изменения при перезагрузке страницы
-    </div>
+    />
 
     <div
       class="flex px-4 grow-1"
