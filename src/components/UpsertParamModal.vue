@@ -5,8 +5,8 @@
     @on-close="onClose"
   >
     <div style="min-width: 480px;">
+      <!--  Название  -->
       <div>
-        <!--  Название  -->
         <AppInput
           id="paramTitle"
           v-model="paramTitle"
@@ -20,6 +20,7 @@
         />
       </div>
 
+      <!--  Границы нормы  -->
       <div class="mt-4 mb-6 flex justify-between">
         <!--  Нижняя граница нормы  -->
         <AppInput
@@ -47,6 +48,18 @@
           :touch-id="touchId"
           @on-validate="validation.highEdge.error = $event"
         />
+      </div>
+
+      <!--  Показывать среднее значение  -->
+      <div class="mb-5">
+        <AppCheckbox
+          id="paramAverage"
+          v-model="isShowAverage"
+        >
+          <template #description>
+            <label for="paramAverage">Показывать среднее значение</label>
+          </template>
+        </AppCheckbox>
       </div>
 
       <!--  Результаты  -->
@@ -105,6 +118,7 @@ import AppAddInputs from '@/components/shared/AppAddInputs.vue'
 import moment from 'moment'
 import {storeToRefs} from 'pinia'
 import {useApiStore} from '@/stores/apiStore.js'
+import AppCheckbox from '@/components/shared/AppCheckbox'
 
 const testStore = useTestStore()
 
@@ -120,6 +134,7 @@ const emit = defineEmits(['close'])
 const upsertParamModal = useTemplateRef('upsert-param-modal')
 
 const paramTitle = ref('')
+const isShowAverage = ref(0)
 const initParamName = ref('')
 const lowEdge = ref('')
 const highEdge = ref('')
@@ -151,6 +166,7 @@ function initEditing () {
   const editingParam = JSON.parse(JSON.stringify(testStore.getFullParameterById(props.editingParamId)))
 
   initParamName.value = editingParam.title
+  isShowAverage.value = editingParam.isShowAverage
   paramTitle.value = editingParam.title
   lowEdge.value = editingParam.normalRange.from
   highEdge.value = editingParam.normalRange.to
@@ -269,6 +285,7 @@ const saveParam = async () => {
       title: paramTitle.value,
       normalFrom: lowEdge.value,
       normalTo: highEdge.value,
+      isShowAverage: isShowAverage.value,
       position: testStore.fullData.length + 1,
       results: formResults.value
         .filter(({ date, resValue }) => date.value && (resValue.value || resValue.value === 0))
@@ -289,6 +306,9 @@ const saveParam = async () => {
     const sendData = {}
     if (paramTitle.value !== initParam.title) {
       sendData.title = paramTitle.value
+    }
+    if (isShowAverage.value !== initParam.isShowAverage) {
+      sendData.isShowAverage = isShowAverage.value
     }
     if (lowEdge.value !== initParam.normalRange.from) {
       sendData.normalFrom = lowEdge.value

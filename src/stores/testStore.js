@@ -31,7 +31,7 @@ export const useTestStore = defineStore(
     }
 
     const changeParameter = async (id, data) => {
-      const allowedFields = ['title', 'normalFrom', 'normalTo', 'isHidden', 'showFrom', 'showTo', 'results']
+      const allowedFields = ['title', 'isShowAverage', 'normalFrom', 'normalTo', 'isHidden', 'showFrom', 'showTo', 'results']
       const sendData = {}
       allowedFields.forEach(field => {
         if (Object.hasOwn(data, field)) {
@@ -50,6 +50,9 @@ export const useTestStore = defineStore(
         const param = fullData[index]
         if (Object.hasOwn(sendData, 'title')) {
           param.title = sendData.title
+        }
+        if (Object.hasOwn(sendData, 'isShowAverage')) {
+          param.isShowAverage = sendData.isShowAverage
         }
         if (Object.hasOwn(sendData, 'normalFrom')) {
           param.normalRange.from = sendData.normalFrom
@@ -188,6 +191,7 @@ export const useTestStore = defineStore(
         fullData.push({
           id: fullData.length + 1,
           title: rawParameter.title,
+          isShowAverage: rawParameter.isShowAverage,
           normalRange: {
             from: rawParameter.normalFrom,
             to: rawParameter.normalTo,

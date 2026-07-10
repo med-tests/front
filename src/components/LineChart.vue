@@ -49,7 +49,7 @@
         </div>
         <!-- Среднее значение в выбранном периоде -->
         <div
-          v-if="computedAverageInPeriod"
+          v-if="item.isShowAverage && computedAverageInPeriod"
           class="flex justify-center"
         >
           <div :id="`average-${id}`">

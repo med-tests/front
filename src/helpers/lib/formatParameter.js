@@ -2,6 +2,7 @@ export default function (parameter) {
   return {
     id: parameter.id,
     title: parameter.title,
+    isShowAverage: parameter.isShowAverage,
     normalRange: {
       from: parameter.normalFrom,
       to: parameter.normalTo,
