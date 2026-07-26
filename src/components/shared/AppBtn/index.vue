@@ -45,14 +45,14 @@
 
 <script setup>
 import { getRandomUid } from '@/helpers/index.js'
-import {computed, onMounted, ref, useTemplateRef} from 'vue'
+import { computed, onMounted, ref, useTemplateRef } from 'vue'
 
 const props = defineProps({
   notBordered: { type: Boolean, default: false },
   disabled: { type: Boolean, default: false },
   notFilling: { type: Boolean, default: false }, // заливка фона кнопки
   title: { type: String, default: '' },
-  type: {type: String, default: 'default'}, // success, error, default
+  type: { type: String, default: 'default' }, // success, error, default
   isLoading: { type: Boolean, default: false },
 })
 

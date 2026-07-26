@@ -1,5 +1,5 @@
 <script setup>
-import {ref, watch} from 'vue'
+import { ref, watch } from 'vue'
 import VueSelect from 'vue3-select-component'
 
 const {

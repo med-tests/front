@@ -103,14 +103,14 @@
 import draggable from 'vuedraggable'
 import EyeClosedIcon from '@/components/icons/EyeClosedIcon.vue'
 import EyeIcon from '@/components/icons/EyeIcon.vue'
-import {useTestStore} from '@/stores/testStore.js'
-import {nextTick, ref, useTemplateRef} from 'vue'
+import { useTestStore } from '@/stores/testStore.js'
+import { nextTick, ref, useTemplateRef } from 'vue'
 import CloseIcon from '@/components/icons/CloseIcon.vue'
 import AppModal from '@/components/shared/AppModal.vue'
 import PencilIcon from '@/components/icons/PencilIcon.vue'
 import UpsertParamModal from '@/components/UpsertParamModal.vue'
-import {storeToRefs} from 'pinia'
-import {useApiStore} from '@/stores/apiStore.js'
+import { storeToRefs } from 'pinia'
+import { useApiStore } from '@/stores/apiStore.js'
 
 const testStore = useTestStore()
 const { arrListData } = storeToRefs(testStore)

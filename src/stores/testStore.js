@@ -3,9 +3,9 @@ import { computed, reactive } from 'vue'
 import api from '@/api.js'
 import { formatParameter } from '@/helpers'
 import { showToast } from '@/components/shared/AppToaster/toast.js'
-import {useUserStore} from '@/stores/userStore.js'
+import { useUserStore } from '@/stores/userStore.js'
 import moment from 'moment'
-import {useApiStore} from '@/stores/apiStore.js'
+import { useApiStore } from '@/stores/apiStore.js'
 
 export const useTestStore = defineStore(
   'testStore',
@@ -41,7 +41,7 @@ export const useTestStore = defineStore(
 
       const index = getIndexByParameterId(id)
       if (userStore.isLoggedIn) {
-        apiStore.editParameter({id, data: sendData})
+        apiStore.editParameter({ id, data: sendData })
           .then(data => {
             showToast('Сохранено')
             fullData[index] = formatParameter(data)

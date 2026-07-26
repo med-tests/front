@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
 import { useTestStore } from '@/stores/testStore.js'
 import { useRouter } from 'vue-router'
-import {ref} from 'vue'
-import {showToast} from '@/components/shared/AppToaster/toast.js'
-import {useApiStore} from '@/stores/apiStore.js'
+import { ref } from 'vue'
+import { showToast } from '@/components/shared/AppToaster/toast.js'
+import { useApiStore } from '@/stores/apiStore.js'
 
 export const useUserStore = defineStore(
   'userStore',

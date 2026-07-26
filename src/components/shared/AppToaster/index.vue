@@ -42,7 +42,7 @@
 </template>
 
 <script setup>
-import {toasts, removeToast} from './toast.js'
+import { toasts, removeToast } from './toast.js'
 import CloseIcon from '@/components/icons/CloseIcon.vue'
 </script>
 

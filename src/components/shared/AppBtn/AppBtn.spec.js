@@ -1,4 +1,4 @@
-import {flushPromises, mount} from '@vue/test-utils'
+import { flushPromises, mount } from '@vue/test-utils'
 import AppBtn from '@/components/shared/AppBtn'
 import { toolTipPlugin } from '@/plugins'
 

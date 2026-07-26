@@ -35,6 +35,7 @@ export default [
           registeredComponentsOnly: false,
           ignores: ['draggable'],
         }],
+      'object-curly-spacing': ['error', 'always'],
     },
     languageOptions: {
       globals: {

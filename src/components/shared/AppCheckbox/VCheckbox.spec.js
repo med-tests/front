@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import AppCheckbox from '@/components/shared/AppCheckbox'
-import {getRandomUid} from '@/helpers/index.js'
+import { getRandomUid } from '@/helpers/index.js'
 
 const getWrapper = (customProps, slots = null) => {
   const options = {
@@ -51,7 +51,7 @@ describe('AppCheckbox', () => {
     expect(wrapper.find('[data-test="checkbox-input"]').element.checked).toBeFalsy()
   })
   it('можно чекнуть по умолчанию числовым пропсом', async () => {
-    const wrapper = getWrapper({ modelValue: 1})
+    const wrapper = getWrapper({ modelValue: 1 })
     expect(wrapper.find('[data-test="checkbox-input"]').element.checked).toBeTruthy()
   })
 

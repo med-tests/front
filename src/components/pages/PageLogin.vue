@@ -75,12 +75,12 @@
 
 <script setup>
 import AppInput from '@/components/shared/AppInput.vue'
-import { nextTick, reactive, ref} from 'vue'
+import { nextTick, reactive, ref } from 'vue'
 import { useUserStore } from '@/stores/userStore.js'
 import { useRouter } from 'vue-router'
 import { getRandomUid } from '@/helpers/index.js'
-import {useApiStore} from '@/stores/apiStore.js'
-import {storeToRefs} from 'pinia'
+import { useApiStore } from '@/stores/apiStore.js'
+import { storeToRefs } from 'pinia'
 
 const userStore = useUserStore()
 const router = useRouter()

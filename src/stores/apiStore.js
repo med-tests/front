@@ -1,7 +1,7 @@
-import {defineStore} from 'pinia'
-import {reactive} from 'vue'
+import { defineStore } from 'pinia'
+import { reactive } from 'vue'
 import api from '@/api.js'
-import {showToast} from '@/components/shared/AppToaster/toast.js'
+import { showToast } from '@/components/shared/AppToaster/toast.js'
 
 export const useApiStore = defineStore(
   'apiStore',

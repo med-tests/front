@@ -119,17 +119,17 @@
   Tooltip,
   Legend,
 } from 'chart.js'
-  import {computed} from 'vue'
-  import {useTestStore} from '@/stores/testStore.js'
+  import { computed } from 'vue'
+  import { useTestStore } from '@/stores/testStore.js'
   import AppCalendar from '@/components/shared/AppCalendar.vue'
   import moment from 'moment'
-  import {showToast} from '@/components/shared/AppToaster/toast.js'
-  import {colors} from '@/assets/vars.js'
+  import { showToast } from '@/components/shared/AppToaster/toast.js'
+  import { colors } from '@/assets/vars.js'
 
   const verticalHoverLine = {
     id: 'verticalHoverLine',
     beforeDatasetsDraw (chart) {
-      const  {ctx, chartArea: {top, bottom } } = chart
+      const  { ctx, chartArea: { top, bottom } } = chart
       ctx.save()
 
       chart.getDatasetMeta(0).data.forEach(dataPoint => {
@@ -272,7 +272,7 @@
           return moment(res.date, 'YYYY-MM-DD')
             .isBetween(item.shownPeriod.start, item.shownPeriod.end, 'day', '[]')
         })
-        .map((res) => ({x: res.date, y: res.value })) || []
+        .map((res) => ({ x: res.date, y: res.value })) || []
 
     return  {
       datasets: [

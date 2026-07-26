@@ -18,7 +18,7 @@ import AppInput from '@/components/shared/AppInput.vue'
 import 'air-datepicker/air-datepicker.css'
 import { onMounted, ref, toRefs, watch } from 'vue'
 import moment from 'moment'
-import {useValidateInput} from '@/composables/useValidateInput.js'
+import { useValidateInput } from '@/composables/useValidateInput.js'
 
 const props = defineProps({
   uniqId: {
@@ -99,7 +99,7 @@ onMounted(() => {
       dateValue.value = initFormat
       emit('input', initFormat)
     },
-    onRenderCell: ({date, cellType}) => {
+    onRenderCell: ({ date, cellType }) => {
       return setClassForColoredCells(refProps.coloredDates.value, cellType, date)
     },
   }
@@ -165,7 +165,7 @@ watch(
     }
 
     datepickerInstance.update({
-      onRenderCell: ({date, cellType}) => {
+      onRenderCell: ({ date, cellType }) => {
         return setClassForColoredCells(newVal, cellType, date)
       },
     })

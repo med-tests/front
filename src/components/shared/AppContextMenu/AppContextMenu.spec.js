@@ -1,4 +1,4 @@
-import {mount} from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 import AppContextMenu from '@/components/shared/AppContextMenu'
 import AppBtn from '@/components/shared/AppBtn'
 import { nextTick } from 'vue'

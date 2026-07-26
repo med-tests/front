@@ -31,8 +31,8 @@
 </template>
 
 <script setup>
-import {ref, useTemplateRef} from 'vue'
-import {getRandomUid} from '@/helpers'
+import { ref, useTemplateRef } from 'vue'
+import { getRandomUid } from '@/helpers'
 
 const randomId = getRandomUid()
 

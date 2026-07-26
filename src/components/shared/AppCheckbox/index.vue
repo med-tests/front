@@ -1,6 +1,6 @@
 <script setup>
-import {watch} from 'vue'
-import {useValidateInput} from '@/composables/useValidateInput.js'
+import { watch } from 'vue'
+import { useValidateInput } from '@/composables/useValidateInput.js'
 
 const {
   label,

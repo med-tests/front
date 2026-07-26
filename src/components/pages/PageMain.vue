@@ -8,8 +8,8 @@ import PlusIcon from '@/components/icons/PlusIcon.vue'
 import { useUserStore } from '@/stores/userStore.js'
 import AppContextMenu from '@/components/shared/AppContextMenu'
 import router from '@/router.js'
-import {storeToRefs} from 'pinia'
-import {useApiStore} from '@/stores/apiStore.js'
+import { storeToRefs } from 'pinia'
+import { useApiStore } from '@/stores/apiStore.js'
 import NotLoggedInBanner from '@/components/NotLoggedInBanner'
 
 const { loading } = storeToRefs(useApiStore())
@@ -46,7 +46,7 @@ const computedIsNoData = computed(() => {
 
 const computedAllItemsHidden = computed(() => {
   const isAllHidden = fullData.value.length
-     ? Object.values(fullData.value).every(({isHidden}) => isHidden)
+     ? Object.values(fullData.value).every(({ isHidden }) => isHidden)
      : false
   return !loading.value.getParams && isAllHidden
 })

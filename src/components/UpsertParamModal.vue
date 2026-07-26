@@ -116,8 +116,8 @@ import { showToast } from '@/components/shared/AppToaster/toast.js'
 import { getRandomUid } from '@/helpers/index.js'
 import AppAddInputs from '@/components/shared/AppAddInputs.vue'
 import moment from 'moment'
-import {storeToRefs} from 'pinia'
-import {useApiStore} from '@/stores/apiStore.js'
+import { storeToRefs } from 'pinia'
+import { useApiStore } from '@/stores/apiStore.js'
 import AppCheckbox from '@/components/shared/AppCheckbox'
 
 const testStore = useTestStore()
@@ -202,7 +202,7 @@ const validation = ref({
     error: false,
     validator: (value) => {
       if (value.length > 45) {
-        showToast('Слишком длинное название', {type: 'error'})
+        showToast('Слишком длинное название', { type: 'error' })
         return false
       }
       return true
@@ -212,7 +212,7 @@ const validation = ref({
     error: false,
     validator: (value) => {
       if (value < 0) {
-        showToast('Нижняя граница не может быть отрицательной', {type: 'error'})
+        showToast('Нижняя граница не может быть отрицательной', { type: 'error' })
         return false
       }
       return true
@@ -222,12 +222,12 @@ const validation = ref({
     error: false,
     validator: (value) => {
       if (highEdge.value < lowEdge.value && ((highEdge.value || highEdge.value === 0) && (lowEdge.value || lowEdge.value === 0))) {
-        showToast('Максимальное значение не может быть меньше минимального', {type: 'error'})
+        showToast('Максимальное значение не может быть меньше минимального', { type: 'error' })
         return false
       }
 
       if (value < 0) {
-        showToast('Верхняя граница не может быть отрицательной', {type: 'error'})
+        showToast('Верхняя граница не может быть отрицательной', { type: 'error' })
         return false
       }
       return true

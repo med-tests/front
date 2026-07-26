@@ -1,8 +1,7 @@
 <script setup>
 import AppInput from '@/components/shared/AppInput.vue'
-import {computed } from 'vue'
-import {showToast} from '@/components/shared/AppToaster/toast.js'
-import PlusIcon from '@/components/icons/PlusIcon.vue'
+import { computed } from 'vue'
+import { showToast } from '@/components/shared/AppToaster/toast.js'
 import CheckIcon from '@/components/icons/CheckIcon.vue'
 import CloseIcon from '@/components/icons/CloseIcon.vue'
 
@@ -20,9 +19,9 @@ const password = defineModel({
 })
 
 function validatePassword () {
-  const invalid = computedConditions.value.filter(({isValid}) => !isValid)
+  const invalid = computedConditions.value.filter(({ isValid }) => !isValid)
   invalid.forEach(condition => {
-    showToast(condition.errorMessage, {type: 'error'})
+    showToast(condition.errorMessage, { type: 'error' })
   })
   return invalid.length === 0
 }

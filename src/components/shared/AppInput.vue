@@ -63,7 +63,7 @@ import { computed, ref, watch } from 'vue'
 import EyeIcon from '@/components/icons/EyeIcon.vue'
 import EyeClosedIcon from '@/components/icons/EyeClosedIcon.vue'
 import CloseIcon from '@/components/icons/CloseIcon.vue'
-import {useValidateInput} from '@/composables/useValidateInput.js'
+import { useValidateInput } from '@/composables/useValidateInput.js'
 
 const {
   modelValue,
@@ -79,7 +79,7 @@ const {
   isInvalidCalendar,
   disabled,
 } = defineProps({
-  modelValue: { type: [String, Number], default: ''},
+  modelValue: { type: [String, Number], default: '' },
   label: { type: String, default: '' },
   id: { type: String, required: true },
   placeholder: { type: String, default: 'Введите значение' },
@@ -92,7 +92,7 @@ const {
   // может иметь сайд-эффекты типа вызовы тостера с текстом ошибки
   callbackValidator: { type: Function, default: () => true },
   // только для календаря. Инпут используется только на вывод. Ввод контролирует библиотека
-  isInvalidCalendar: { type: Boolean, default: false},
+  isInvalidCalendar: { type: Boolean, default: false },
   disabled: { type: Boolean, default: false },
   clearTitle: { type: String, default: 'Очистить' },
 })

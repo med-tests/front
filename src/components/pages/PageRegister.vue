@@ -64,8 +64,8 @@ import { useUserStore } from '@/stores/userStore.js'
 import { useRouter } from 'vue-router'
 import { showToast } from '@/components/shared/AppToaster/toast.js'
 import { getRandomUid } from '@/helpers/index.js'
-import {useApiStore} from '@/stores/apiStore.js'
-import {storeToRefs} from 'pinia'
+import { useApiStore } from '@/stores/apiStore.js'
+import { storeToRefs } from 'pinia'
 
 const userStore = useUserStore()
 const router = useRouter()
@@ -77,11 +77,11 @@ const username = reactive({
 
 function validateUsername (value) {
   if (value.length < 2) {
-    showToast('Слишком короткй логин', {type: 'error'})
+    showToast('Слишком короткй логин', { type: 'error' })
     return false
   }
   if (value.length > 32) {
-    showToast('Не больше 32 символов в логине', {type: 'error'})
+    showToast('Не больше 32 символов в логине', { type: 'error' })
     return false
   }
 
