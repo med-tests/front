@@ -2,6 +2,7 @@ import { mount } from '@vue/test-utils'
 import AppContextMenu from '@/components/shared/AppContextMenu'
 import AppBtn from '@/components/shared/AppBtn'
 import { nextTick } from 'vue'
+import { toolTipPlugin } from '@/plugins/index.js'
 
 describe('AppContextMenu', () => {
   describe('должен отрисовывать триггер', () => {
@@ -32,6 +33,9 @@ describe('AppContextMenu', () => {
           components: {
             AppBtn,
           },
+          plugins: [
+            toolTipPlugin,
+          ],
         },
       })
 

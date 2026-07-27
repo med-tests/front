@@ -16,3 +16,8 @@ html {
   scroll-behavior: smooth;
   color: var(--color-gray-700);
 }
+
+/*  @apply  */
+.default-input {
+  @apply border rounded-xs p-2 text-gray-700 text-base w-full outline-emerald-800;
+}
