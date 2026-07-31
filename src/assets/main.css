@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 @import "tailwindcss";
-@source inline("border-gray-700 border-red-700 opacity-60");
+@source inline("border-gray-700 border-red-700 opacity-60 border-gray-400 bg-gray-200 pr-[30px]");
 
 @theme {
   --font-sans: "Inter", sans-serif;
@@ -20,4 +20,8 @@ html {
 /*  @apply  */
 .default-input {
   @apply border rounded-xs p-2 text-gray-700 text-base w-full outline-emerald-800;
+}
+
+.app-input__clear-btn {
+  @apply absolute w-[24px] h-[24px] top-[50%] right-[5px] translate-y-[-50%];
 }

@@ -2,17 +2,19 @@ import AppTextInput from '@/components/shared/inputs/AppTextInput'
 import { mount } from '@vue/test-utils'
 import AppBtn from '@/components/shared/AppBtn'
 import { toolTipPlugin } from '@/plugins'
+import { input as inputClasses } from '@/assets/vars.js'
 
 const defaultPlaceholder = 'Введите значение'
-const defaultBorderClass = 'border-gray-600'
-const invalidBorderClass = 'border-red-700'
-const disabledBorderClass = 'border-gray-400'
-const disabledBgClass = 'bg-gray-200'
-const clearBtnOffsetClass = 'pr-[30px]'
+const {
+  defaultBorderClass,
+  invalidBorderClass,
+  disabledBorderClass,
+  disabledBgClass,
+  clearBtnOffsetClass,
+} = inputClasses
 
 const inputSelector = 'input[data-test="app-text-input"]'
 const clearBtnSelector = '[data-test="app-text-input__clear-btn"]'
-
 
 describe('общее', () => {
   it('корректно рендерится без пропсов (дефолтное состояние)', () => {
@@ -34,7 +36,14 @@ describe('общее', () => {
     expect(inputWrp.element.value).toBe(text)
   })
   it('выставлены корректные дефолтные значения пропсов', () => {
-    const wrp = getWrapper()
+    const wrp = getWrapper({
+      global: {
+        stubs: {
+          ToolTip: true,
+          AppBtn: true,
+        },
+      },
+    })
 
     expect(wrp.props()).toMatchObject({
       modelValue: '',
@@ -63,6 +72,7 @@ describe('общее', () => {
   it('имеет autocomplete="new-password" (для отключения автозаполнения)', () => {
     const inputWrp = getWrapper().find(inputSelector)
 
+    expect(inputWrp.attributes()).toHaveProperty('autocomplete')
     expect(inputWrp.attributes('autocomplete')).toBe('new-password')
   })
   it('цвет бордера меняется в зависимости от isInvalid', async () => {
@@ -125,17 +135,6 @@ describe('обработка значения', () => {
     expect(wrp.emitted()).toHaveProperty('update:modelValue')
     expect(wrp.emitted('update:modelValue')).toHaveLength(2)
     expect(wrp.emitted('update:modelValue')[1][0]).toBe(inputTextNext)
-  })
-  it('не эмитит update:modelValue при disabled=true', async () => {
-    const wrp = getWrapper({
-      props: { disabled: true },
-    })
-    const inputWrp = wrp.find(inputSelector)
-
-    const inputText = 'la-la-la'
-    await inputWrp.setValue(inputText)
-
-    expect(wrp.emitted()).not.toHaveProperty('update:modelValue')
   })
 })
 
@@ -206,7 +205,6 @@ describe('кнопка очистки ввода', () => {
 
     expect(wrp.find('.tippy-content').exists()).toBe(true)
     expect(wrp.find('.tippy-content').html()).toContain(clearBtnText)
-
   })
   it('инпут имеет отступ под кнопку', () => {
     const inputWrp = getWrapper({
@@ -268,7 +266,7 @@ describe('disabled', () => {
 
       expect(inputWrp.attributes()).toHaveProperty('disabled')
     })
-    it('не позволяет менять дефолтное значение (переданное при рендере через v-model)', async () => {
+    it('не позволяет менять начальное значение', async () => {
       const text = 'initial'
       const wrp = getWrapper({
         props: {
@@ -313,6 +311,17 @@ describe('disabled', () => {
 
       expect(wrp.find(inputSelector).classes()).not.toContain(clearBtnOffsetClass)
       expect(wrp.find(clearBtnSelector).exists()).toBe(false)
+    })
+    it('не эмитит update:modelValue', async () => {
+      const wrp = getWrapper({
+        props: { disabled: true },
+      })
+      const inputWrp = wrp.find(inputSelector)
+
+      const inputText = 'la-la-la'
+      await inputWrp.setValue(inputText)
+
+      expect(wrp.emitted()).not.toHaveProperty('update:modelValue')
     })
   })
 

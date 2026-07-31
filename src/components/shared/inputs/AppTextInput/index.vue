@@ -2,17 +2,17 @@
   <div class="relative">
     <input
       :id
-      :ref="`input-${id}`"
+      ref="input"
       v-model="value"
       autocomplete="new-password"
       class="default-input"
       data-test="app-text-input"
       type="text"
       :class="{
-        'border-gray-600': !isInvalid && !disabled,
-        'border-gray-400 bg-gray-200 outline-none': disabled && !isInvalid,
-        'border-red-700': isInvalid,
-        'pr-[30px]': !hideCloseIcon && !disabled
+        [defaultBorderClass]: !isInvalid && !disabled,
+        [`${disabledBorderClass} ${disabledBgClass} outline-none`]: disabled && !isInvalid,
+        [invalidBorderClass]: isInvalid,
+        [clearBtnOffsetClass]: !hideCloseIcon && !disabled
       }"
       :disabled
       :placeholder="placeholder"
@@ -22,7 +22,7 @@
       v-if="!hideCloseIcon && !disabled"
       not-bordered
       not-filling
-      class="absolute w-[24px] h-[24px] top-[50%] right-[5px] translate-y-[-50%]"
+      class="app-input__clear-btn"
       data-test="app-text-input__clear-btn"
       title="Очистить"
       @click="clear"
@@ -36,7 +36,15 @@
 import CloseIcon from '@/components/icons/CloseIcon.vue'
 import { computed, useTemplateRef } from 'vue'
 import { getRandomUid } from '@/helpers/index.js'
+import { input as inputClasses } from '@/assets/vars.js'
 
+const {
+  defaultBorderClass,
+  invalidBorderClass,
+  disabledBorderClass,
+  disabledBgClass,
+  clearBtnOffsetClass,
+} = inputClasses
 const {
   modelValue,
   disabled,
@@ -54,17 +62,23 @@ const emit = defineEmits([
   'update:modelValue',
 ])
 
+const inputRef = useTemplateRef('input')
+
 // установка значения
 const value = computed({
   get: () => modelValue,
   set: (newValue) => {
-    if (!disabled) emit('update:modelValue', newValue)
+    if (disabled) {
+      inputRef.value.value = modelValue
+      return
+    }
+    emit('update:modelValue', newValue)
   },
 })
 
-const inputRef = useTemplateRef(`input-${id}`)
+// очистка ввода
 function clear () {
-  value.value = ''
+  emit('update:modelValue', '')
   inputRef.value.focus()
 }
 </script>
