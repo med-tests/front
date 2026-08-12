@@ -97,8 +97,8 @@
 
       <div v-else>
         <p class="mb-2">
-          С <span class="font-medium">{{ moment(item.shownPeriod.start).format('DD.MM.YYYY') }}</span>
-          по <span class="font-medium">{{ moment(item.shownPeriod.end).format('DD.MM.YYYY') }}</span>
+          С <span class="font-medium">{{ formatToRussianDate(item.shownPeriod.start) }}</span>
+          по <span class="font-medium">{{ formatToRussianDate(item.shownPeriod.end) }}</span>
           нет результатов.
         </p>
         <p>Попробуйте выбрать другой временной период.</p>
@@ -125,6 +125,7 @@
   import moment from 'moment'
   import { showToast } from '@/components/shared/AppToaster/toast.js'
   import { colors } from '@/assets/vars.js'
+  import { formatToRussianDate } from '@/helpers/index.js'
 
   const verticalHoverLine = {
     id: 'verticalHoverLine',
@@ -198,7 +199,7 @@
           callbacks: {
             title: function (context) {
               const rawDate = context[0].label
-              return moment(new Date(rawDate)).format('DD.MM.YYYY')
+              return formatToRussianDate(new Date(rawDate))
             },
             label: function (context) {
               return context.parsed.y
@@ -218,7 +219,7 @@
           ticks: {
             callback: function(value) {
               const rawDate = this.getLabelForValue(value)
-              return moment(new Date(rawDate)).format('DD.MM.YYYY')
+              return formatToRussianDate(new Date(rawDate))
             },
             font: {
               size: 16,

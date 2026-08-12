@@ -34,9 +34,8 @@
 <script setup>
 import CloseIcon from '@/components/icons/CloseIcon.vue'
 import { input as inputClasses } from '@/assets/vars.js'
-import { getRandomUid } from '@/helpers/index.js'
+import { formatToDate, formatToISODate, getRandomUid } from '@/helpers/index.js'
 import { onMounted, watch } from 'vue'
-import moment from 'moment'
 import AirDatepicker from 'air-datepicker'
 
 const {
@@ -86,7 +85,7 @@ onMounted(() => {
     },
     onSelect: ({ date }) => {
       const initFormat = date
-          ? moment(date).format('YYYY-MM-DD')
+          ? formatToISODate(date)
           : ''
       emit('update:modelValue', initFormat)
     },
@@ -107,7 +106,7 @@ watch(
       if (datepickerInstance) {
         newVal === ''
             ? datepickerInstance.clear()
-            : datepickerInstance.selectDate(moment(new Date(newVal), 'YYYY-MM-DD').toDate())
+            : datepickerInstance.selectDate(formatToDate(new Date(newVal)))
       }
     },
 )
@@ -116,7 +115,7 @@ watch(
     () => minDate,
     (newVal) => {
       if (datepickerInstance) {
-        const date = newVal ? moment(new Date(newVal), 'YYYY-MM-DD').toDate() : ''
+        const date = newVal ? formatToDate(new Date(newVal)) : ''
         datepickerInstance.update({ minDate: date })
       }
     },
@@ -126,7 +125,7 @@ watch(
     () => maxDate,
     (newVal) => {
       if (datepickerInstance) {
-        const date = newVal ? moment(new Date(newVal), 'YYYY-MM-DD').toDate() : ''
+        const date = newVal ? formatToDate(new Date(newVal)) : ''
         datepickerInstance.update({ maxDate: date })
       }
     },
@@ -150,7 +149,7 @@ watch(
 function setClassForColoredCells (coloredDates, cellType, date) {
   let dates = coloredDates,
       isDay = cellType === 'day',
-      _date = moment(date).format('YYYY-MM-DD'),
+      _date = formatToISODate(date),
       shouldChangeContent = isDay && dates.includes(_date)
 
   return {

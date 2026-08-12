@@ -113,9 +113,8 @@ import { computed, nextTick, ref, useTemplateRef } from 'vue'
 import { useTestStore } from '@/stores/testStore.js'
 import AppInput from '@/components/shared/AppInput.vue'
 import { showToast } from '@/components/shared/AppToaster/toast.js'
-import { getRandomUid } from '@/helpers/index.js'
+import { formatToISODate, getRandomUid } from '@/helpers/index.js'
 import AppAddInputs from '@/components/shared/AppAddInputs.vue'
-import moment from 'moment'
 import { storeToRefs } from 'pinia'
 import { useApiStore } from '@/stores/apiStore.js'
 import AppCheckbox from '@/components/shared/AppCheckbox'
@@ -244,7 +243,7 @@ const resultFieldSettings = {
     hideInputCloseIcon: false,
     placeholder: 'ДД.MM.ГГГГ',
     maxDate: () => {
-      return moment().format('YYYY-MM-DD')
+      return formatToISODate(new Date())
     },
   },
   resValue: {

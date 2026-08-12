@@ -17,8 +17,8 @@ import AirDatepicker from 'air-datepicker'
 import AppInput from '@/components/shared/AppInput.vue'
 import 'air-datepicker/air-datepicker.css'
 import { onMounted, ref, toRefs, watch } from 'vue'
-import moment from 'moment'
 import { useValidateInput } from '@/composables/useValidateInput.js'
+import { formatToDate, formatToISODate } from '@/helpers/index.js'
 
 const props = defineProps({
   uniqId: {
@@ -93,7 +93,7 @@ onMounted(() => {
     onSelect: ({ date }) => {
       isInvalid.value = false
       const initFormat = date
-       ? moment(date).format('YYYY-MM-DD')
+       ? formatToISODate(date)
        : ''
 
       dateValue.value = initFormat
@@ -114,7 +114,7 @@ onMounted(() => {
   datepickerInstance = new AirDatepicker(`#input-${refProps.uniqId.value}`, options)
 
   if (props.selectedDates) {
-    datepickerInstance.selectDate(moment(props.selectedDates, 'YYYY-MM-DD').toDate())
+    datepickerInstance.selectDate(formatToDate(props.selectedDates))
   }
 })
 
@@ -128,7 +128,7 @@ watch(
 
       newVal === ''
        ? datepickerInstance.clear()
-       : datepickerInstance.selectDate(moment(newVal, 'YYYY-MM-DD').toDate())
+       : datepickerInstance.selectDate(formatToDate(newVal))
     }
   },
 )
@@ -139,7 +139,7 @@ watch(
     if (!datepickerInstance) {
       return
     }
-    datepickerInstance.update({ minDate: newVal ? moment(newVal, 'YYYY-MM-DD').toDate() : '' })
+    datepickerInstance.update({ minDate: newVal ? formatToDate(newVal) : '' })
   },
 )
 
@@ -149,7 +149,7 @@ watch(
     if (!datepickerInstance) {
       return
     }
-    datepickerInstance.update({ maxDate: newVal ? moment(newVal, 'YYYY-MM-DD').toDate() : '' })
+    datepickerInstance.update({ maxDate: newVal ? formatToDate(newVal) : '' })
   },
 )
 
@@ -204,7 +204,7 @@ watch(
 function setClassForColoredCells (coloredDates, cellType, date) {
   let dates = coloredDates,
     isDay = cellType === 'day',
-    _date = moment(date).format('YYYY-MM-DD'),
+    _date = formatToISODate(date),
     shouldChangeContent = isDay && dates.includes(_date)
 
   return {
