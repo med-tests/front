@@ -1,0 +1,171 @@
+<template>
+  <div>
+    <label
+      v-if="label"
+      class="block mb-1 text-gray-700"
+      :class="{'required': required }"
+      :for="id"
+    >
+      {{ label }}
+    </label>
+    <slot name="description" />
+    <AppCalendarInput
+      v-if="type === 'calendar'"
+      :id
+      :colored-dates
+      :disabled
+      :hide-close-icon
+      :is-invalid
+      :max-date
+      :min-date
+      :model-value="value"
+      :on-before-select
+      :placeholder
+      @update:model-value="emit('update:modelValue', $event)"
+    />
+    <AppTextInput
+      v-if="type === 'text'"
+      :id
+      :disabled
+      :hide-close-icon
+      :is-invalid
+      :model-value="value"
+      :placeholder
+      @update:model-value="emit('update:modelValue', $event)"
+    />
+    <AppNumberInput
+      v-if="type === 'number'"
+      :id
+      :disabled
+      :hide-close-icon
+      :is-invalid
+      :model-value="value"
+      :placeholder
+      @update:model-value="emit('update:modelValue', $event)"
+    />
+    <AppPasswordInput
+      v-if="type === 'password'"
+      :id
+      :disabled
+      :is-invalid
+      :model-value="value"
+      :placeholder
+      @update:model-value="emit('update:modelValue', $event)"
+    />
+  </div>
+</template>
+
+<script setup>
+import { getRandomUid } from '@/helpers/index.js'
+import AppCalendarInput from '@/components/shared/inputs/AppCalendarInput'
+import AppTextInput from '@/components/shared/inputs/AppTextInput'
+import AppNumberInput from '@/components/shared/inputs/AppNumberInput'
+import AppPasswordInput from '@/components/shared/inputs/AppPasswordInput'
+import { ref, watch } from 'vue'
+import { useValidateInput } from '@/composables/useValidateInput.js'
+
+const {
+  id,
+  modelValue,
+  required,
+  touchId,
+  callbackValidator,
+} = defineProps({
+  id: { type: String, default: () => getRandomUid() },
+  label: { type: String, default: '' },
+  required: { type: Boolean, default: false },
+  type: {
+    type:String,
+    default: 'text',
+    validator(value) {
+      return ['text', 'number', 'password', 'calendar'].includes(value)
+    },
+  },
+  touchId: { type: String, default: '' },
+  // должна возвращать true, если ввод валиден и false - если нет
+  // может иметь сайд-эффекты типа вызовы тостера с текстом ошибки
+  callbackValidator: { type: Function, default: () => true },
+
+  modelValue: { type: [String, Number], default: '' },
+  placeholder: { type: String, default: 'Введите значение' },
+  disabled: { type: Boolean, default: false },
+  hideCloseIcon: { type: Boolean, default: false },
+  // для календаря
+  minDate: {
+    type: [String, null],
+    default: null,
+    validator(value) {
+      const isNull = value === null
+      const isFormattedString = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/.test(value)
+      return isNull || isFormattedString
+    },
+  },
+  maxDate: {
+    type: [String, null],
+    default: null,
+    validator(value) {
+      const isNull = value === null
+      const isFormattedString = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/.test(value)
+      return isNull || isFormattedString
+    },
+  },
+  coloredDates: {
+    type: Array,
+    default: () => ([]),
+    validator(value) {
+      return value
+          .every(str => /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/.test(str))
+    },
+  },
+  onBeforeSelect: { type: [Function, null], default: null },
+})
+
+const emit = defineEmits([
+  'update:modelValue',
+  'onValidate',
+])
+
+const value = ref('')
+
+watch(
+    () => modelValue,
+    (newVal) => value.value = newVal,
+    { immediate: true },
+)
+
+const { isInvalid, validate, setIsInvalidTo } = useValidateInput()
+
+watch(
+    () => touchId,
+    () => {
+      validate({
+        value: value.value,
+        required,
+        callbackValidator,
+      })
+    },
+)
+
+watch(
+    isInvalid,
+    () => {
+      emit('onValidate', !isInvalid.value)
+    },
+)
+
+watch(
+    value,
+    () => {
+      if (isInvalid.value) {
+        setIsInvalidTo(false)
+      }
+    },
+)
+</script>
+
+<style>
+.required::after {
+  content: '*';
+  color: red;
+}
+</style>

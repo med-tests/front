@@ -63,7 +63,15 @@ const {
   // Ожидает формат YYYY-MM-DD
   coloredDates: { type: Array, default: () => ([]) },
   // Начальное значение. (selectedDates) Ожидает формат YYYY-MM-DD или пустую строку
-  modelValue: { type: String, default: '' },
+  modelValue: {
+    type: String,
+    default: '',
+    validator(value) {
+      const isEmpty = value === ''
+      const isFormattedString = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/.test(value)
+      return isEmpty || isFormattedString
+    },
+  },
   // Ожидает формат YYYY-MM-DD
   minDate: { type: [String, null], default: null },
   // Ожидает формат YYYY-MM-DD
