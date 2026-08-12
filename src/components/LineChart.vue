@@ -5,20 +5,18 @@
       class="flex mb-3 items-end justify-between mx-auto"
       style="width: calc(100% - 64px)"
     >
-      <AppCalendar
-        forbid-toggle-selected
+      <AppFormField
         class="mr-5 inline-block"
-        clear-title="Сбросить"
         label="Начало периода"
+        type="calendar"
         :colored-dates="computedParamDates"
         :disabled="!item.results.length"
         :max-date="computedLastDate"
         :min-date="computedFirstDate"
+        :model-value="item.shownPeriod.start"
         :on-before-select="onBeforeSelectStart"
-        :selected-dates="item.shownPeriod.start"
-        :uniq-id="`${id}-start`"
         @clear="changePeriod('start', computedFirstDate)"
-        @input="changePeriod('start', $event)"
+        @update:model-value="changePeriod('start', $event)"
       />
       <div class="text-lg text-gray-700 leading-none font-medium text-center">
         {{ chartData.datasets[0].label }}
@@ -62,20 +60,18 @@
           </div>
         </div>
       </div>
-      <AppCalendar
-        forbid-toggle-selected
+      <AppFormField
         class="inline-block"
-        clear-title="Сбросить"
         label="Конец периода"
+        type="calendar"
         :colored-dates="computedParamDates"
         :disabled="!item.results.length"
         :max-date="computedLastDate"
         :min-date="computedFirstDate"
+        :model-value="item.shownPeriod.end"
         :on-before-select="onBeforeSelectEnd"
-        :selected-dates="item.shownPeriod.end"
-        :uniq-id="`${id}-end`"
         @clear="changePeriod('end', computedLastDate)"
-        @input="changePeriod('end', $event)"
+        @update:model-value="changePeriod('end', $event)"
       />
     </div>
     <Line
@@ -121,11 +117,11 @@
 } from 'chart.js'
   import { computed } from 'vue'
   import { useTestStore } from '@/stores/testStore.js'
-  import AppCalendar from '@/components/shared/AppCalendar.vue'
+  import AppFormField from '@/components/shared/inputs/AppFormField'
   import moment from 'moment'
   import { showToast } from '@/components/shared/AppToaster/toast.js'
   import { colors } from '@/assets/vars.js'
-  import { formatToRussianDate } from '@/helpers/index.js'
+  import { formatToISODate, formatToRussianDate } from '@/helpers/index.js'
 
   const verticalHoverLine = {
     id: 'verticalHoverLine',
@@ -233,25 +229,23 @@
   function onBeforeSelectStart (value) {
     if (value
         && item.shownPeriod.end
-        && moment(value).isAfter(item.shownPeriod.end)
+        && moment(formatToISODate(value)).isAfter(item.shownPeriod.end)
     ) {
       showToast('Начало периода не может быть позже конца периода', {  type: 'error' })
       return false
-    } else {
-      return true
     }
+    return true
   }
 
   function onBeforeSelectEnd (value) {
     if (value
         && item.shownPeriod.start
-        && moment(value).isBefore(item.shownPeriod.start)
+        && moment(formatToISODate(value)).isBefore(item.shownPeriod.start)
     ) {
       showToast('Конец периода не может быть раньше начала периода', {  type: 'error' })
       return false
-    } else {
-      return true
     }
+    return true
   }
 
   const changePeriod = (period, value) => {

@@ -6,47 +6,41 @@
   >
     <div style="min-width: 480px;">
       <!--  Название  -->
-      <div>
-        <AppInput
-          id="paramTitle"
-          v-model="paramTitle"
-          hide-close-icon
-          required
-          label="Название"
-          placeholder="Введите название"
-          :callback-validator="validation.title.validator"
-          :touch-id="touchId"
-          @on-validate="validation.title.error = $event"
-        />
-      </div>
+      <AppFormField
+        v-model="paramTitle"
+        hide-close-icon
+        required
+        label="Название"
+        placeholder="Введите название"
+        type="text"
+        :callback-validator="validation.title.validator"
+        :touch-id="touchId"
+        @on-validate="validation.title.error = !$event"
+      />
 
       <!--  Границы нормы  -->
       <div class="mt-4 mb-6 flex justify-between">
         <!--  Нижняя граница нормы  -->
-        <AppInput
-          id="lowEdge"
+        <AppFormField
           v-model="lowEdge"
           hide-close-icon
           label="Нижняя граница нормы"
-          placeholder="Введите число"
           type="number"
           :callback-validator="validation.lowEdge.validator"
           :touch-id="touchId"
-          @on-validate="validation.lowEdge.error = $event"
+          @on-validate="validation.lowEdge.error = !$event"
         />
 
         <!--  Верхняя граница нормы  -->
-        <AppInput
-          id="highEdge"
+        <AppFormField
           v-model="highEdge"
           hide-close-icon
           class="ml-4"
           label="Верхняя граница нормы"
-          placeholder="Введите число"
           type="number"
           :callback-validator="validation.highEdge.validator"
           :touch-id="touchId"
-          @on-validate="validation.highEdge.error = $event"
+          @on-validate="validation.highEdge.error = !$event"
         />
       </div>
 
@@ -111,7 +105,7 @@
 import AppModal from '@/components/shared/AppModal.vue'
 import { computed, nextTick, ref, useTemplateRef } from 'vue'
 import { useTestStore } from '@/stores/testStore.js'
-import AppInput from '@/components/shared/AppInput.vue'
+import AppFormField from '@/components/shared/inputs/AppFormField'
 import { showToast } from '@/components/shared/AppToaster/toast.js'
 import { formatToISODate, getRandomUid } from '@/helpers/index.js'
 import AppAddInputs from '@/components/shared/AppAddInputs.vue'

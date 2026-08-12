@@ -9,29 +9,26 @@
         Вход
       </div>
 
-      <div class="w-full mb-3">
-        <AppInput
-          id="login"
-          v-model="username.value"
-          required
-          label="Логин"
-          :touch-id="touchId"
-          @on-click-close-icon="username.value = ''"
-          @on-validate="username.error = $event"
-        />
-      </div>
+      <AppFormField
+        v-model="username.value"
+        required
+        autocomplete="username"
+        class="w-full mb-3"
+        label="Логин"
+        type="text"
+        :touch-id="touchId"
+        @on-validate="username.error = !$event"
+      />
 
-      <div class="w-full mb-3">
-        <AppInput
-          id="password"
-          v-model="password.value"
-          required
-          label="Пароль"
-          type="password"
-          :touch-id="touchId"
-          @on-validate="password.error = $event"
-        />
-      </div>
+      <AppFormField
+        v-model="password.value"
+        required
+        class="w-full mb-3"
+        label="Пароль"
+        type="password"
+        :touch-id="touchId"
+        @on-validate="password.error = !$event"
+      />
 
       <AppBtn
         not-bordered
@@ -74,7 +71,7 @@
 </template>
 
 <script setup>
-import AppInput from '@/components/shared/AppInput.vue'
+import AppFormField from '@/components/shared/inputs/AppFormField'
 import { nextTick, reactive, ref } from 'vue'
 import { useUserStore } from '@/stores/userStore.js'
 import { useRouter } from 'vue-router'

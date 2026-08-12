@@ -9,21 +9,20 @@
         Регистрация
       </div>
 
-      <div class="w-full mb-3">
-        <AppInput
-          id="login"
-          v-model="username.value"
-          required
-          label="Логин"
-          :callback-validator="validateUsername"
-          :touch-id="touchId"
-          @on-click-close-icon="username.value = ''"
-          @on-validate="username.error = $event"
-        />
-      </div>
+      <AppFormField
+        v-model="username.value"
+        required
+        autocomplete="username"
+        class="w-full mb-3"
+        label="Логин"
+        type="text"
+        :callback-validator="validateUsername"
+        :touch-id="touchId"
+        @on-validate="username.error = !$event"
+      />
 
       <div class="w-full mb-3">
-        <AppPasswordInput
+        <AppPassword
           id="register-password"
           v-model="password"
           :touch-id
@@ -57,8 +56,7 @@
 </template>
 
 <script setup>
-import AppInput from '@/components/shared/AppInput.vue'
-import AppPasswordInput from '@/components/shared/AppPasswordInput'
+import AppPassword from '@/components/shared/AppPassword'
 import { nextTick, reactive, ref } from 'vue'
 import { useUserStore } from '@/stores/userStore.js'
 import { useRouter } from 'vue-router'
@@ -66,6 +64,7 @@ import { showToast } from '@/components/shared/AppToaster/toast.js'
 import { getRandomUid } from '@/helpers/index.js'
 import { useApiStore } from '@/stores/apiStore.js'
 import { storeToRefs } from 'pinia'
+import AppFormField from '@/components/shared/inputs/AppFormField'
 
 const userStore = useUserStore()
 const router = useRouter()

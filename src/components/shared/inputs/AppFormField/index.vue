@@ -20,12 +20,13 @@
       :min-date
       :model-value="value"
       :on-before-select
-      :placeholder
+      @clear="emit('clear')"
       @update:model-value="emit('update:modelValue', $event)"
     />
     <AppTextInput
       v-if="type === 'text'"
       :id
+      :autocomplete
       :disabled
       :hide-close-icon
       :is-invalid
@@ -46,6 +47,7 @@
     <AppPasswordInput
       v-if="type === 'password'"
       :id
+      :autocomplete
       :disabled
       :is-invalid
       :model-value="value"
@@ -76,7 +78,7 @@ const {
   required: { type: Boolean, default: false },
   type: {
     type:String,
-    default: 'text',
+    required: true,
     validator(value) {
       return ['text', 'number', 'password', 'calendar'].includes(value)
     },
@@ -90,14 +92,17 @@ const {
   placeholder: { type: String, default: 'Введите значение' },
   disabled: { type: Boolean, default: false },
   hideCloseIcon: { type: Boolean, default: false },
+  // для текстового и пароля
+  autocomplete: { type: String, default: 'off' },
   // для календаря
   minDate: {
     type: [String, null],
     default: null,
     validator(value) {
       const isNull = value === null
+      const isEmpty = value === ''
       const isFormattedString = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/.test(value)
-      return isNull || isFormattedString
+      return isEmpty || isNull || isFormattedString
     },
   },
   maxDate: {
@@ -105,8 +110,9 @@ const {
     default: null,
     validator(value) {
       const isNull = value === null
+      const isEmpty = value === ''
       const isFormattedString = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/.test(value)
-      return isNull || isFormattedString
+      return isEmpty || isNull || isFormattedString
     },
   },
   coloredDates: {
@@ -123,6 +129,7 @@ const {
 const emit = defineEmits([
   'update:modelValue',
   'onValidate',
+  'clear',
 ])
 
 const value = ref('')

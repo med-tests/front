@@ -48,32 +48,20 @@
           v-for="(field, fieldKey) in fieldsSettings"
           :key="`row-${rowIndex}-${fieldKey}`"
         >
-          <AppInput
-            v-if="['text', 'number'].includes(field.type)"
+          <AppFormField
             :id="`${fieldKey}-${field.type || 'text'}-row-${rowIndex}`"
             v-model="data[rowIndex][fieldKey].value"
             class="grow"
             :callback-validator="field.validator"
             :hide-close-icon="field.hideCloseIcon"
+            :max-date="field.maxDate ? field.maxDate() : null"
+            :min-date="field.minDate ? field.minDate() : null"
             :placeholder="field.placeholder"
-            :required="field.required"
-            :touch-id="touchId"
-            :type="field.type || 'text'"
-            @on-validate="data[rowIndex][fieldKey].error = $event"
-          />
-          <AppCalendar
-            v-if="field.type === 'calendar'"
-            class="grow"
-            :callback-validator="field.validator"
-            :hide-close-icon="field.hideInputCloseIcon"
-            :max-date="field.maxDate ? field.maxDate() : ''"
             :required="field.required"
             :selected-dates="data[rowIndex][fieldKey].value"
             :touch-id="touchId"
-            :uniq-id="`${rowIndex}-${fieldKey}-calendar`"
-            @clear="data[rowIndex][fieldKey].value = ''"
-            @input="data[rowIndex][fieldKey].value = $event"
-            @on-validate="data[rowIndex][fieldKey].error = $event"
+            :type="field.type"
+            @on-validate="data[rowIndex][fieldKey].error = !$event"
           />
         </div>
         <AppBtn
@@ -95,11 +83,10 @@
 </template>
 
 <script setup>
-import AppInput from '@/components/shared/AppInput.vue'
+import AppFormField from '@/components/shared/inputs/AppFormField'
 import { ref, watch } from 'vue'
 import PlusIcon from '@/components/icons/PlusIcon.vue'
 import CloseIcon from '@/components/icons/CloseIcon.vue'
-import AppCalendar from '@/components/shared/AppCalendar.vue'
 
 const props = defineProps({
   title: { type: String, default: '' },

@@ -1,5 +1,5 @@
 <script setup>
-import AppInput from '@/components/shared/AppInput.vue'
+import AppFormField from '@/components/shared/inputs/AppFormField'
 import { computed } from 'vue'
 import { showToast } from '@/components/shared/AppToaster/toast.js'
 import CheckIcon from '@/components/icons/CheckIcon.vue'
@@ -59,7 +59,7 @@ const computedConditions = computed(() => {
 </script>
 
 <template>
-  <AppInput
+  <AppFormField
     :id="id"
     v-model="password.value"
     required
@@ -93,5 +93,5 @@ const computedConditions = computed(() => {
         </div>
       </div>
     </template>
-  </AppInput>
+  </AppFormField>
 </template>

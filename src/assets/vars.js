@@ -6,5 +6,5 @@ export const input = {
   invalidBorderClass: 'border-red-700',
   disabledBorderClass: 'border-gray-400',
   disabledBgClass: 'bg-gray-200',
-  clearBtnOffsetClass: 'pr-[30px]',
+  clearBtnOffsetClass: '!pr-[30px]',
 }

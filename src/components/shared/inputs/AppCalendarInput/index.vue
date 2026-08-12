@@ -22,9 +22,9 @@
       not-bordered
       not-filling
       class="app-input__clear-btn"
-      data-test="app-text-input__clear-btn"
+      data-test="app-calendar-input__clear-btn"
       title="Очистить"
-      @click="clear"
+      @click="emit('clear')"
     >
       <CloseIcon />
     </AppBtn>
@@ -37,6 +37,7 @@ import { input as inputClasses } from '@/assets/vars.js'
 import { formatToDate, formatToISODate, getRandomUid } from '@/helpers/index.js'
 import { onMounted, watch } from 'vue'
 import AirDatepicker from 'air-datepicker'
+import 'air-datepicker/air-datepicker.css'
 
 const {
   defaultBorderClass,
@@ -77,15 +78,14 @@ const {
   // Ожидает формат YYYY-MM-DD
   maxDate: { type: [String, null], default: null },
 })
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'clear'])
 
 let datepickerInstance = null
 onMounted(() => {
   const options = {
     dateFormat: 'dd.MM.yyyy',
     autoClose: true,
-    // Если true, то клик на активной ячейке снимет с нее выделение
-    // может быть () => Boolean
+    // Если true, то клик на активной ячейке снимет с нее выделение. может быть () => Boolean
     toggleSelected: false,
     onBeforeSelect: ({ date }) => {
       // если не проходит проверку, выбранная дата не установится
@@ -162,12 +162,6 @@ function setClassForColoredCells (coloredDates, cellType, date) {
 
   return {
     classes: shouldChangeContent ? 'test-day' : undefined,
-  }
-}
-
-function clear () {
-  if (datepickerInstance) {
-    datepickerInstance.clear()
   }
 }
 </script>
