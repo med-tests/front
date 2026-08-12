@@ -4,7 +4,7 @@
       :id
       ref="input"
       v-model="value"
-      autocomplete="new-password"
+      autocomplete="off"
       class="default-input"
       data-test="app-number-input"
       type="text"

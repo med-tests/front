@@ -50,11 +50,11 @@ describe('общее', () => {
     expect(id).toBeDefined()
     expect(id.length).toBeGreaterThan(0)
   })
-  it('инпут имеет autocomplete="new-password" (для отключения автозаполнения)', () => {
+  it('инпут имеет autocomplete="off" (для отключения автозаполнения)', () => {
     const inputWrp = getWrapper().find(inputSelector)
 
     expect(inputWrp.attributes()).toHaveProperty('autocomplete')
-    expect(inputWrp.attributes('autocomplete')).toBe('new-password')
+    expect(inputWrp.attributes('autocomplete')).toBe('off')
   })
 })
 

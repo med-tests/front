@@ -4,10 +4,10 @@
       :id
       ref="input"
       v-model="value"
-      autocomplete="new-password"
       class="default-input"
       data-test="app-text-input"
       type="text"
+      :autocomplete
       :class="{
         [defaultBorderClass]: !isInvalid && !disabled,
         [`${disabledBorderClass} ${disabledBgClass} outline-none`]: disabled && !isInvalid,
@@ -49,6 +49,7 @@ const {
   modelValue,
   disabled,
   id,
+  autocomplete,
 } = defineProps({
   modelValue: { type: String, default: '' },
   id: { type: String, default: () => getRandomUid() },
@@ -56,6 +57,7 @@ const {
   disabled: { type: Boolean, default: false },
   hideCloseIcon: { type: Boolean, default: false },
   isInvalid: { type: Boolean, default: false },
+  autocomplete: { type: String, default: 'off' },
 })
 
 const emit = defineEmits([

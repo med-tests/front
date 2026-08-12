@@ -3,7 +3,7 @@
     <input
       :id="`calendar-input-${id}`"
       readonly
-      autocomplete="new-password"
+      autocomplete="off"
       class="default-input"
       data-test="app-calendar-input"
       placeholder="Выберите дату"

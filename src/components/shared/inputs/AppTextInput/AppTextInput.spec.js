@@ -69,11 +69,11 @@ describe('общее', () => {
     expect(anotherWrpId.length).greaterThan(0)
     expect(anotherWrpId).not.toBe(wrpId)
   })
-  it('имеет autocomplete="new-password" (для отключения автозаполнения)', () => {
+  it('имеет autocomplete="off" (для отключения автозаполнения)', () => {
     const inputWrp = getWrapper().find(inputSelector)
 
     expect(inputWrp.attributes()).toHaveProperty('autocomplete')
-    expect(inputWrp.attributes('autocomplete')).toBe('new-password')
+    expect(inputWrp.attributes('autocomplete')).toBe('off')
   })
   it('цвет бордера меняется в зависимости от isInvalid', async () => {
     const wrp = getWrapper({
