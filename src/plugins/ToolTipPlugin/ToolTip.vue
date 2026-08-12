@@ -19,6 +19,10 @@ let tippyInstance = null
 function initTippy() {
   if (tippyInstance) tippyInstance.destroy()
 
+  if (!document.getElementById(props.appendElementId)) {
+    return
+  }
+
   // the tippy function takes the element to hover over and some options
   // remember we want the element the tooltip is nested under
   // we can access that on the template ref's parentNode
