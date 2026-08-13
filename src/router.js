@@ -24,6 +24,7 @@ const routes = [
     path: '/register',
     component: () => import('@/components/pages/PageRegister.vue'),
   },
+  ...(import.meta.env.DEV && devRoutes),
   {
     path: '/:pathMatch(.*)*',
     component: () => import('@/components/pages/PageMain.vue'),
