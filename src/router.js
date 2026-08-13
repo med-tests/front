@@ -1,5 +1,13 @@
 import { createWebHistory, createRouter } from 'vue-router'
 
+const devRoutes = [
+  {
+    name: 'test',
+    path: '/test',
+    component: () => import('@/components/pages/PageTest.vue'),
+  },
+]
+
 const routes = [
   {
     name: 'main',
@@ -21,6 +29,9 @@ const routes = [
     component: () => import('@/components/pages/PageMain.vue'),
   },
 ]
+if (import.meta.env.DEV) {
+  routes.unshift(...devRoutes)
+}
 
 const router = createRouter({
   history: createWebHistory(),
