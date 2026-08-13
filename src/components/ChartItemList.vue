@@ -12,7 +12,7 @@
     >
       <template #item="{element, index}">
         <div
-          class="p-2 flex border-emerald-800 hover:bg-emerald-600/15"
+          class="p-2 flex border-emerald-800 item-hover"
           :class="{
             'border-b-1': index !== arrListData.length - 1,
             'opacity-60': element.isHidden

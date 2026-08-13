@@ -42,7 +42,7 @@
     >
       <div
         v-if="!row.isHidden"
-        class="flex justify-between items-center gap-x-4 mb-2 hover:bg-emerald-300/20 rounded"
+        class="flex justify-between items-center gap-x-4 mb-2 item-hover rounded"
       >
         <div
           v-for="(field, fieldKey) in fieldsSettings"
