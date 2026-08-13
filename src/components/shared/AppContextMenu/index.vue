@@ -36,20 +36,6 @@ import { getRandomUid } from '@/helpers'
 
 const randomId = getRandomUid()
 
-const vClickOutside = {
-  mounted: (el, binding) => {
-    el.clickOutsideEvent = (event) => {
-      if (!(el === event.target || el.contains(event.target))) {
-        binding.value(event.target)
-      }
-    }
-    document.addEventListener('click', el.clickOutsideEvent)
-  },
-  unmounted: el => {
-    document.removeEventListener('click', el.clickOutsideEvent)
-  },
-}
-
 const contextMenuRef = useTemplateRef(`cm-${randomId}`)
 function close (eventTarget) {
   if (eventTarget.id === randomId || contextMenuRef.value.contains(eventTarget)) {
