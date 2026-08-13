@@ -1,5 +1,13 @@
 import { createWebHistory, createRouter } from 'vue-router'
 
+const devRoutes = [
+  {
+    name: 'test',
+    path: '/test',
+    component: () => import('@/components/pages/PageTest.vue'),
+  },
+]
+
 const routes = [
   {
     name: 'main',
@@ -16,6 +24,7 @@ const routes = [
     path: '/register',
     component: () => import('@/components/pages/PageRegister.vue'),
   },
+  ...(import.meta.env.DEV && devRoutes),
   {
     path: '/:pathMatch(.*)*',
     component: () => import('@/components/pages/PageMain.vue'),
