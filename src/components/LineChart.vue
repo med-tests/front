@@ -88,7 +88,15 @@
     >
       <div v-if="!item.results.length">
         Результаты, необходимые для построения графика, не добавлены.
-        <p>Чтобы добавить их, отредактируйте показатель.</p>
+        <p>
+          Чтобы добавить их, 
+          <AppBtn
+            type="success"
+            @click="emit('showUpsertModal')"
+          >
+            <span class="px-2">отредактируйте показатель</span>
+          </AppBtn>.
+        </p>
       </div>
 
       <div v-else>
@@ -122,6 +130,8 @@
   import { showToast } from '@/components/shared/AppToaster/toast.js'
   import { colors } from '@/assets/vars.js'
   import { formatToISODate, formatToRussianDate } from '@/helpers/index.js'
+
+  const emit = defineEmits(['showUpsertModal'])
 
   const verticalHoverLine = {
     id: 'verticalHoverLine',

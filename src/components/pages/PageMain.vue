@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, ref, useTemplateRef } from 'vue'
+import { computed, nextTick, onMounted, ref, useTemplateRef } from 'vue'
 import { useTestStore } from '@/stores/testStore.js'
 import LineChart from '@/components/LineChart.vue'
 import ChartItemList from '@/components/ChartItemList.vue'
@@ -55,13 +55,27 @@ const upsertParamModalRef = useTemplateRef('upsert-param-modal')
 
 function onContextMenuClick (eventName) {
   if (eventName === 'createParameter') {
-    upsertParamModalRef.value.open()
+    openCreateModal()
   }
 }
 
 const computedVisibleItems = computed(() => {
   return sortedFullData.value.filter(({ isHidden }) => !isHidden)
 })
+
+const editingParamId = ref(0)
+
+async function openEditModal (id) {
+  editingParamId.value = id
+  await nextTick()
+  upsertParamModalRef.value.open()
+}
+
+async function openCreateModal () {
+  editingParamId.value = 0
+  await nextTick()
+  upsertParamModalRef.value.open()
+}
 </script>
 
 <template>
@@ -186,7 +200,7 @@ const computedVisibleItems = computed(() => {
             Чтобы начать, необходимо
             <AppBtn
               type="success"
-              @click="upsertParamModalRef.open()"
+              @click="openCreateModal"
             >
               <span class="px-2">Создать показатель</span>
             </AppBtn>
@@ -204,14 +218,16 @@ const computedVisibleItems = computed(() => {
             :key="item.id"
             class="py-15 first:pt-0 last:pb-0 param-chart relative"
             :item="item"
+            @show-upsert-modal="openEditModal(item.id)"
           />
         </div>
       </div>
     </div>
 
-    <!--  Модалка создания показателя  -->
+    <!--  Модалка показателя  -->
     <UpsertParamModal
       ref="upsert-param-modal"
+      :editing-param-id="editingParamId"
     />
   </div>
 </template>
