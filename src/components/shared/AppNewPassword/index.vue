@@ -63,6 +63,7 @@ const computedConditions = computed(() => {
     :id="id"
     v-model="password.value"
     required
+    autocomplete="new-password"
     label="Пароль"
     type="password"
     :callback-validator="validatePassword"

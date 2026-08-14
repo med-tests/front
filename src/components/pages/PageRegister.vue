@@ -22,7 +22,7 @@
       />
 
       <div class="w-full mb-3">
-        <AppPassword
+        <AppNewPassword
           id="register-password"
           v-model="password"
           :touch-id
@@ -56,7 +56,7 @@
 </template>
 
 <script setup>
-import AppPassword from '@/components/shared/AppPassword'
+import AppNewPassword from '@/components/shared/AppNewPassword'
 import { nextTick, reactive, ref } from 'vue'
 import { useUserStore } from '@/stores/userStore.js'
 import { useRouter } from 'vue-router'
