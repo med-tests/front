@@ -699,7 +699,7 @@ describe('AppBtn', () => {
     vi.advanceTimersByTime(tippyDelay)
     await flushPromises()
 
-    expect(wrapper.find('.tippy-content').exists()).toBeTruthy()
+    expect(wrapper.find('.tippy-content').exists()).toBe(true)
     expect(wrapper.find('.tippy-content').html()).toContain(title)
   })
   it('не отображает тултип при наведении, если его текст не передан', async () => {

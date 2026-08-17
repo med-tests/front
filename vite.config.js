@@ -13,6 +13,7 @@ export default defineConfig({
   test: {
     globals: true,          // позволяет использовать describe, it, expect без импорта
     environment: 'jsdom',   // эмулирует браузерное окружение
+    setupFiles: ['./vitest.setup.js'],
   },
   resolve: {
     // чтобы работали импорты типа
