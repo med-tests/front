@@ -1,8 +1,8 @@
-import { mount } from '@vue/test-utils'
+import { flushPromises, mount } from '@vue/test-utils'
 import AppContextMenu from '@/components/shared/AppContextMenu'
 import AppBtn from '@/components/shared/AppBtn'
-import { nextTick } from 'vue'
-import { toolTipPlugin } from '@/plugins/index.js'
+import { toolTipPlugin } from '@/plugins'
+import { clickOutsideDirective } from '@/directives'
 
 describe('AppContextMenu', () => {
   describe('должен отрисовывать триггер', () => {
@@ -36,6 +36,9 @@ describe('AppContextMenu', () => {
           plugins: [
             toolTipPlugin,
           ],
+          directives: {
+            'click-outside': clickOutsideDirective,
+          },
         },
       })
 
@@ -185,6 +188,11 @@ describe('AppContextMenu', () => {
         arrItems: [menuItem],
       },
       attachTo: document.body,
+      global: {
+        directives: {
+          'click-outside': clickOutsideDirective,
+        },
+      },
     })
     await wrp.find('[data-test="wrp-toggler"]').trigger('click')
     const wrpItems = wrp.find('[data-test="wrp-items"]')
@@ -192,10 +200,9 @@ describe('AppContextMenu', () => {
     expect(wrpItems.html()).toContain(menuItem.title)
 
     document.body.click()
+    await flushPromises()
 
-    await nextTick()
-
-    expect(wrp.find('[data-test="wrp-items"]').exists()).toBeFalsy()
+    expect(wrp.find('[data-test="wrp-items"]').exists()).toBe(false)
   })
 })
 
@@ -220,6 +227,11 @@ function getWrapper (options = {}) {
       toggler: Object.hasOwn(options, 'togglerSlot')
         ? options.togglerSlot
         : defaultSlot,
+    },
+    global: {
+      directives: {
+        'click-outside': {},
+      },
     },
     ...(Object.hasOwn(options, 'global') && {
       global: options.global,

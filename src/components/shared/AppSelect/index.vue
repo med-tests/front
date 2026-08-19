@@ -5,12 +5,15 @@
   >
     <div 
       class="p-2 border rounded-xs flex justify-between items-center"
+      data-test="select-trigger-label"
       :class="{
-        'border-emerald-800 cursor-pointer': !disabled,
+        'border-emerald-800': !disabled && !isInvalid,
+        'cursor-pointer': !disabled,
         'rounded-b-none': showList,
         'border-b-0': showList && isSearch,
-        [invalidBorderClass]: isInvalid,
-        [`${disabledBorderClass} ${disabledBgClass}`]: disabled
+        [disabledBgClass]: disabled,
+        [disabledBorderClass]: disabled && !isInvalid,
+        [invalidBorderClass]: isInvalid
       }"
       @click="toggleList"
     >
@@ -29,6 +32,7 @@
       <ChevronIcon
         v-if="!disabled"
         class="stroke-gray-600 hover:stroke-gray-900"
+        data-test="select-trigger-icon"
         :class="{
           'rotate-x-180': showList
         }"
@@ -36,10 +40,12 @@
     </div>
 
     <div
-      v-if="showList"
-      class="overflow-hidden absolute top-[100%] left-0 w-full border border-t-0 border-emerald-800 rounded-xs"
+      v-if="showList && !disabled"
+      class="overflow-hidden z-1 bg-white absolute top-[100%] left-0 w-full border border-t-0 rounded-xs"
+      data-test="select-list-wrap"
       :class="{
         'border-t-0 rounded-t-none': showList,
+        'border-emerald-800': !isInvalid,
         [invalidBorderClass]: isInvalid,
       }"
     >
@@ -48,36 +54,41 @@
         v-bind="inputSettings"
         v-model="searchText"
         class="mx-1 mt-1"
+        data-test="select-search"
       />
-      <div
+      <ul
         v-if="filteredList.length"
         class="overflow-y-auto max-h-[160px]"
+        data-test="select-list"
       >
-        <div
+        <li
           v-if="isAllowEmpty"
           class="p-2 text-gray-700 text-base cursor-pointer item-hover"
+          data-test="not-select-list-item"
           :class="{
             'bg-emerald-400/15 hover:bg-emerald-400/15': selected === null
           }"
           @click="onClickItem(null)"
         >
           Не выбрано
-        </div>
-        <div
+        </li>
+        <li
           v-for="item in filteredList"
           :key="item.value"
           class="p-2 text-gray-700 text-base cursor-pointer item-hover"
+          data-test="select-list-item"
           :class="{
             'bg-emerald-400/15 hover:bg-emerald-400/15': item.value === selected?.value
           }"
           @click="onClickItem(item)"
         >
           {{ item.label }}
-        </div>
-      </div>
+        </li>
+      </ul>
       <div
         v-else
         class="p-2 text-gray-700 text-base"
+        data-test="select-nothing-found"
       >
         Ничего не найдено
       </div>
@@ -86,7 +97,6 @@
 </template>
 
 <script setup>
-import { getRandomUid } from '@/helpers/index.js'
 import { ref, watch } from 'vue'
 import AppTextInput from '@/components/shared/inputs/AppTextInput'
 import { input as inputClasses } from '@/assets/vars.js'
@@ -103,8 +113,7 @@ const {
   disabled,
   modelValue,
 } = defineProps({
-  id: { type: String, default: () => getRandomUid() },
-  modelValue: { type: [String, Number, null], required: true },
+  modelValue: { type: [String, Number, null], default: null },
   list: {
     type: Array,
     default: () => ([]),
@@ -135,7 +144,17 @@ const selected = ref(null) // { label: '', value: } || null
 watch(
     () => modelValue,
     (newModelValue) => {
-      selected.value = newModelValue === null ? null : list.find(({ value }) => value === newModelValue)
+      if (newModelValue === null) {
+        selected.value = null
+      }
+
+      const listItem = list.find(({ value }) => value === newModelValue)
+      if (listItem) {
+        selected.value = listItem
+      }
+      else {
+        selected.value = null
+      }
     },
     { immediate: true },
 )
