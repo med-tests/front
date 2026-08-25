@@ -24,7 +24,7 @@
       @update:model-value="emit('update:modelValue', $event)"
     />
     <AppTextInput
-      v-if="type === 'text'"
+      v-else-if="type === 'text'"
       :id
       :autocomplete
       :disabled
@@ -35,7 +35,7 @@
       @update:model-value="emit('update:modelValue', $event)"
     />
     <AppNumberInput
-      v-if="type === 'number'"
+      v-else-if="type === 'number'"
       :id
       :disabled
       :hide-close-icon
@@ -45,13 +45,24 @@
       @update:model-value="emit('update:modelValue', $event)"
     />
     <AppPasswordInput
-      v-if="type === 'password'"
+      v-else-if="type === 'password'"
       :id
       :autocomplete
       :disabled
       :is-invalid
       :model-value="value"
       :placeholder
+      @update:model-value="emit('update:modelValue', $event)"
+    />
+    <AppSelect 
+      v-else-if="type === 'select'"
+      :disabled
+      :input-settings="{ placeholder }"
+      :is-allow-empty
+      :is-invalid
+      :is-search
+      :list="selectList"
+      :model-value="value"
       @update:model-value="emit('update:modelValue', $event)"
     />
   </div>
@@ -61,6 +72,7 @@
 import { getRandomUid } from '@/helpers/index.js'
 import AppCalendarInput from '@/components/shared/inputs/AppCalendarInput'
 import AppTextInput from '@/components/shared/inputs/AppTextInput'
+import AppSelect from '@/components/shared/AppSelect'
 import AppNumberInput from '@/components/shared/inputs/AppNumberInput'
 import AppPasswordInput from '@/components/shared/inputs/AppPasswordInput'
 import { ref, watch } from 'vue'
@@ -80,7 +92,7 @@ const {
     type:String,
     required: true,
     validator(value) {
-      return ['text', 'number', 'password', 'calendar'].includes(value)
+      return ['text', 'number', 'password', 'calendar', 'select'].includes(value)
     },
   },
   touchId: { type: String, default: '' },
@@ -124,6 +136,14 @@ const {
     },
   },
   onBeforeSelect: { type: [Function, null], default: null },
+  
+  // для селекта
+  selectList: {
+    type: Array,
+    default: () => ([]),
+  },
+  isSearch: { type: Boolean, default: false },
+  isAllowEmpty: { type: Boolean, default: false },
 })
 
 const emit = defineEmits([
