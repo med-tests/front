@@ -4,13 +4,12 @@ import { useTestStore } from '@/stores/testStore.js'
 import LineChart from '@/components/LineChart.vue'
 import ChartItemList from '@/components/ChartItemList.vue'
 import UpsertParamModal from '@/components/UpsertParamModal.vue'
-import PlusIcon from '@/components/icons/PlusIcon.vue'
 import { useUserStore } from '@/stores/userStore.js'
-import AppContextMenu from '@/components/shared/AppContextMenu'
 import router from '@/router.js'
 import { storeToRefs } from 'pinia'
 import { useApiStore } from '@/stores/apiStore.js'
 import NotLoggedInBanner from '@/components/NotLoggedInBanner'
+import MainContextMenu from '@/components/MainContextMenu.vue'
 
 const { loading } = storeToRefs(useApiStore())
 
@@ -51,19 +50,13 @@ const computedAllItemsHidden = computed(() => {
   return !loading.value.getParams && isAllHidden
 })
 
-const upsertParamModalRef = useTemplateRef('upsert-param-modal')
-
-function onContextMenuClick (eventName) {
-  if (eventName === 'createParameter') {
-    openCreateModal()
-  }
-}
-
 const computedVisibleItems = computed(() => {
   return sortedFullData.value.filter(({ isHidden }) => !isHidden)
 })
 
 const editingParamId = ref(0)
+
+const upsertParamModalRef = useTemplateRef('upsert-param-modal')
 
 async function openEditModal (id) {
   editingParamId.value = id
@@ -104,28 +97,9 @@ async function openCreateModal () {
           </h3>
 
           <div>
-            <AppContextMenu
-              :arr-items="[
-                {title: 'Создать показатель', event: 'createParameter'},
-              ]"
-              @click="onContextMenuClick"
-            >
-              <template #toggler>
-                <div class="flex">
-                  <AppBtn
-                    not-bordered
-                    not-filling
-                    type="success"
-                    :disabled="loading.getParams"
-                  >
-                    <PlusIcon
-                      width="20"
-                      :line-width="4"
-                    />
-                  </AppBtn>
-                </div>
-              </template>
-            </AppContextMenu>
+            <MainContextMenu
+              @open-create-modal="openCreateModal"
+            />
           </div>
         </div>
 
