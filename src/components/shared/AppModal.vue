@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import CloseIcon from '@/components/icons/CloseIcon.vue'
+import CloseIcon from '@/components/icons/CloseIcon'
 import { ref } from 'vue'
 
 defineProps({
