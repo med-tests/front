@@ -99,7 +99,7 @@ const props = defineProps({
 
 const data = ref(props.data.map(item => ({ ...item, isHidden: false })))
 
-if (props.addNewRowIfEmpty.value && !data.value.length) {
+if (props.addNewRowIfEmpty && !data.value.length) {
   addFieldForNewResult()
 }
 
