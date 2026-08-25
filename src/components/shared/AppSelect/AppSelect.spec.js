@@ -167,6 +167,35 @@ describe('[фича]: список вариантов', () => {
     expect(wrp.find(listWrapSelector).exists()).toBe(false)
     expect(wrp.find(listSelector).exists()).toBe(false)
   })
+  it('обновляется при изменении пропса list', async () => {
+    const wrp = getWrp({
+      props: { list: listData },
+    })
+
+    await wrp.find(triggerLabelSelector).trigger('click')
+
+    expect(wrp.find(listSelector).exists()).toBe(true)
+
+    const items = wrp.findAll(listItemSelector)
+    expect(items).toHaveLength(listData.length)
+    const actualLabels = items.map(item => item.text())
+    expect(actualLabels).toEqual(listData.map(item => item.label))
+
+    const newList = [
+      { label: 'Морковь', value: 10 },
+      { label: 'Картошка', value: 11 },
+      { label: 'Капуста', value: 12 },
+    ]
+    await wrp.setProps({ list: newList })
+    await flushPromises()
+
+    expect(wrp.find(listSelector).exists()).toBe(true)
+
+    const updatedItems = wrp.findAll(listItemSelector)
+    expect(updatedItems).toHaveLength(newList.length)
+    const updatedLabels = updatedItems.map(item => item.text())
+    expect(updatedLabels).toEqual(newList.map(item => item.label))
+  })
 })
 
 describe('[фича]: поиск по списку вариантов (isSearch=true)', () => {

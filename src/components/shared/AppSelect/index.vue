@@ -162,6 +162,13 @@ watch(
 const searchText = ref('')
 const filteredList = ref(list)
 watch(
+    () => list,
+    (newList) => {
+      filteredList.value = newList
+    },
+)
+
+watch(
     searchText,
     (newSearchText) => {
       if(!newSearchText.trim().length) {
