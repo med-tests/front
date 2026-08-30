@@ -237,6 +237,33 @@ export const useTestStore = defineStore(
       return fullData.findIndex(param => param.id === id)
     }
 
+    function addMultiResults (data) {
+      if (userStore.isLoggedIn) {
+        return apiStore.addMultiResults(data)
+          .then((res) => {
+            showToast('Сохранено')
+            res.forEach(({ id, results }) => {
+              const param = getFullParameterById(id)
+              if (param) {
+                param.results = results
+              }
+            })
+          })
+      } else {
+        return new Promise((res) => res())
+          .then(() => {
+            data.forEach(({ id, results }) => {
+              const param = getFullParameterById(id)
+              if (param) {
+                param.results = results
+                  .concat(param.results)
+                  .sort((a, b) => new Date(a.date) - new Date(b.date))
+              }
+            })
+        })
+      }
+    }
+
     return {
       // state
       fullData,
@@ -253,6 +280,7 @@ export const useTestStore = defineStore(
       deleteParameter,
       getFullParameterById,
       clearData,
+      addMultiResults,
     }
   },
 )

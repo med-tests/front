@@ -1,7 +1,7 @@
 <template>
   <div>
     <!--  Заголовок и кнопка добавить  -->
-    <div class="flex justify-between mb-3">
+    <div class="flex justify-between mb-2">
       <h5 class="text-lg text-gray-700">
         {{ title }}
       </h5>
@@ -53,6 +53,7 @@
             v-model="data[rowIndex][fieldKey].value"
             class="grow"
             :callback-validator="field.validator"
+            :disabled
             :hide-close-icon="field.hideCloseIcon"
             :max-date="field.maxDate ? field.maxDate() : null"
             :min-date="field.minDate ? field.minDate() : null"
@@ -70,6 +71,7 @@
           not-filling
           title="Удалить"
           type="error"
+          :disabled
           @click="deleteRow(rowIndex)"
         >
           <CloseIcon
@@ -95,6 +97,7 @@ const props = defineProps({
   hideDelete: { type: Boolean, default: false },
   data: { type: Array, default: () => ([]) },
   addNewRowIfEmpty: { type: Boolean, default: false },
+  disabled: { type: Boolean, default: false },
 })
 
 const data = ref(props.data.map(item => ({ ...item, isHidden: false })))

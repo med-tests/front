@@ -23,7 +23,7 @@ html {
 
 /*  @apply  */
 .default-input {
-  @apply placeholder:text-gray-500 border rounded-xs p-2 text-gray-700 text-base w-full outline-emerald-800;
+  @apply placeholder:text-gray-500 border rounded-xs p-2 text-gray-700 text-base w-full outline-emerald-800 bg-white;
 }
 
 .app-input__clear-btn {

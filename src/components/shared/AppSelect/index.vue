@@ -7,13 +7,13 @@
       class="p-2 border rounded-xs flex justify-between items-center"
       data-test="select-trigger-label"
       :class="{
-        'border-emerald-800': !disabled && !isInvalid,
+        'border-emerald-800 bg-white': !disabled && !isInvalid,
         'cursor-pointer': !disabled,
         'rounded-b-none': showList,
         'border-b-0': showList && isSearch,
         [disabledBgClass]: disabled,
         [disabledBorderClass]: disabled && !isInvalid,
-        [invalidBorderClass]: isInvalid
+        [`${invalidBorderClass} bg-white`]: isInvalid
       }"
       @click="toggleList"
     >

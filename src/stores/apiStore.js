@@ -14,6 +14,7 @@ export const useApiStore = defineStore(
         deleteParameter: false,
         login: false,
         register: false,
+        addMultiResults: false,
     })
       
    function getParams () {
@@ -65,6 +66,18 @@ export const useApiStore = defineStore(
        })
    }
 
+   function addMultiResults (data) {
+     loading.addMultiResults = true
+     return api.addMultiResults(data)
+       .finally(() => {
+         loading.addMultiResults = false
+       })
+       .catch(err => {
+         showToast('Не удалось сохранить результаты', { type: 'error' })
+         return Promise.reject(err)
+       })
+   }
+
    function login (sendData) {
         loading.login = true
         return api.login(sendData)
@@ -96,6 +109,7 @@ export const useApiStore = defineStore(
         addParameter,
         editParameter,
         deleteParameter,
+        addMultiResults,
         login,
         register,
     }

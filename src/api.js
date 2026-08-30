@@ -67,4 +67,7 @@ export default {
   changeParameterPosition: function (id, data) {
     return apiInstance.patch(`/position/${id}`, data)
   },
+  addMultiResults: function (data) {
+    return apiInstance.post('/add-multi-results', data)
+  },
 }
