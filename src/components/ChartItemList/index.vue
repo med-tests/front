@@ -15,11 +15,11 @@
           class="p-2 flex border-emerald-800 item-hover"
           :class="{
             'border-b-1': index !== arrListData.length - 1,
-            'opacity-60': element.isHidden
           }"
         >
           <a
             class="pr-1 cursor-pointer text-lg text-gray-600 hover:text-gray-900"
+            :class="{'opacity-60': element.isHidden}"
             :href="`#chart-${element.id}`"
           >
             {{ element.title }}
@@ -33,8 +33,10 @@
               :title="element.isHidden ? 'Показать' : 'Скрыть'"
               @click="changeParameter(element.id, { isHidden: element.isHidden ? 0 : 1 })"
             >
-              <EyeClosedIcon v-if="element.isHidden" />
-              <EyeIcon v-else />
+              <div :class="{'opacity-60': element.isHidden}">
+                <EyeClosedIcon v-if="element.isHidden" />
+                <EyeIcon v-else />
+              </div>
             </AppBtn>
 
             <AppBtn
@@ -47,6 +49,7 @@
               <PencilIcon
                 height="17"
                 width="17"
+                :class="{'opacity-60': element.isHidden}"
               />
             </AppBtn>
 
@@ -58,7 +61,7 @@
               :disabled="loading.editParameter"
               @click="showDeleteModal(element)"
             >
-              <CloseIcon />
+              <CloseIcon :class="{'opacity-60': element.isHidden}" />
             </AppBtn>
           </div>
         </div>
