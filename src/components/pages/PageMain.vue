@@ -115,7 +115,6 @@
         >
           <LineChart
             v-for="item in computedVisibleItems"
-            :id="item.id"
             :key="item.id"
             class="py-15 first:pt-0 last:pb-0 param-chart relative"
             :item="item"

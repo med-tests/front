@@ -154,10 +154,11 @@
 
   ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
 
-  const { item, id } = defineProps({
+  const { item } = defineProps({
     item: { type: Object, required: true },
-    id: { type: Number, required: true },
   })
+
+  const id = item.id
 
   const testStore = useTestStore()
 
