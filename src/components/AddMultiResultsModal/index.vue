@@ -203,3 +203,9 @@ const saveData = async () => {
 }
 
 </script>
+
+<script>
+export default {
+  name: 'AddMultiResultsModal',
+}
+</script>

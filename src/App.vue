@@ -1,9 +1,9 @@
 <template>
   <RouterView />
-  <Index />
+  <AppToaster />
 </template>
 <script setup>
-import Index from '@/components/shared/AppToaster/index.vue'
+import AppToaster from '@/components/shared/AppToaster'
 import { onMounted } from 'vue'
 import { useUserStore } from '@/stores/userStore.js'
 

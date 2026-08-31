@@ -23,3 +23,9 @@
 <script setup>
 import router from '@/router.js'
 </script>
+
+<script>
+export default {
+  name: 'NotLoggedInBanner',
+}
+</script>

@@ -319,3 +319,9 @@
     return (sum / amount).toFixed(1)
   })
 </script>
+
+<script>
+export default {
+  name: 'LineChart',
+}
+</script>

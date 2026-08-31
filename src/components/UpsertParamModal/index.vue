@@ -356,3 +356,9 @@ const saveParam = async () => {
   }
 }
 </script>
+
+<script>
+export default {
+  name: 'UpsertParamModal',
+}
+</script>

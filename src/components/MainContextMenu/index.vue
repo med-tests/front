@@ -56,3 +56,9 @@ function onContextMenuClick (eventName) {
   }
 }
 </script>
+
+<script>
+export default {
+  name: 'MainContextMenu',
+}
+</script>
