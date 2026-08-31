@@ -1,7 +1,7 @@
-import AppNumberInput from '@/components/shared/inputs/AppNumberInput'
+import AppNumberInput from '@/components/shared/inputs/AppNumberInput/index.vue'
 import { mount } from '@vue/test-utils'
-import AppBtn from '@/components/shared/AppBtn'
-import { toolTipPlugin } from '@/plugins'
+import AppBtn from '@/components/shared/AppBtn/index.vue'
+import { toolTipPlugin } from '@/plugins/index.js'
 import { input as inputClass } from '@/assets/vars.js'
 
 const defaultPlaceholder = 'Введите число'

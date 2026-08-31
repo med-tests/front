@@ -93,7 +93,6 @@ import AppAddInputs from '@/components/shared/AppAddInputs.vue'
 import AppBtn from '@/components/shared/AppBtn/index.vue'
 import CloseIcon from '@/components/icons/CloseIcon.vue'
 import { useApiStore } from '@/stores/apiStore.js'
-import { showToast } from '@/components/shared/AppToaster/toast.js'
 
 const addMultiResultsModalRef = useTemplateRef('add-multi-results-modal')
 

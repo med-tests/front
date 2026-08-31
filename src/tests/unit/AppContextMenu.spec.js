@@ -1,8 +1,8 @@
 import { flushPromises, mount } from '@vue/test-utils'
-import AppContextMenu from '@/components/shared/AppContextMenu'
-import AppBtn from '@/components/shared/AppBtn'
-import { toolTipPlugin } from '@/plugins'
-import { clickOutsideDirective } from '@/directives'
+import AppContextMenu from '@/components/shared/AppContextMenu/index.vue'
+import AppBtn from '@/components/shared/AppBtn/index.vue'
+import { toolTipPlugin } from '@/plugins/index.js'
+import { clickOutsideDirective } from '@/directives/index.js'
 
 describe('AppContextMenu', () => {
   describe('должен отрисовывать триггер', () => {

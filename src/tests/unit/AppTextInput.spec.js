@@ -1,7 +1,7 @@
-import AppTextInput from '@/components/shared/inputs/AppTextInput'
+import AppTextInput from '@/components/shared/inputs/AppTextInput/index.vue'
 import { mount } from '@vue/test-utils'
-import AppBtn from '@/components/shared/AppBtn'
-import { toolTipPlugin } from '@/plugins'
+import AppBtn from '@/components/shared/AppBtn/index.vue'
+import { toolTipPlugin } from '@/plugins/index.js'
 import { input as inputClasses } from '@/assets/vars.js'
 
 const defaultPlaceholder = 'Введите значение'

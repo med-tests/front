@@ -1,6 +1,6 @@
 import { flushPromises, mount } from '@vue/test-utils'
-import AppBtn from '@/components/shared/AppBtn'
-import { toolTipPlugin } from '@/plugins'
+import AppBtn from '@/components/shared/AppBtn/index.vue'
+import { toolTipPlugin } from '@/plugins/index.js'
 
 describe('AppBtn', () => {
   it ('отрисовывает кнопку из слота', async () => {
