@@ -2,12 +2,13 @@
   <AppModal
     ref="add-multi-results-modal"
     title="Добавить несколько результатов"
+    :card-mode="!!forms.length"
+    :hide-ok="!forms.length"
+    :is-loading="loading.addMultiResults"
+    @ok="saveData"
     @on-close="clearData"
   >
-    <div
-      class="w-full"
-      style="min-width: 552px;"
-    >
+    <div class="w-full min-w-[552px] min-h-[210px]">
       <div class="flex items-center">
         <span class="pr-3">Выберите показатель:</span>
         <AppSelect
@@ -20,7 +21,7 @@
 
       <div
         v-if="forms.length"
-        class="mt-3 overflow-y-auto max-h-[450px] "
+        class="mt-3"
       >
         <div
           v-for="(form, index) in forms"
@@ -63,20 +64,6 @@
             @on-change="setResultsForParam(form.param.value, $event)"
           />
         </div>
-      </div>
-      
-      <!-- Управление формой -->
-      <div class="mt-3 flex">
-        <AppBtn
-          class="ml-auto"
-          type="success"
-          :is-loading="loading.addMultiResults"
-          @click="saveData"
-        >
-          <div class="px-2">
-            Сохранить
-          </div>
-        </AppBtn>
       </div>
     </div>
   </AppModal>

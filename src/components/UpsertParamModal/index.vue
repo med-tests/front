@@ -1,7 +1,10 @@
 <template>
   <AppModal
     ref="upsert-param-modal"
+с    :card-mode="!isCreating"
+    :is-loading="computedIsLoading"
     :title="computedModalTitle"
+    @ok="saveParam"
     @on-close="onClose"
   >
     <div style="min-width: 480px;">
@@ -19,7 +22,12 @@
       />
 
       <!--  Границы нормы  -->
-      <div class="mt-4 mb-6 flex justify-between">
+      <div 
+        class="mt-4 mb-6 flex"
+        :class="{
+          'justify-between': isCreating
+        }"
+      >
         <!--  Нижняя граница нормы  -->
         <AppFormField
           v-model="lowEdge"
@@ -57,10 +65,7 @@
       </div>
 
       <!--  Результаты  -->
-      <div
-        class="overflow-y-auto p-1"
-        style="max-height: 350px; min-width: 450px;"
-      >
+      <div class="p-1">
         <div class="text-right">
           Чтобы добавить результаты анализов или измерений показателя,
           <br>
@@ -74,28 +79,6 @@
           @delete-row="onDeleteResult"
           @on-change="formResults = $event"
         />
-      </div>
-
-      <!-- Управление формой -->
-      <div class="mt-3 ml-auto flex justify-end flex-row gap-x-4">
-        <AppBtn
-          :is-loading="computedIsLoading"
-          @click="upsertParamModal.close()"
-        >
-          <div class="px-2">
-            Отменить
-          </div>
-        </AppBtn>
-
-        <AppBtn
-          type="success"
-          :is-loading="computedIsLoading"
-          @click="saveParam"
-        >
-          <div class="px-2">
-            Сохранить
-          </div>
-        </AppBtn>
       </div>
     </div>
   </AppModal>

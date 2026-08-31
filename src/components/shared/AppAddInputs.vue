@@ -44,27 +44,24 @@
         v-if="!row.isHidden"
         class="flex justify-between items-center gap-x-4 mb-2 item-hover rounded"
       >
-        <div
+        <AppFormField
           v-for="(field, fieldKey) in fieldsSettings"
+          :id="`${fieldKey}-${field.type || 'text'}-row-${rowIndex}`"
           :key="`row-${rowIndex}-${fieldKey}`"
-        >
-          <AppFormField
-            :id="`${fieldKey}-${field.type || 'text'}-row-${rowIndex}`"
-            v-model="data[rowIndex][fieldKey].value"
-            class="grow"
-            :callback-validator="field.validator"
-            :disabled
-            :hide-close-icon="field.hideCloseIcon"
-            :max-date="field.maxDate ? field.maxDate() : null"
-            :min-date="field.minDate ? field.minDate() : null"
-            :placeholder="field.placeholder"
-            :required="field.required"
-            :selected-dates="data[rowIndex][fieldKey].value"
-            :touch-id="touchId"
-            :type="field.type"
-            @on-validate="data[rowIndex][fieldKey].error = !$event"
-          />
-        </div>
+          v-model="data[rowIndex][fieldKey].value"
+          class="grow"
+          :callback-validator="field.validator"
+          :disabled
+          :hide-close-icon="field.hideCloseIcon"
+          :max-date="field.maxDate ? field.maxDate() : null"
+          :min-date="field.minDate ? field.minDate() : null"
+          :placeholder="field.placeholder"
+          :required="field.required"
+          :selected-dates="data[rowIndex][fieldKey].value"
+          :touch-id="touchId"
+          :type="field.type"
+          @on-validate="data[rowIndex][fieldKey].error = !$event"
+        />
         <AppBtn
           v-if="!hideDelete"
           not-bordered
