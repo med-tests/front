@@ -4,7 +4,13 @@
     to="body"
   >
     <div class="absolute flex items-center justify-center top-0 bottom-0 left-0 right-0 bg-black/70 p-10">
-      <div class="p-5 bg-white/95 rounded-sm">
+      <div 
+        class="p-5 bg-white/95 rounded-sm max-h-full overflow-y-auto"
+        :class="{
+          'max-w-[850px] w-full h-full': cardMode
+        }"
+      >
+        <!--  header  -->
         <CloseIcon
           v-if="!hideClose"
           class="ml-auto cursor-pointer fill-gray-600 hover:fill-gray-900"
@@ -17,6 +23,8 @@
         >
           {{ title }}
         </h5>
+
+        <!--  content  -->
         <slot />
       </div>
     </div>
@@ -35,6 +43,10 @@ defineProps({
   title: {
     type: String,
     default: '',
+  },
+  cardMode: {
+    type: Boolean,
+    default: false,
   },
 })
 
