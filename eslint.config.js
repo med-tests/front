@@ -36,6 +36,9 @@ export default [
           ignores: ['draggable'],
         }],
       'object-curly-spacing': ['error', 'always'],
+      'vue/block-order': ['error', {
+        'order': ['template', 'script', 'style'],
+      }],
     },
     languageOptions: {
       globals: {

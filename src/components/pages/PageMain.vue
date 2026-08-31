@@ -1,76 +1,3 @@
-<script setup>
-import { computed, nextTick, onMounted, ref, useTemplateRef } from 'vue'
-import { useTestStore } from '@/stores/testStore.js'
-import LineChart from '@/components/LineChart'
-import ChartItemList from '@/components/ChartItemList'
-import UpsertParamModal from '@/components/UpsertParamModal'
-import { useUserStore } from '@/stores/userStore.js'
-import router from '@/router.js'
-import { storeToRefs } from 'pinia'
-import { useApiStore } from '@/stores/apiStore.js'
-import NotLoggedInBanner from '@/components/NotLoggedInBanner'
-import MainContextMenu from '@/components/MainContextMenu'
-
-const { loading } = storeToRefs(useApiStore())
-
-const testStore = useTestStore()
-const { fullData, sortedFullData } = storeToRefs(testStore)
-const { getParams } = testStore
-
-const userStore = useUserStore()
-const { isLoggedIn } = storeToRefs(userStore)
-const { logout } = userStore
-
-const scrollOffset = ref(0)
-const bannerHeight = ref(0)
-onMounted(() => {
-  const chartTitle = document.getElementById('chartTitle')
-  const chartTitleHeight = chartTitle.offsetHeight + +window.getComputedStyle(chartTitle).marginBottom.replace('px', '')
-
-  const chartWrap = document.getElementById('chartWrap')
-  const chartWrapPaddings = +window.getComputedStyle(chartWrap).paddingTop.replace('px', '')
-      + +window.getComputedStyle(chartWrap).paddingBottom.replace('px', '')
-
-  if (!isLoggedIn.value) {
-    bannerHeight.value = document.getElementById('banner').offsetHeight
-  }
-
-  scrollOffset.value = chartTitleHeight + chartWrapPaddings + bannerHeight.value
-  getParams()
-})
-
-const computedIsNoData = computed(() => {
-  return !loading.value.getParams && !fullData.value.length
-})
-
-const computedAllItemsHidden = computed(() => {
-  const isAllHidden = fullData.value.length
-     ? Object.values(fullData.value).every(({ isHidden }) => isHidden)
-     : false
-  return !loading.value.getParams && isAllHidden
-})
-
-const computedVisibleItems = computed(() => {
-  return sortedFullData.value.filter(({ isHidden }) => !isHidden)
-})
-
-const editingParamId = ref(0)
-
-const upsertParamModalRef = useTemplateRef('upsert-param-modal')
-
-async function openEditModal (id) {
-  editingParamId.value = id
-  await nextTick()
-  upsertParamModalRef.value.open()
-}
-
-async function openCreateModal () {
-  editingParamId.value = 0
-  await nextTick()
-  upsertParamModalRef.value.open()
-}
-</script>
-
 <template>
   <div
     class="mx-auto my-0 h-screen bg-white/95 flex flex-col"
@@ -205,6 +132,79 @@ async function openCreateModal () {
     />
   </div>
 </template>
+
+<script setup>
+import { computed, nextTick, onMounted, ref, useTemplateRef } from 'vue'
+import { useTestStore } from '@/stores/testStore.js'
+import LineChart from '@/components/LineChart'
+import ChartItemList from '@/components/ChartItemList'
+import UpsertParamModal from '@/components/UpsertParamModal'
+import { useUserStore } from '@/stores/userStore.js'
+import router from '@/router.js'
+import { storeToRefs } from 'pinia'
+import { useApiStore } from '@/stores/apiStore.js'
+import NotLoggedInBanner from '@/components/NotLoggedInBanner'
+import MainContextMenu from '@/components/MainContextMenu'
+
+const { loading } = storeToRefs(useApiStore())
+
+const testStore = useTestStore()
+const { fullData, sortedFullData } = storeToRefs(testStore)
+const { getParams } = testStore
+
+const userStore = useUserStore()
+const { isLoggedIn } = storeToRefs(userStore)
+const { logout } = userStore
+
+const scrollOffset = ref(0)
+const bannerHeight = ref(0)
+onMounted(() => {
+  const chartTitle = document.getElementById('chartTitle')
+  const chartTitleHeight = chartTitle.offsetHeight + +window.getComputedStyle(chartTitle).marginBottom.replace('px', '')
+
+  const chartWrap = document.getElementById('chartWrap')
+  const chartWrapPaddings = +window.getComputedStyle(chartWrap).paddingTop.replace('px', '')
+      + +window.getComputedStyle(chartWrap).paddingBottom.replace('px', '')
+
+  if (!isLoggedIn.value) {
+    bannerHeight.value = document.getElementById('banner').offsetHeight
+  }
+
+  scrollOffset.value = chartTitleHeight + chartWrapPaddings + bannerHeight.value
+  getParams()
+})
+
+const computedIsNoData = computed(() => {
+  return !loading.value.getParams && !fullData.value.length
+})
+
+const computedAllItemsHidden = computed(() => {
+  const isAllHidden = fullData.value.length
+     ? Object.values(fullData.value).every(({ isHidden }) => isHidden)
+     : false
+  return !loading.value.getParams && isAllHidden
+})
+
+const computedVisibleItems = computed(() => {
+  return sortedFullData.value.filter(({ isHidden }) => !isHidden)
+})
+
+const editingParamId = ref(0)
+
+const upsertParamModalRef = useTemplateRef('upsert-param-modal')
+
+async function openEditModal (id) {
+  editingParamId.value = id
+  await nextTick()
+  upsertParamModalRef.value.open()
+}
+
+async function openCreateModal () {
+  editingParamId.value = 0
+  await nextTick()
+  upsertParamModalRef.value.open()
+}
+</script>
 
 <style>
 .param-chart:not(:last-child)::after {
