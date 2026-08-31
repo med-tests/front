@@ -166,6 +166,12 @@ function setClassForColoredCells (coloredDates, cellType, date) {
 }
 </script>
 
+<script>
+export default {
+  name: 'AppCalendarInput',
+}
+</script>
+
 <style scoped>
 .test-day {
   background-color: #ffb8ff;

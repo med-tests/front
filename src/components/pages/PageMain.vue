@@ -1,15 +1,15 @@
 <script setup>
 import { computed, nextTick, onMounted, ref, useTemplateRef } from 'vue'
 import { useTestStore } from '@/stores/testStore.js'
-import LineChart from '@/components/LineChart.vue'
-import ChartItemList from '@/components/ChartItemList.vue'
-import UpsertParamModal from '@/components/UpsertParamModal.vue'
+import LineChart from '@/components/LineChart'
+import ChartItemList from '@/components/ChartItemList'
+import UpsertParamModal from '@/components/UpsertParamModal'
 import { useUserStore } from '@/stores/userStore.js'
 import router from '@/router.js'
 import { storeToRefs } from 'pinia'
 import { useApiStore } from '@/stores/apiStore.js'
 import NotLoggedInBanner from '@/components/NotLoggedInBanner'
-import MainContextMenu from '@/components/MainContextMenu.vue'
+import MainContextMenu from '@/components/MainContextMenu'
 
 const { loading } = storeToRefs(useApiStore())
 

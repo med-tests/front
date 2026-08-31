@@ -190,6 +190,12 @@ watch(
 )
 </script>
 
+<script>
+export default {
+  name: 'AppFormField',
+}
+</script>
+
 <style>
 .required::after {
   content: '*';

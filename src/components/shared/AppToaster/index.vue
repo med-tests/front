@@ -46,6 +46,12 @@ import { toasts, removeToast } from './toast.js'
 import CloseIcon from '@/components/icons/CloseIcon.vue'
 </script>
 
+<script>
+export default {
+  name: 'AppToaster',
+}
+</script>
+
 <style scoped>
 .toast-enter-from,
 .toast-leave-to {

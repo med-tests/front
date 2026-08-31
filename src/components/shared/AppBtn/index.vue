@@ -127,6 +127,12 @@ onMounted(() => {
 })
 </script>
 
+<script>
+export default {
+  name: 'AppBtn',
+}
+</script>
+
 <style>
 .v-btn-loading{
     top: 50%;

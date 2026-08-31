@@ -125,7 +125,7 @@
 } from 'chart.js'
   import { computed } from 'vue'
   import { useTestStore } from '@/stores/testStore.js'
-  import AppFormField from '@/components/shared/inputs/AppFormField'
+  import AppFormField from '@/components/shared/inputs/AppFormField/index.vue'
   import moment from 'moment'
   import { showToast } from '@/components/shared/AppToaster/toast.js'
   import { colors } from '@/assets/vars.js'

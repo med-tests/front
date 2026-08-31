@@ -105,13 +105,13 @@
 import AppModal from '@/components/shared/AppModal.vue'
 import { computed, nextTick, ref, useTemplateRef } from 'vue'
 import { useTestStore } from '@/stores/testStore.js'
-import AppFormField from '@/components/shared/inputs/AppFormField'
+import AppFormField from '@/components/shared/inputs/AppFormField/index.vue'
 import { showToast } from '@/components/shared/AppToaster/toast.js'
 import { formatToISODate, getRandomUid } from '@/helpers/index.js'
 import AppAddInputs from '@/components/shared/AppAddInputs.vue'
 import { storeToRefs } from 'pinia'
 import { useApiStore } from '@/stores/apiStore.js'
-import AppCheckbox from '@/components/shared/AppCheckbox'
+import AppCheckbox from '@/components/shared/AppCheckbox/index.vue'
 
 const testStore = useTestStore()
 

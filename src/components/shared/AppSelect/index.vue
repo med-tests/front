@@ -203,3 +203,9 @@ watch(
     },
 )
 </script>
+
+<script>
+export default {
+  name: 'AppSelect',
+}
+</script>

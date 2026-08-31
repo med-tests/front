@@ -1,3 +1,38 @@
+<template>
+  <div>
+    <label
+      v-if="label"
+      class="block mb-1 text-gray-700"
+      data-test="label"
+      :class="{'required': required }"
+      :for="id"
+    >
+      {{ label }}
+    </label>
+
+    <div class="flex">
+      <input
+        :id
+        v-model="model"
+        data-test="checkbox-input"
+        style="width: 16px;"
+        type="checkbox"
+        :class="{
+          'border-red-300': isInvalid
+        }"
+        :false-value="0"
+        :true-value="1"
+      >
+      <div
+        class="px-1"
+        data-test="description"
+      >
+        <slot name="description" />
+      </div>
+    </div>
+  </div>
+</template>
+
 <script setup>
 import { watch } from 'vue'
 import { useValidateInput } from '@/composables/useValidateInput.js'
@@ -58,40 +93,11 @@ watch(
 
 </script>
 
-<template>
-  <div>
-    <label
-      v-if="label"
-      class="block mb-1 text-gray-700"
-      data-test="label"
-      :class="{'required': required }"
-      :for="id"
-    >
-      {{ label }}
-    </label>
-
-    <div class="flex">
-      <input
-        :id
-        v-model="model"
-        data-test="checkbox-input"
-        style="width: 16px;"
-        type="checkbox"
-        :class="{
-          'border-red-300': isInvalid
-        }"
-        :false-value="0"
-        :true-value="1"
-      >
-      <div
-        class="px-1"
-        data-test="description"
-      >
-        <slot name="description" />
-      </div>
-    </div>
-  </div>
-</template>
+<script>
+export default {
+  name: 'AppCheckbox',
+}
+</script>
 
 <style scoped>
 .required::after {

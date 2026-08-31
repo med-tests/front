@@ -93,7 +93,7 @@
       </div>
     </div>
   </AppModal>
-  <UpsertParamModal
+  <Index
     ref="upsert-param-modal"
     :editing-param-id="editingParamId"
   />
@@ -108,7 +108,7 @@ import { nextTick, ref, useTemplateRef } from 'vue'
 import CloseIcon from '@/components/icons/CloseIcon.vue'
 import AppModal from '@/components/shared/AppModal.vue'
 import PencilIcon from '@/components/icons/PencilIcon.vue'
-import UpsertParamModal from '@/components/UpsertParamModal.vue'
+import Index from '@/components/UpsertParamModal/index.vue'
 import { storeToRefs } from 'pinia'
 import { useApiStore } from '@/stores/apiStore.js'
 

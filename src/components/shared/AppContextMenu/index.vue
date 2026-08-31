@@ -59,3 +59,9 @@ function selectItem (eventName) {
 }
 
 </script>
+
+<script>
+export default {
+  name: 'AppContextMenu',
+}
+</script>

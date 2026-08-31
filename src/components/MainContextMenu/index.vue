@@ -26,11 +26,11 @@
 </template>
 
 <script setup>
-import AppContextMenu from '@/components/shared/AppContextMenu'
-import PlusIcon from '@/components/icons/PlusIcon'
+import AppContextMenu from '@/components/shared/AppContextMenu/index.vue'
+import PlusIcon from '@/components/icons/PlusIcon.vue'
 import { storeToRefs } from 'pinia'
 import { useApiStore } from '@/stores/apiStore.js'
-import AddMultiResultsModal from '@/components/AddMultiResultsModal.vue'
+import AddMultiResultsModal from '@/components/AddMultiResultsModal/index.vue'
 import { useTemplateRef } from 'vue'
 
 const emit = defineEmits(['openCreateModal'])

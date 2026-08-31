@@ -84,3 +84,9 @@ function clear () {
   inputRef.value.focus()
 }
 </script>
+
+<script>
+export default {
+  name: 'AppTextInput',
+}
+</script>

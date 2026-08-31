@@ -1,3 +1,42 @@
+<template>
+  <AppFormField
+    :id="id"
+    v-model="password.value"
+    required
+    autocomplete="new-password"
+    label="Пароль"
+    type="password"
+    :callback-validator="validatePassword"
+    :touch-id="touchId"
+    @on-validate="password.error = $event"
+  >
+    <template #description>
+      <div class="mb-1">
+        <div
+          v-for="(condition, index) in computedConditions"
+          :key="index"
+        >
+          <div class="flex items-center mb-1">
+            <CloseIcon
+              v-if="!condition.isValid"
+              class="fill-red-800"
+              width="16"
+            />
+            <CheckIcon
+              v-else
+              class="stroke-emerald-800"
+              width="18"
+            />
+            <div class="text-sm ml-1">
+              {{ condition.label }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+  </AppFormField>
+</template>
+
 <script setup>
 import AppFormField from '@/components/shared/inputs/AppFormField'
 import { computed } from 'vue'
@@ -58,41 +97,8 @@ const computedConditions = computed(() => {
 })
 </script>
 
-<template>
-  <AppFormField
-    :id="id"
-    v-model="password.value"
-    required
-    autocomplete="new-password"
-    label="Пароль"
-    type="password"
-    :callback-validator="validatePassword"
-    :touch-id="touchId"
-    @on-validate="password.error = $event"
-  >
-    <template #description>
-      <div class="mb-1">
-        <div
-          v-for="(condition, index) in computedConditions"
-          :key="index"
-        >
-          <div class="flex items-center mb-1">
-            <CloseIcon
-              v-if="!condition.isValid"
-              class="fill-red-800"
-              width="16"
-            />
-            <CheckIcon
-              v-else
-              class="stroke-emerald-800"
-              width="18"
-            />
-            <div class="text-sm ml-1">
-              {{ condition.label }}
-            </div>
-          </div>
-        </div>
-      </div>
-    </template>
-  </AppFormField>
-</template>
+<script>
+export default {
+  name: 'AppNewPassword',
+}
+</script>

@@ -90,3 +90,9 @@ const value = computed({
 
 const passwordStarred = ref(true)
 </script>
+
+<script>
+export default {
+  name: 'AppPasswordInput',
+}
+</script>
