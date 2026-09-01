@@ -1,7 +1,7 @@
 <template>
   <AppModal
     ref="upsert-param-modal"
-с    :card-mode="!isCreating"
+    :card-mode="!isCreating"
     :is-loading="computedIsLoading"
     :title="computedModalTitle"
     @ok="saveParam"
@@ -11,6 +11,7 @@
       <!--  Название  -->
       <AppFormField
         v-model="paramTitle"
+        v-focus
         hide-close-icon
         required
         label="Название"

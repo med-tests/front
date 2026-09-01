@@ -11,6 +11,7 @@
 
       <AppFormField
         v-model="username.value"
+        v-focus
         required
         autocomplete="username"
         class="w-full mb-3"

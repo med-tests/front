@@ -1,17 +1,7 @@
-export const clickOutside = (app) => {
-  app.directive('click-outside', clickOutsideDirective)
-}
+import { focus } from '@/directives/focus'
+import { clickOutside } from '@/directives/clickOutside'
 
-export const clickOutsideDirective = {
-  mounted: (el, binding) => {
-    el.clickOutsideEvent = (event) => {
-      if (!(el === event.target || el.contains(event.target))) {
-        binding.value(event.target)
-      }
-    }
-    document.addEventListener('click', el.clickOutsideEvent)
-  },
-  unmounted: el => {
-    document.removeEventListener('click', el.clickOutsideEvent)
-  },
+export {
+  focus,
+  clickOutside,
 }
