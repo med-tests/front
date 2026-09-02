@@ -32,10 +32,9 @@ function initTippy() {
     placement: 'auto',
     theme: 'light',
     appendTo: document.getElementById(props.appendElementId),
+    trigger: window.innerWidth > 900 ? 'mouseenter focus' : 'mouseenter',  // 'click' для удобства дебага
 
-    // чтоб не скрывалось для удобства отладки
-    // hideOnClick: 'toggle',
-    // trigger: 'click',
+    // hideOnClick: 'toggle', // чтоб не скрывалось для удобства отладки
   })
 }
 
