@@ -93,12 +93,12 @@ export const useTestStore = defineStore(
           if (param.results.length) {
             param.results.sort((a,b) => moment(a.date, 'YYYY-MM-DD').unix() - moment(b.date, 'YYYY-MM-DD').unix())
 
-            if (!param.shownPeriod.start && !param.shownPeriod.end) {
-              param.shownPeriod = {
-                start: param.results[0].date,
-                end: param.results[param.results.length - 1].date,
-              }
+            param.shownPeriod = {
+              start: param.results[0].date,
+              end: param.results[param.results.length - 1].date,
             }
+          } else {
+            param.shownPeriod = { start: '', end: '' }
           }
         }
         showToast('Сохранено до перезагрузки страницы')
@@ -242,11 +242,9 @@ export const useTestStore = defineStore(
         return apiStore.addMultiResults(data)
           .then((res) => {
             showToast('Сохранено')
-            res.forEach(({ id, results }) => {
-              const param = getFullParameterById(id)
-              if (param) {
-                param.results = results
-              }
+            res.forEach(param => {
+              const index = getIndexByParameterId(param.id)
+              fullData[index] = formatParameter(param)
             })
           })
       } else {
@@ -258,6 +256,9 @@ export const useTestStore = defineStore(
                 param.results = results
                   .concat(param.results)
                   .sort((a, b) => new Date(a.date) - new Date(b.date))
+
+                param.shownPeriod.start = param.results[0].date
+                param.shownPeriod.end = param.results[param.results.length - 1].date
               }
             })
         })
