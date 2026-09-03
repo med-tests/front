@@ -92,20 +92,20 @@ onMounted(() => {
       return onBeforeSelect ? onBeforeSelect(date) : true
     },
     onSelect: ({ date }) => {
-      const initFormat = date
-          ? formatToISODate(date)
-          : ''
-      emit('update:modelValue', initFormat)
+      emit('update:modelValue', date ? formatToISODate(date) : '')
     },
     onRenderCell: ({ date, cellType }) => {
       return setClassForColoredCells(coloredDates, cellType, date)
     },
-    selectedDates: modelValue,
     ...(minDate && { minDate }),
     ...(maxDate && { maxDate }),
   }
 
   datepickerInstance = new AirDatepicker(`#calendar-input-${id}`, options)
+
+  modelValue === ''
+    ? datepickerInstance.clear()
+    : datepickerInstance.selectDate(formatToDate(modelValue))
 })
 
 watch(
@@ -114,7 +114,7 @@ watch(
       if (datepickerInstance) {
         newVal === ''
             ? datepickerInstance.clear()
-            : datepickerInstance.selectDate(formatToDate(new Date(newVal)))
+            : datepickerInstance.selectDate(formatToDate(newVal))
       }
     },
 )
