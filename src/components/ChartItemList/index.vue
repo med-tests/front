@@ -73,11 +73,15 @@
     ref="delete-param-modal"
     @on-close="deletingParameter = null"
   >
-    <div style="min-width: 380px;">
-      <div class="mt-3 text-center my-2 text-lg">
-        Вы уверены, что хотите удалить "{{ deletingParameter.title || '' }}"?
+    <template #default>
+      <div style="min-width: 380px;">
+        <div class="mt-3 text-center my-2 text-lg">
+          Вы уверены, что хотите удалить "{{ deletingParameter.title || '' }}"?
+        </div>
       </div>
-
+    </template>
+      
+    <template #footer>
       <div class="mt-3 ml-auto flex justify-end flex-row gap-x-4">
         <AppBtn
           :is-loading="loading.deleteParameter"
@@ -94,7 +98,7 @@
           <span class="px-2">Удалить</span>
         </AppBtn>
       </div>
-    </div>
+    </template>
   </AppModal>
   <UpsertParamModal
     ref="upsert-param-modal"
